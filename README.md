@@ -1,4 +1,4 @@
-# ThreddedCreateApp
+# ThreddedCreateApp [![Build Status](https://travis-ci.org/thredded/thredded_create_app.svg?branch=master)](https://travis-ci.org/thredded/thredded_create_app)
 
 Generates a Rails app with the [Thredded](https://github.com/thredded/thredded) forums engine installed.
 

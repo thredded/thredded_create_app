@@ -1,5 +1,14 @@
 sudo: false
 language: ruby
 rvm:
-  - 2.3.1
-before_install: gem install bundler -v 1.13.6
+- 2.2
+env:
+  matrix:
+  # Username and password from http://docs.travis-ci.com/user/database-setup/
+  - DB=postgresql DB_USERNAME=postgres DB_PASSWORD=""
+before_install:
+- "gem install bundler --no-document"
+- >-
+  if [ "$DB" = 'postgresql' ]; then psql -d template1 -c "CREATE EXTENSION citext;" -U postgres; fi
+cache: bundler
+bundler_args: --path ../../vendor/bundle --without debug
