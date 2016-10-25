@@ -4,7 +4,11 @@ module ThreddedCreateApp
   module Logging
     def log_verbose(message = nil)
       return unless ThreddedCreateApp.verbose?
-      log_stderr Term::ANSIColor.bright_blue(message || yield)
+      log_stderr Term::ANSIColor.bright_magenta(message || yield)
+    end
+
+    def log_info(message)
+      log_stderr Term::ANSIColor.bright_blue message
     end
 
     def log_warn(message)

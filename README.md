@@ -24,20 +24,24 @@ gem install thredded_create_app
 
 Then, run the command below depending on how you installed your ruby:
 
-a. If using system ruby:
+* If using system ruby:
  
    ```bash
    thredded_create_app myapp
    ```
 
-b. If using [RVM](https://rvm.io/):
+* If using [RVM](https://rvm.io/):
 
    ```bash
    RUBY_VERSION=2.3.1 APP=myapp
    rvm use --create "${RUBY_VERSION}@${APP}"
    thredded_create_app $APP
+   ```
+   
+   Then, generate .ruby-version and .ruby-gemset:
+ 
+   ```bash
    cd myapp
-   # Generate .ruby-version and .ruby-gemset
    rvm use --ruby-version "${RUBY_VERSION}@${APP}"
    printf '.ruby-version\n.ruby-gemset\n' >> .git/info/exclude
    ```

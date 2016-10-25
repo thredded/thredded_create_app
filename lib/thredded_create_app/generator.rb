@@ -3,12 +3,12 @@ module ThreddedCreateApp
   class Generator
     include ThreddedCreateApp::Logging
 
-    def self.run(options)
-      new(options).run
+    def initialize(**options)
+      @options = options
     end
 
-    def initialize(app_name:)
-      @app_name = app_name
+    def summary
+      '* stuff'
     end
 
     def run
