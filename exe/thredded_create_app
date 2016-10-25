@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 require 'bundler/setup'
-require 'thredded_create_app'
-require 'irb'
-IRB.start
+require 'thredded_create_app/cli'
+ThreddedCreateApp::CLI.start(ARGV)
