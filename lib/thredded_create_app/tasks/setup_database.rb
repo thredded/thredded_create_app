@@ -11,8 +11,8 @@ module ThreddedCreateApp
       def after_bundle
         log_info 'Creating config/database.yml from template'
         copy_template 'setup_database/database.yml.erb', 'config/database.yml'
-
         create_db_user
+        run 'bundle exec rails db:create db:migrate'
       end
 
       private
@@ -32,7 +32,7 @@ module ThreddedCreateApp
       end
 
       def dev_user_password
-        @dev_user_password ||= SecureRandom.urlsafe_base64(30)
+        @dev_user_password ||= SecureRandom.urlsafe_base64(20)
       end
     end
   end

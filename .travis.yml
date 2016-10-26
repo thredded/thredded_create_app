@@ -1,7 +1,7 @@
 sudo: false
 language: ruby
 rvm:
-- 2.2
+- 2.3.1
 env:
   matrix:
   # Username and password from http://docs.travis-ci.com/user/database-setup/
