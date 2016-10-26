@@ -30,9 +30,15 @@ module ThreddedCreateApp
         @gems << [gem_name, version, groups]
       end
 
+      def git_commit(message)
+        log_info 'Commiting'
+        system 'git add .'
+        system 'git', 'commit', '-m', "[thredded_create_app] #{message}"
+      end
+
       attr_reader :app_name, :app_path, :gems
 
-      def system_with_log(*args)
+      def run(*args)
         log_command args.length == 1 ? args[0] : Shellwords.shelljoin(args)
         unless system(*args)
           exit 1

@@ -41,7 +41,7 @@ module ThreddedCreateApp
       log_info 'Will do the following:'
       log_info generator.summary
       exit unless options[:auto_confirm] || agree?
-      generator.run
+      generator.generate
     end
 
     def optparse # rubocop:disable Metrics/MethodLength,Metrics/AbcSize

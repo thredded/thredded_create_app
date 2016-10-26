@@ -11,8 +11,9 @@ This generator will create a new Rails app with the following configuration:
 
 ## Pre-requisites
 
-1. PostgreSQL.
-2. Ruby 2.1+.
+1. Git.
+2. PostgreSQL.
+3. Ruby 2.1+.
 
 ## Usage
 

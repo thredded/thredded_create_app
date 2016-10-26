@@ -14,11 +14,12 @@ module ThreddedCreateApp
       tasks.map { |t| "* #{t.summary}" }.join("\n")
     end
 
-    def run
+    def generate
       log_verbose "Started: #{inspect}"
       FileUtils.mkdir_p(app_path)
       Bundler.with_clean_env do
         Dir.chdir(app_path) do
+          run 'git init .'
           @tasks.each(&:before_bundle)
           bundle
           @tasks.each(&:after_bundle)
@@ -30,21 +31,31 @@ module ThreddedCreateApp
 
     def tasks
       @tasks ||= [
-          Tasks::CreateRailsApp
+          Tasks::CreateRailsApp,
+          # Tasks::AddDevise,
+          # Tasks::AddThredded,
+          # Tasks::AddRailsEmailPreview,
+          # Tasks::AddI18nTasks,
+          # Tasks::SetupDatabase
       ].map { |task_class| task_class.new(@options) }
+    end
+
+    def gems
+      tasks.flat_map(&:gems)
     end
 
     # @final
     def bundle
       File.open('Gemfile', 'a') do |f|
         log_info 'Writing gems to Gemfile'
-        tasks.flat_map(&:gems).each do |(name, version, groups)|
+        gems.each do |(name, version, groups)|
           f.puts ["gem '#{name}'",
                   (version if version),
                   ("groups: %i(#{groups * ' '})" if groups)].compact.join(', ')
         end
-        system_with_log 'bundle install --quiet'
+        run 'bundle install --quiet'
       end
+      git_commit "Add gems: #{gems.map { |(name, *)| name } * ', '}"
     end
   end
 end

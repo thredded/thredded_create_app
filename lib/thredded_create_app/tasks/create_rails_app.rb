@@ -8,15 +8,17 @@ module ThreddedCreateApp
       end
 
       def before_bundle
-        system_with_log 'gem update --system --no-document --quiet'
-        system_with_log 'gem install bundler rails --no-document'
-        system_with_log 'rails new . --skip-bundle --database=postgresql ' \
+        run 'gem update --system --no-document --quiet'
+        run 'gem install bundler rails --no-document'
+        run 'rails new . --skip-bundle --database=postgresql ' \
            '--skip-test --quiet'
         add_gem 'rspec-rails', groups: %i(test)
+        git_commit summary
       end
 
       def after_bundle
-        system_with_log 'bundle exec rails g rspec:install --quiet'
+        run 'bundle exec rails g rspec:install --quiet'
+        git_commit 'rails g rspec:install'
       end
     end
   end
