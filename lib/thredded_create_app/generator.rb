@@ -2,9 +2,9 @@
 require 'fileutils'
 require 'thredded_create_app/tasks/base'
 require 'thredded_create_app/tasks/create_rails_app'
+require 'thredded_create_app/tasks/setup_database'
 module ThreddedCreateApp
   class Generator < Tasks::Base
-
     def initialize(**options)
       super
       @options = options
@@ -31,12 +31,12 @@ module ThreddedCreateApp
 
     def tasks
       @tasks ||= [
-          Tasks::CreateRailsApp,
-          # Tasks::AddDevise,
-          # Tasks::AddThredded,
-          # Tasks::AddRailsEmailPreview,
-          # Tasks::AddI18nTasks,
-          # Tasks::SetupDatabase
+        Tasks::CreateRailsApp,
+        # Tasks::AddDevise,
+        # Tasks::AddThredded,
+        # Tasks::AddRailsEmailPreview,
+        # Tasks::AddI18nTasks,
+        Tasks::SetupDatabase
       ].map { |task_class| task_class.new(@options) }
     end
 

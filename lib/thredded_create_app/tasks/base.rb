@@ -1,6 +1,8 @@
 # frozen_string_literal: true
-require 'thredded_create_app/logging'
 require 'shellwords'
+require 'fileutils'
+require 'erb'
+require 'thredded_create_app/logging'
 module ThreddedCreateApp
   module Tasks
     # @abstract
@@ -38,11 +40,18 @@ module ThreddedCreateApp
 
       attr_reader :app_name, :app_path, :gems
 
-      def run(*args)
-        log_command args.length == 1 ? args[0] : Shellwords.shelljoin(args)
-        unless system(*args)
-          exit 1
+      def copy_template(src_path, target_path, eval_erb: true)
+        src = File.read(File.expand_path(src_path, File.dirname(__FILE__)))
+        src = ERB.new(src).result(binding) if eval_erb
+        FileUtils.mkdir_p(File.dirname(target_path))
+        File.open(target_path, 'wb') { |f| f.write src }
+      end
+
+      def run(*args, log: true)
+        if log
+          log_command args.length == 1 ? args[0] : Shellwords.shelljoin(args)
         end
+        exit 1 unless system(*args)
       end
     end
   end

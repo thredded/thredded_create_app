@@ -42,6 +42,9 @@ module ThreddedCreateApp
       log_info generator.summary
       exit unless options[:auto_confirm] || agree?
       generator.generate
+      log_stderr Term::ANSIColor.bold Term::ANSIColor.bright_green(
+        'All done! 🌟'
+      )
     end
 
     def optparse # rubocop:disable Metrics/MethodLength,Metrics/AbcSize

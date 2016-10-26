@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# Generates a new app with thredded_create_app tmp/myapp
+# Cleans up the old app before testing this
+
+echo 'Removing myapp_dev postgres user and rm -rf tmp/app'
+
+drop_postgres_user() {
+  local psql_cmd='psql postgres'
+  if ! $psql_cmd -c '' 2>/dev/null; then
+    psql_cmd="sudo -u ${PG_DAEMON_USER:-postgres} psql postgres"
+  fi
+  $psql_cmd --quiet -c 'DROP USER myapp_dev' 2>/dev/null
+}
+
+drop_postgres_user
+rm -rf tmp
+./exe/thredded_create_app -y tmp/myapp
