@@ -12,3 +12,6 @@ before_install:
   if [ "$DB" = 'postgresql' ]; then psql -d template1 -c "CREATE EXTENSION citext;" -U postgres; fi
 cache: bundler
 bundler_args: --path ../../vendor/bundle --without debug
+
+# Avoid rake here, as the RSpec test task spawns a new process which does not run via bundler.
+script: "bundle exec rspec --format d && bundle exec rubocop"
