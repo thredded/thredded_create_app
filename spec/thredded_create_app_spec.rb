@@ -6,7 +6,7 @@ describe ThreddedCreateApp do
     expect(ThreddedCreateApp::VERSION).not_to be nil
   end
 
-  it 'does something useful' do
-    expect(false).to eq(true)
+  it 'generates the app without errors' do
+    expect(system 'bin/create-tmp-myapp').to be true
   end
 end
