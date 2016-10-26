@@ -7,6 +7,10 @@ module ThreddedCreateApp
       log_stderr Term::ANSIColor.bright_magenta(message || yield)
     end
 
+    def log_command(message)
+      log_stderr Term::ANSIColor.bold message
+    end
+
     def log_info(message)
       log_stderr Term::ANSIColor.bright_blue message
     end
