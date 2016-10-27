@@ -8,6 +8,8 @@ gem 'byebug', platform: :mri
 
 if ENV['TRAVIS']
   # On Travis, add the generated app gems so that they are cached
+  gem 'rubygems-update'
+  gem 'bundler'
   gem 'rails'
   gem 'sassc'
   gem 'thredded'
