@@ -1,11 +1,16 @@
-sudo: false
+dist: trusty
+sudo: required
 language: ruby
 rvm:
-- 2.3.1
+# The latest ruby that is pre-installed on Travis Trusty
+# https://docs.travis-ci.com/user/trusty-ci-environment/
+- 2.2.3
+services:
+  - postgresql
 env:
   matrix:
-  # Username and password from http://docs.travis-ci.com/user/database-setup/
-  - DB=postgresql DB_USERNAME=postgres DB_PASSWORD=""
+  # https://docs.travis-ci.com/user/database-setup/#PostgreSQL
+  - DB_USERNAME=postgres DB_PASSWORD=""
 before_install:
 - "gem install bundler --no-document"
 - >-
