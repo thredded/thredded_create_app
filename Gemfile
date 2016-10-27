@@ -5,3 +5,10 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'byebug', platform: :mri
+
+if ENV['TRAVIS']
+  # On Travis, add the generated app gems so that they are cached
+  gem 'rails'
+  gem 'sassc'
+  gem 'thredded'
+end
