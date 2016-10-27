@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.homepage      = 'https://github.com/thredded/thredded_create_app'
   s.license       = 'MIT'
 
-  s.required_ruby_version = '~> 2.1'
+  s.required_ruby_version = '~> 2.3'
 
   s.files = Dir['{exe,lib}/**/*'] + %w(LICENSE.txt README.md)
 

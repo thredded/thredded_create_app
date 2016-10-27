@@ -11,9 +11,9 @@ env:
   # https://docs.travis-ci.com/user/database-setup/#PostgreSQL
   - DB_USERNAME=postgres DB_PASSWORD=""
 before_install:
+- "gem update --system --no-document --quiet"
 - "gem install bundler --no-document"
-- >-
-  psql -d template1 -c "CREATE EXTENSION citext;" -U postgres
+- "psql -d template1 -c \"CREATE EXTENSION citext;\" -U postgres"
 cache: bundler
 bundler_args: --path ../../vendor/bundle --without debug
 

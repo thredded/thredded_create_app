@@ -13,7 +13,7 @@ This generator will create a new Rails app with the following configuration:
 
 1. Git.
 2. PostgreSQL.
-3. Ruby 2.1+.
+3. Ruby 2.3+.
 
 ## Usage
 

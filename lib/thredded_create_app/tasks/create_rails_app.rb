@@ -10,7 +10,9 @@ module ThreddedCreateApp
       def before_bundle
         run 'gem update --system --no-document --quiet'
         run 'gem install bundler rails --no-document'
-        run 'rails new . --skip-bundle --database=postgresql ' \
+        # I have no idea why this bundle exec is necessary on Travis.
+        run "#{'bundle exec ' if ENV['TRAVIS']}" \
+           'rails new . --skip-bundle --database=postgresql ' \
            "--skip-test#{verbose? ? ' --verbose' : ' --quiet'}"
         add_gem 'rspec-rails', groups: %i(test)
         git_commit summary
