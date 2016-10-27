@@ -3,7 +3,7 @@ require 'term/ansicolor'
 module ThreddedCreateApp
   module Logging
     def log_verbose(message = nil)
-      return unless ThreddedCreateApp.verbose?
+      return unless verbose?
       log_stderr Term::ANSIColor.bright_magenta(message || yield)
     end
 

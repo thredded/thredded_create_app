@@ -19,4 +19,4 @@ SQL
 
 drop_postgres_user
 rm -rf tmp
-./exe/thredded_create_app -y tmp/myapp
+./exe/thredded_create_app -y tmp/myapp "$@"

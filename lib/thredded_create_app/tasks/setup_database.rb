@@ -13,6 +13,7 @@ module ThreddedCreateApp
         copy_template 'setup_database/database.yml.erb', 'config/database.yml'
         create_db_user
         run 'bundle exec rails db:create db:migrate'
+        git_commit 'Configure Database'
       end
 
       private

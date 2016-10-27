@@ -1,5 +1,8 @@
 # frozen_string_literal: true
-require 'thredded_create_app'
+require 'thredded_create_app/command_error'
+require 'thredded_create_app/generator'
+require 'thredded_create_app/logging'
+
 require 'highline'
 module ThreddedCreateApp
   class CLI
@@ -62,7 +65,7 @@ module ThreddedCreateApp
           exit
         end
         op.on('--verbose', 'Verbose output') do
-          ::ThreddedCreateApp.verbose = true
+          options[:verbose] = @verbose = true
         end
         op.on('-h', '--help', 'Show this message') do
           STDERR.puts op
@@ -103,6 +106,10 @@ TEXT
         Term::ANSIColor.bold(Term::ANSIColor.bright_yellow('Proceed? [y/n]')),
         true
       )
+    end
+
+    def verbose?
+      @verbose
     end
 
     class ArgvError < StandardError

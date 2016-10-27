@@ -9,7 +9,7 @@ env:
 before_install:
 - "gem install bundler --no-document"
 - >-
-  if [ "$DB" = 'postgresql' ]; then psql -d template1 -c "CREATE EXTENSION citext;" -U postgres; fi
+  psql -d template1 -c "CREATE EXTENSION citext;" -U postgres
 cache: bundler
 bundler_args: --path ../../vendor/bundle --without debug
 

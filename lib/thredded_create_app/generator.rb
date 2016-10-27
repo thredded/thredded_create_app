@@ -2,6 +2,8 @@
 require 'fileutils'
 require 'thredded_create_app/tasks/base'
 require 'thredded_create_app/tasks/create_rails_app'
+require 'thredded_create_app/tasks/add_devise'
+require 'thredded_create_app/tasks/add_thredded'
 require 'thredded_create_app/tasks/setup_database'
 module ThreddedCreateApp
   class Generator < Tasks::Base
@@ -32,10 +34,10 @@ module ThreddedCreateApp
     def tasks
       @tasks ||= [
         Tasks::CreateRailsApp,
-        # Tasks::AddDevise,
-        # Tasks::AddThredded,
-        # Tasks::AddRailsEmailPreview,
+        Tasks::AddDevise,
+        Tasks::AddThredded,
         # Tasks::AddI18nTasks,
+        # Tasks::AddRubocop,
         Tasks::SetupDatabase
       ].map { |task_class| task_class.new(@options) }
     end
@@ -53,8 +55,8 @@ module ThreddedCreateApp
                   (version if version),
                   ("groups: %i(#{groups * ' '})" if groups)].compact.join(', ')
         end
-        run 'bundle install --quiet'
       end
+      run "bundle install#{' --quiet' unless verbose?}"
       git_commit "Add gems: #{gems.map { |(name, *)| name } * ', '}"
     end
   end

@@ -11,13 +11,13 @@ module ThreddedCreateApp
         run 'gem update --system --no-document --quiet'
         run 'gem install bundler rails --no-document'
         run 'rails new . --skip-bundle --database=postgresql ' \
-           '--skip-test --quiet'
+           "--skip-test#{' --quiet' unless verbose?}"
         add_gem 'rspec-rails', groups: %i(test)
         git_commit summary
       end
 
       def after_bundle
-        run 'bundle exec rails g rspec:install --quiet'
+        run_generator 'rspec:install'
         git_commit 'rails g rspec:install'
       end
     end
