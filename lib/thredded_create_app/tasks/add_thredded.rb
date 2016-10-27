@@ -29,6 +29,7 @@ module ThreddedCreateApp
         replace 'config/initializers/thredded.rb',
                 'Thredded.user_name_column = :name',
                 'Thredded.user_name_column = :display_name'
+        add_route "mount Thredded::Engine => '/forum'"
       end
 
       def setup_thredded_assets
