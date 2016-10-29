@@ -8,6 +8,13 @@ module ThreddedCreateApp
   class CLI
     include ThreddedCreateApp::Logging
 
+    DEFAULTS = {
+      auto_confirm: false,
+      verbose: false,
+      skip_install_gem_bundler_rails: false,
+      simple_form: false
+    }.freeze
+
     def self.start(argv)
       new(argv).start
     end
@@ -16,7 +23,7 @@ module ThreddedCreateApp
       @argv = argv
     end
 
-    def start # rubocop:disable Metrics/MethodLength
+    def start
       auto_output_coloring do
         begin
           run
@@ -50,10 +57,10 @@ module ThreddedCreateApp
       )
     end
 
-    def optparse # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+    def optparse # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       argv = @argv.dup
       argv << '--help' if argv.empty?
-      options = {}
+      options = DEFAULTS.dup
       positional_args = OptionParser.new(
         "Usage: #{program_name} #{Term::ANSIColor.bold 'APP_PATH'}"
       ) do |op|
@@ -66,6 +73,14 @@ module ThreddedCreateApp
         end
         op.on('--verbose', 'Verbose output') do
           options[:verbose] = @verbose = true
+        end
+        op.on('--[no-]simple-form',
+              "Use simple_form (default: #{DEFAULTS[:simple_form]})") do |v|
+          options[:simple_form] = v
+        end
+        op.on('--skip-install-gem-bundler-rails',
+              'Skips `gem update --system and `gem install bundler rails`') do
+          options[:skip_install_gem_bundler_rails] = true
         end
         op.on('-h', '--help', 'Show this message') do
           STDERR.puts op

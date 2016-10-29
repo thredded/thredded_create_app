@@ -2,9 +2,12 @@
 require 'fileutils'
 require 'thredded_create_app/tasks/base'
 require 'thredded_create_app/tasks/create_rails_app'
+require 'thredded_create_app/tasks/add_simple_form'
 require 'thredded_create_app/tasks/add_devise'
 require 'thredded_create_app/tasks/add_thredded'
+require 'thredded_create_app/tasks/add_display_name_to_users'
 require 'thredded_create_app/tasks/setup_database'
+require 'thredded_create_app/tasks/setup_app_skeleton'
 module ThreddedCreateApp
   class Generator < Tasks::Base
     def initialize(**options)
@@ -34,12 +37,13 @@ module ThreddedCreateApp
     def tasks
       @tasks ||= [
         Tasks::CreateRailsApp,
+        (Tasks::AddSimpleForm if @options[:simple_form]),
         Tasks::AddDevise,
         Tasks::AddThredded,
-        # Tasks::AddI18nTasks,
-        # Tasks::AddRubocop,
-        Tasks::SetupDatabase
-      ].map { |task_class| task_class.new(@options) }
+        Tasks::AddDisplayNameToUsers,
+        Tasks::SetupDatabase,
+        Tasks::SetupAppSkeleton
+      ].compact.map { |task_class| task_class.new(@options) }
     end
 
     def gems

@@ -64,11 +64,12 @@ module ThreddedCreateApp
 
       def add_route(route_str)
         log_verbose "Add route: #{route_str}"
-        inject_into_file 'config/routes.rb', "  #{route_str}\n",
+        inject_into_file 'config/routes.rb',
+                         content: "  #{route_str}\n",
                          after: /\.routes\.draw do\s*\n/m
       end
 
-      def inject_into_file(path, content, after: nil, before: nil)
+      def inject_into_file(path, content:, after: nil, before: nil)
         replace path, (after || before), after ? '\0' + content : content + '\0'
       end
 

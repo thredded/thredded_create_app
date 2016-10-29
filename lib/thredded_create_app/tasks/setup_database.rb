@@ -32,7 +32,8 @@ module ThreddedCreateApp
       end
 
       def dev_user_password
-        # Use a fixed password so that multiple runs of thredded_create_app don't fail.
+        # Use a fixed password so that multiple runs of thredded_create_app
+        # don't fail.
         @dev_user_password ||= app_name
       end
     end

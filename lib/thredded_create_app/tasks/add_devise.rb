@@ -3,6 +3,10 @@ require 'thredded_create_app/tasks/base'
 module ThreddedCreateApp
   module Tasks
     class AddDevise < Base
+      def summary
+        'Add devise with I18n and configure a User model'
+      end
+
       def before_bundle
         add_gem 'devise'
         add_gem 'devise-i18n'
