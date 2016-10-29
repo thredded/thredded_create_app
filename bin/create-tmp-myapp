@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# Generates a new app with thredded_create_app tmp/myapp
-# Cleans up the old app before testing this
+# Generates a new app with `thredded_create_app -y tmp/myapp "$@"`.
+# Cleans up the old app and database user + data first.
 
 echo 'Removing myapp_dev postgres data and the tmp/app codebase'
 

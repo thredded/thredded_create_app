@@ -1,0 +1,55 @@
+@import "flash-messages";
+
+.app {
+  @include thredded--clearfix;
+  -webkit-font-smoothing: antialiased;
+  color: $text-color;
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+  line-height: $base-line-height;
+}
+
+.app-container {
+  margin: 0 auto;
+  max-width: ($grid-container-max-width + 4rem);
+  padding: 0;
+}
+
+.app-nav-logo {
+  color: $text-color;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.app-nav-auth {
+  float: right;
+
+  @include thredded-media-mobile {
+    font-size: 0;
+
+    a {
+      margin-left: 0.4rem;
+      font-size: 1rem;
+    }
+  }
+}
+
+a {
+  @extend %thredded--link;
+}
+
+button, input[type="submit"] {
+  @extend %thredded--button;
+}
+
+form {
+  @extend %thredded--form;
+}
+
+blockquote {
+  @extend %thredded--blockquote;
+}
+
+table {
+  @extend %thredded--table;
+}

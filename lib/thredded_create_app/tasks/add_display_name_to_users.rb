@@ -38,7 +38,6 @@ module ThreddedCreateApp
         inject_into_file 'app/controllers/application_controller.rb',
                          after:   "ActionController::Base\n",
                          content: devise_permitted_params_rb
-        run_generator 'devise:i18n:views -v registrations'
         %w(app/views/devise/registrations/new.html.erb
            app/views/devise/registrations/edit.html.erb).each do |path|
           autofocus = File.read(path).include?(', autofocus: true')

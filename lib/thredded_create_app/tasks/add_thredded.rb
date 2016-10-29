@@ -16,6 +16,8 @@ module ThreddedCreateApp
         install_thredded
         git_commit 'Install thredded (rails g thredded:install)'
         add_thredded_routes
+        set_thredded_layout
+        configure_thredded_controller
         add_thredded_styles
         add_thredded_javascripts
         git_commit 'Add Thredded routes, styles, and javascripts'
@@ -27,20 +29,34 @@ module ThreddedCreateApp
 
       def install_thredded
         run_generator 'thredded:install'
+        run 'bundle exec rails thredded:install:migrations' \
+            "#{' --quiet' unless verbose?}"
       end
 
       def add_thredded_routes
         add_route "mount Thredded::Engine => '/forum'"
       end
 
+      def set_thredded_layout
+        replace 'config/initializers/thredded.rb',
+                "Thredded.layout = 'thredded/application'",
+                "Thredded.layout = 'application'"
+      end
+
+      def configure_thredded_controller
+        copy 'add_thredded/thredded_initializer_controller.rb',
+             'config/initializers/thredded.rb',
+             mode: 'a'
+      end
+
       def add_thredded_styles
-        copy 'add_thredded/_myapp_thredded.scss',
-             "app/assets/stylesheets/_#{app_name}_thredded.scss"
+        copy 'add_thredded/_myapp-thredded.scss',
+             "app/assets/stylesheets/_#{app_name}-thredded.scss"
         if File.file? 'app/assets/stylesheets/application.css'
           File.delete 'app/assets/stylesheets/application.css'
         end
         File.write 'app/assets/stylesheets/application.scss',
-                   "@import \"#{app_name}_thredded\";",
+                   "@import \"#{app_name}-thredded\";\n",
                    mode: 'a'
       end
 

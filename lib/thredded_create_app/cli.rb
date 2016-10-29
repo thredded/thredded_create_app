@@ -52,9 +52,18 @@ module ThreddedCreateApp
       log_info generator.summary
       exit unless options[:auto_confirm] || agree?
       generator.generate
-      log_stderr Term::ANSIColor.bold Term::ANSIColor.bright_green(
-        'All done! 🌟'
-      )
+      log_stderr Term::ANSIColor.bold Term::ANSIColor.bright_green <<~TEXT
+        All done! 🌟
+      TEXT
+      start_app_server!(options[:app_path])
+    end
+
+    def start_app_server!(app_path)
+      log_info 'Changing directory and starting the app server'
+      command = "cd #{Shellwords.escape(app_path)} && " \
+        'bundle exec rails s'
+      log_command command
+      Bundler.with_clean_env { exec command }
     end
 
     def optparse # rubocop:disable Metrics/AbcSize,Metrics/MethodLength

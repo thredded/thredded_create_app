@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'fileutils'
+require 'shellwords'
 require 'thredded_create_app/tasks/base'
 require 'thredded_create_app/tasks/create_rails_app'
 require 'thredded_create_app/tasks/add_simple_form'
