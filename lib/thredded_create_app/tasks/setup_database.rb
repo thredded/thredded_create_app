@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require 'thredded_create_app/tasks/base'
-require 'securerandom'
 module ThreddedCreateApp
   module Tasks
     class SetupDatabase < Base
@@ -33,7 +32,8 @@ module ThreddedCreateApp
       end
 
       def dev_user_password
-        @dev_user_password ||= SecureRandom.urlsafe_base64(20)
+        # Use a fixed password so that multiple runs of thredded_create_app don't fail.
+        @dev_user_password ||= app_name
       end
     end
   end
