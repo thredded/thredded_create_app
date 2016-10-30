@@ -43,6 +43,8 @@ module ThreddedCreateApp
         Tasks::AddThredded,
         Tasks::AddDisplayNameToUsers,
         Tasks::SetupAppSkeleton,
+        # Tasks::AddHeroku,
+        # Tasks::AddDocker,
         Tasks::SetupDatabase
       ].compact.map { |task_class| task_class.new(@options) }
     end

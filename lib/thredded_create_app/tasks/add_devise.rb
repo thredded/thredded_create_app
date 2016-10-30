@@ -27,7 +27,7 @@ module ThreddedCreateApp
                          after:   /protect_from_forgery.*\n/,
                          content: <<-'RUBY'
 
-  before_filter :store_current_location, unless: :devise_controller?
+  before_action :store_current_location, unless: :devise_controller?
 
   private
 
