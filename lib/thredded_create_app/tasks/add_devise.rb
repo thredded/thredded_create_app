@@ -26,17 +26,15 @@ module ThreddedCreateApp
         inject_into_file 'app/controllers/application_controller.rb',
                          after:   /protect_from_forgery.*\n/,
                          content: <<-'RUBY'
-  # devise
+
   before_filter :store_current_location, unless: :devise_controller?
 
   private
 
-  # devise
   def store_current_location
     store_location_for(:user, request.url)
   end
 
-  # devise
   def after_sign_out_path_for(resource)
     request.referrer || root_path
   end
