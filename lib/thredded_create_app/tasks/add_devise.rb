@@ -13,6 +13,9 @@ module ThreddedCreateApp
       end
 
       def after_bundle
+        replace 'config/initializers/filter_parameter_logging.rb',
+                ':password',
+                ':password, :password_confirmation'
         run_generator 'devise:install'
         run_generator 'devise User'
         setup_views
