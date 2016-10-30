@@ -20,7 +20,9 @@ module ThreddedCreateApp
         configure_thredded_controller
         add_thredded_styles
         add_thredded_javascripts
-        git_commit 'Add Thredded routes, styles, and javascripts'
+        copy 'add_thredded/spec/features/thredded_spec.rb',
+             'spec/features/thredded_spec.rb'
+        git_commit 'Configure Thredded (routes, assets, behaviour, tests)'
         add_admin_column_to_users
         git_commit 'Add the admin column to users'
       end

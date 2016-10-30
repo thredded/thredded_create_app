@@ -59,6 +59,7 @@ module ThreddedCreateApp
       log_stderr Term::ANSIColor.bold Term::ANSIColor.bright_green <<~TEXT
         All done! 🌟
       TEXT
+      generator.run_tests!
       start_app_server!(options[:app_path]) if options[:start_server]
     end
 

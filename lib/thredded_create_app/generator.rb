@@ -23,17 +23,30 @@ module ThreddedCreateApp
     def generate
       log_verbose "Started: #{inspect}"
       FileUtils.mkdir_p(app_path)
-      Bundler.with_clean_env do
-        Dir.chdir(app_path) do
-          run 'git init .'
-          @tasks.each(&:before_bundle)
-          bundle
-          @tasks.each(&:after_bundle)
-        end
+      in_app_env do
+        run 'git init .'
+        @tasks.each(&:before_bundle)
+        bundle
+        @tasks.each(&:after_bundle)
+      end
+    end
+
+    def run_tests!
+      log_info 'Running tests'
+      in_app_env do
+        run 'bundle exec rspec -fd'
       end
     end
 
     private
+
+    def in_app_env
+      Bundler.with_clean_env do
+        Dir.chdir app_path do
+          yield
+        end
+      end
+    end
 
     def tasks
       @tasks ||= [

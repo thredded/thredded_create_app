@@ -29,6 +29,8 @@ module ThreddedCreateApp
         add_home_page
         add_i18n
         add_app_layout
+        copy 'setup_app_skeleton/spec/features/homepage_spec.rb',
+             'spec/features/homepage_spec.rb'
         add_seeds
         git_commit 'Set up basic app navigation and styles'
       end

@@ -23,6 +23,7 @@ module ThreddedCreateApp
            "--skip-test#{verbose? ? ' --verbose' : ' --quiet'}"
         replace 'Gemfile', /gem 'sass-rails'.*$/, "gem 'sassc-rails'"
         add_gem 'rspec-rails', groups: %i(test)
+        add_gem 'capybara', groups: %i(test)
         git_commit summary
       end
 
