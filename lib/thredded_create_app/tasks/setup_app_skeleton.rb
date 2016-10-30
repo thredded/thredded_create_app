@@ -84,6 +84,8 @@ module ThreddedCreateApp
       def add_user_page
         run_generator 'controller users show' \
                       ' --no-assets --no-helper --skip-routes'
+        copy 'setup_app_skeleton/spec/controllers/users_controller_spec.rb',
+             'spec/controllers/users_controller_spec.rb'
         copy 'setup_app_skeleton/users_show.html.erb',
              'app/views/users/show.html.erb'
         replace 'app/controllers/users_controller.rb', 'def show', <<-'RUBY'
