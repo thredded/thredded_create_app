@@ -7,6 +7,8 @@ rvm:
 services:
   - postgresql
 env:
+  global:
+  - TRAVIS=1 CI=1 COVERAGE=1
   matrix:
   # https://docs.travis-ci.com/user/database-setup/#PostgreSQL
   - DB_USERNAME=postgres DB_PASSWORD=""
@@ -19,3 +21,6 @@ bundler_args: --path ../../vendor/bundle --without debug
 
 # Avoid rake here, as the RSpec test task spawns a new process which does not run via bundler.
 script: "bundle exec rspec --format d && bundle exec rubocop"
+after_script:
+# NB: --groups must equal to the total number of jobs
+- "bundle exec codeclimate-batch --groups 2"

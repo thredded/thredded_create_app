@@ -27,5 +27,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'highline', '>= 1.7.2'
   s.add_development_dependency 'bundler', '~> 1.13'
   s.add_development_dependency 'rspec', '~> 3.5'
+  s.add_development_dependency 'simplecov'
   s.add_development_dependency 'rubocop', '~> 0.44'
 end

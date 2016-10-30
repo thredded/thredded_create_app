@@ -6,8 +6,16 @@ gemspec
 
 gem 'byebug', platform: :mri
 
+if ENV['CI']
+  group :test do
+    # CodeClimate coverage reporting.
+    gem 'codeclimate-test-reporter', require: false
+    gem 'codeclimate_batch', require: false
+  end
+end
+
 if ENV['TRAVIS']
-  # On Travis, add the generated app gems so that they are cached
+  # Add the generated app gems so that they are cached.
   gem 'bundler'
   gem 'coffee-rails'
   gem 'devise'
