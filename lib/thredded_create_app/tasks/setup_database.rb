@@ -11,7 +11,7 @@ module ThreddedCreateApp
         log_info 'Creating config/database.yml from template'
         copy_template 'setup_database/database.yml.erb', 'config/database.yml'
         create_db_user
-        run 'bundle exec rails db:create db:migrate' \
+        run 'bundle exec rails db:create db:migrate db:seed' \
             "#{' --quiet' unless verbose?}"
         git_commit 'Configure the database'
       end

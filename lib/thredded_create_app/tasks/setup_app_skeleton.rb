@@ -4,8 +4,6 @@ module ThreddedCreateApp
   module Tasks
     class SetupAppSkeleton < Base
       MATERIAL_700_COLORS = [
-        '#D32F2F', # red
-        '#C2185B', # pink
         '#7B1FA2', # purple
         '#512DA8', # deep purple
         '#303F9F', # indigo
@@ -25,12 +23,18 @@ module ThreddedCreateApp
       end
 
       def after_bundle
+        add_jquery_turbolinks
         add_styles
         add_user_page
         add_home_page
         add_i18n
         add_app_layout
+        add_seeds
         git_commit 'Set up basic app navigation and styles'
+      end
+
+      def add_jquery_turbolinks
+        # TODO: https://github.com/kossnocorp/jquery.turbolinks/pull/58
       end
 
       def add_styles
@@ -95,8 +99,21 @@ module ThreddedCreateApp
         add_route <<~'RUBY', append: true
           root to: 'home#show'
         RUBY
-        copy 'setup_app_skeleton/home_show.html.erb',
-             'app/views/home/show.html.erb'
+        copy_template 'setup_app_skeleton/home_show.html.erb.erb',
+                      'app/views/home/show.html.erb'
+      end
+
+      def add_seeds
+        copy_template 'setup_app_skeleton/seeds.rb.erb',
+                      'db/seeds.rb'
+      end
+
+      def admin_email
+        "admin@#{app_name.tr(' ', '_').downcase}.com"
+      end
+
+      def admin_password
+        '123456'
       end
 
       def brand_primary

@@ -1,9 +1,12 @@
-<header role="banner">
+<header role="banner" class="app-header">
   <span class="app-nav-auth">
     <% if current_user %>
         <%= link_to current_user.display_name, user_path(current_user) %>
+        |
+        <%= link_to t('nav.sign_out'), main_app.destroy_user_session_path,
+                    method: :delete %>
     <% else %>
-        <%= link_to t('devise.shared.links.sign_in'), new_user_session_path %>
+        <%= link_to t('nav.sign_in'), main_app.new_user_session_path %>
     <% end %>
   </span>
   <a class="app-nav-logo" href="/"><%= t 'brand.name' %></a>

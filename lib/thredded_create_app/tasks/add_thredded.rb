@@ -9,13 +9,13 @@ module ThreddedCreateApp
 
       def before_bundle
         add_gem 'thredded'
-        add_gem 'sassc'
       end
 
       def after_bundle
         install_thredded
         git_commit 'Install thredded (rails g thredded:install)'
         add_thredded_routes
+        copy 'add_thredded/thredded.en.yml', 'config/locales/thredded.en.yml'
         set_thredded_layout
         configure_thredded_controller
         add_thredded_styles

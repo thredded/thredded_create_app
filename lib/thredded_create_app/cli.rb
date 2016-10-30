@@ -11,7 +11,11 @@ module ThreddedCreateApp
     DEFAULTS = {
       auto_confirm: false,
       verbose: false,
-      skip_install_gem_bundler_rails: false,
+      install_gem_bundler_rails: true,
+      start_server: true,
+      # The simple_form option is currently broken.
+      # Fixed by https://github.com/tigrish/devise-i18n/pull/139 (merged)
+      # TODO: Set the default to true once a new version devise-i18n is released
       simple_form: false
     }.freeze
 
@@ -45,7 +49,7 @@ module ThreddedCreateApp
 
     private
 
-    def run
+    def run # rubocop:disable Metrics/AbcSize
       options = optparse
       generator = ThreddedCreateApp::Generator.new(options)
       log_info 'Will do the following:'
@@ -55,7 +59,7 @@ module ThreddedCreateApp
       log_stderr Term::ANSIColor.bold Term::ANSIColor.bright_green <<~TEXT
         All done! 🌟
       TEXT
-      start_app_server!(options[:app_path])
+      start_app_server!(options[:app_path]) if options[:start_server]
     end
 
     def start_app_server!(app_path)
@@ -66,13 +70,16 @@ module ThreddedCreateApp
       Bundler.with_clean_env { exec command }
     end
 
-    def optparse # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/BlockLength
+    def optparse
       argv = @argv.dup
       argv << '--help' if argv.empty?
       options = DEFAULTS.dup
       positional_args = OptionParser.new(
         "Usage: #{program_name} #{Term::ANSIColor.bold 'APP_PATH'}"
       ) do |op|
+        default_text = -> (option) { " (default: #{DEFAULTS[option]})" }
+
         op.on('-y', 'Auto-confirm all prompts') do
           options[:auto_confirm] = true
         end
@@ -83,13 +90,18 @@ module ThreddedCreateApp
         op.on('--verbose', 'Verbose output') do
           options[:verbose] = @verbose = true
         end
-        op.on('--[no-]simple-form',
-              "Use simple_form (default: #{DEFAULTS[:simple_form]})") do |v|
+        op.on('--[no-]simple-form', 'Use simple_form' +
+            default_text[:simple_form]) do |v|
           options[:simple_form] = v
         end
-        op.on('--skip-install-gem-bundler-rails',
-              'Skips `gem update --system and `gem install bundler rails`') do
-          options[:skip_install_gem_bundler_rails] = true
+        op.on('--[no-]install-gem-bundler-rails',
+              'Run `gem update --system and `gem install bundler rails`' +
+                  default_text[:simple_form]) do |v|
+          options[:install_gem_bundler_rails] = v
+        end
+        op.on('--[no-]start-server', 'Start the app server' +
+            default_text[:start_server]) do |v|
+          options[:start_server] = v
         end
         op.on('-h', '--help', 'Show this message') do
           STDERR.puts op
@@ -109,6 +121,7 @@ TEXT
       options.update(app_path: argv[0])
       options
     end
+    # rubocop:enable Metrics/AbcSize,Metrics/MethodLength,Metrics/BlockLength
 
     def error(message, exit_code)
       log_error message

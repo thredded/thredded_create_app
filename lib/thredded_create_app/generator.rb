@@ -42,8 +42,8 @@ module ThreddedCreateApp
         Tasks::AddDevise,
         Tasks::AddThredded,
         Tasks::AddDisplayNameToUsers,
-        Tasks::SetupDatabase,
-        Tasks::SetupAppSkeleton
+        Tasks::SetupAppSkeleton,
+        Tasks::SetupDatabase
       ].compact.map { |task_class| task_class.new(@options) }
     end
 

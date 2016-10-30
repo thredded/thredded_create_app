@@ -9,10 +9,21 @@
   line-height: $base-line-height;
 }
 
+.app-header {
+  border-bottom: 1px solid #eee;
+  a {
+    display: inline-block;
+    padding: 1rem 0;
+  }
+}
+
 .app-container {
   margin: 0 auto;
   max-width: ($grid-container-max-width + 4rem);
   padding: 0;
+  @include thredded-media-tablet-and-up {
+    padding: 0 2rem 0.75rem 2rem;
+  }
 }
 
 .app-nav-logo {
@@ -52,4 +63,8 @@ blockquote {
 
 table {
   @extend %thredded--table;
+}
+
+hr {
+  @extend %thredded--hr;
 }

@@ -16,10 +16,32 @@ module ThreddedCreateApp
         run_generator 'devise:install'
         run_generator 'devise User'
         setup_views
+        setup_after_sign_in_behaviour
         git_commit 'Setup Devise'
       end
 
       private
+
+      def setup_after_sign_in_behaviour
+        inject_into_file 'app/controllers/application_controller.rb',
+                         after:   /protect_from_forgery.*\n/,
+                         content: <<-'RUBY'
+  # devise
+  before_filter :store_current_location, unless: :devise_controller?
+
+  private
+
+  # devise
+  def store_current_location
+    store_location_for(:user, request.url)
+  end
+
+  # devise
+  def after_sign_out_path_for(resource)
+    request.referrer || root_path
+  end
+        RUBY
+      end
 
       def setup_views
         run_generator 'devise:i18n:views -v sessions registrations'

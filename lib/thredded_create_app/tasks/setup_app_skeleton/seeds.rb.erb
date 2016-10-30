@@ -1,0 +1,20 @@
+# frozen_string_literal: true
+admin = User.create!(
+    display_name: 'Admin',
+    email: <%= admin_email.inspect %>,
+    password: <%= admin_password.inspect %>,
+    admin: true
+)
+
+messageboard = Thredded::Messageboard.create!(
+    name: 'General',
+    slug: 'general',
+    description: 'A board is not a board without some posts'
+)
+
+Thredded::TopicForm.new(
+    title: 'My first topic',
+    content: 'Hello **world**!',
+    user: admin,
+    messageboard: messageboard
+).save

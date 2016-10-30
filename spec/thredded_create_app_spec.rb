@@ -7,6 +7,7 @@ describe ThreddedCreateApp do
   end
 
   it 'generates the app without errors' do
-    expect(system('bin/create-tmp-myapp --verbose')).to be true
+    expect(system('bin/create-tmp-myapp --verbose --no-start-server'))
+      .to(be true)
   end
 end

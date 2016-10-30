@@ -3,9 +3,9 @@ require 'thredded_create_app/tasks/base'
 module ThreddedCreateApp
   module Tasks
     class CreateRailsApp < Base
-      def initialize(skip_install_gem_bundler_rails: false, **args)
+      def initialize(install_gem_bundler_rails: false, **args)
         super
-        @skip_install_gem_bundler_rails = skip_install_gem_bundler_rails
+        @install_gem_bundler_rails = install_gem_bundler_rails
       end
 
       def summary
@@ -13,7 +13,7 @@ module ThreddedCreateApp
       end
 
       def before_bundle
-        unless @skip_install_gem_bundler_rails
+        if @install_gem_bundler_rails
           run 'gem update --system --no-document --quiet'
           run 'gem install bundler rails --no-document'
         end
@@ -21,6 +21,7 @@ module ThreddedCreateApp
         run "#{'bundle exec ' if ENV['TRAVIS']}" \
            'rails new . --skip-bundle --database=postgresql ' \
            "--skip-test#{verbose? ? ' --verbose' : ' --quiet'}"
+        replace 'Gemfile', /gem 'sass-rails'.*$/, "gem 'sassc-rails'"
         add_gem 'rspec-rails', groups: %i(test)
         git_commit summary
       end

@@ -3,6 +3,10 @@ AllCops:
   Exclude:
     - 'tmp/**/*'
 
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - 'lib/thredded_create_app/tasks/*/*.rb'
+
 Metrics/ClassLength:
   Max: 125
 
