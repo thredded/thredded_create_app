@@ -1,44 +1,47 @@
 <h1>Welcome to your new Rails app with Thredded! 🎉</h1>
 
-<p>You can now:</p>
+<%% unless Rails.env.production? %>
+  <p>You can now:</p>
 
-<ul>
-  <li>
-    <p>Check out the <b><%%= link_to t('nav.forums'), thredded.root_path %></b>.
-    </p>
-  </li>
-  <li>
-    <p>
-      <b><%%= link_to 'Log in', new_user_session_path %></b> as
-      <code><%= admin_email %></code>
-      with password <code><%= admin_password %></code>.
-    </p>
-  </li>
-  <li>
-    <p>Edit this page at <code>app/views/home/show.html.erb</code>.</p>
-  </li>
-</ul>
+  <ul>
+    <li>
+      <p>Check out the
+        <b><%%= link_to t('nav.forums'), thredded.root_path %></b>.
+      </p>
+    </li>
+    <li>
+      <p>
+        <b><%%= link_to 'Log in', new_user_session_path %></b> as
+        <code><%= admin_email %></code>
+        with password <code><%= admin_password %></code>.
+      </p>
+    </li>
+    <li>
+      <p>Edit this page at <code>app/views/home/show.html.erb</code>.</p>
+    </li>
+  </ul>
 
-<hr>
-<p>Your app uses:</p>
-<ul>
-  <li>
-    <a href="http://rubyonrails.org/">Ruby on Rails</a>
-    v<%%= Rails::VERSION::STRING %>.
-  </li>
-  <li>
-    <a href="https://github.com/plataformatec/devise">Devise</a>
-    v<%%= require 'devise/version'; Devise::VERSION %> for authentication.
-  </li>
-  <li>
-    <a href="https://github.com/thredded/thredded">Thredded</a>
-    v<%%= Thredded::VERSION %> as the forums engine.
-  </li>
-  <li>Sass for your styles.</li>
-  <li>RSpec for testing.</li>
-</ul>
+  <hr>
+  <p>Your app uses:</p>
+  <ul>
+    <li>
+      <a href="http://rubyonrails.org/">Ruby on Rails</a>
+      v<%%= Rails::VERSION::STRING %>.
+    </li>
+    <li>
+      <a href="https://github.com/plataformatec/devise">Devise</a>
+      v<%%= require 'devise/version'; Devise::VERSION %> for authentication.
+    </li>
+    <li>
+      <a href="https://github.com/thredded/thredded">Thredded</a>
+      v<%%= Thredded::VERSION %> as the forums engine.
+    </li>
+    <li>Sass for your styles.</li>
+    <li>RSpec for testing.</li>
+  </ul>
 
-Created with
-<a href="https://github.com/thredded/thredded_create_app">
-  thredded_create_app
-</a> v<%= require 'thredded_create_app/version'; ThreddedCreateApp::VERSION %>.
+  Created with
+  <a href="https://github.com/thredded/thredded_create_app">
+    thredded_create_app
+  </a> v<%= require 'thredded_create_app/version'; ThreddedCreateApp::VERSION %>.
+<%% end %>
