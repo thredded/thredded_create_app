@@ -36,7 +36,7 @@ module ThreddedCreateApp
 
       def git_commit(message)
         log_info "Commiting: #{message}"
-        system 'git add .'
+        system 'git add -A .'
         system(*['git', 'commit', '-m', "[thredded_create_app] #{message}",
                  ('--quiet' unless verbose?)].compact)
       end
