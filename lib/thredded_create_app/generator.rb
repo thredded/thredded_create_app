@@ -41,7 +41,13 @@ module ThreddedCreateApp
     private
 
     def in_app_env
-      Bundler.with_clean_env do
+      if defined?(Bundler)
+        Bundler.with_clean_env do
+          Dir.chdir app_path do
+            yield
+          end
+        end
+      else
         Dir.chdir app_path do
           yield
         end
