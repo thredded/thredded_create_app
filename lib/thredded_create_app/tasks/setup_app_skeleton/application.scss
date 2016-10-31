@@ -45,6 +45,10 @@
   }
 }
 
+.form-inputs .input, .form-actions {
+  margin: 1rem 0;
+}
+
 a {
   @extend %thredded--link;
 }
