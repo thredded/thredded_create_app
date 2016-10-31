@@ -14,7 +14,39 @@ messageboard = Thredded::Messageboard.create!(
 
 Thredded::TopicForm.new(
     title: 'My first topic',
-    content: 'Hello **world**!',
+    content: <<~MARKDOWN,
+      Hello **world**! This first post shows some of the Thredded default post
+      formatting functionality.
+
+      ### Quote
+
+      > There is nothing either good or bad, but thinking makes it so.
+
+      ### Image
+
+      ![lime-cat](https://cloud.githubusercontent.com/assets/216339/19857777/2be75b1e-9f3c-11e6-9845-f30ceb4308a9.jpg)
+
+      ### Video
+
+      https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+      ### Table
+
+      | x | y | x ⊕ y |
+      |---|---|:-----:|
+      | 1 | 1 |   0   |
+      | 1 | 0 |   1   |
+      | 0 | 1 |   1   |
+      | 0 | 0 |   0   |
+
+      ### Code
+
+      ```ruby
+      puts 'Hello world'
+      ```
+
+      Some BBCode is supported as well, e.g. [b]bold[/b].
+    MARKDOWN
     user: admin,
     messageboard: messageboard
 ).save
