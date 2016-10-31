@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 if ENV['COVERAGE'] && !%w(rbx jruby).include?(RUBY_ENGINE)
   if ENV['CI']
     require 'codeclimate_batch'
