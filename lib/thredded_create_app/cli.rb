@@ -13,10 +13,7 @@ module ThreddedCreateApp
       verbose: false,
       install_gem_bundler_rails: true,
       start_server: true,
-      # The simple_form option is currently broken.
-      # Fixed by https://github.com/tigrish/devise-i18n/pull/139 (merged)
-      # TODO: Set the default to true once a new version devise-i18n is released
-      simple_form: false
+      simple_form: true
     }.freeze
 
     def self.start(argv)
