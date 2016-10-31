@@ -52,9 +52,13 @@ Then, run the command below depending on how you installed your ruby:
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests.
 You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-Run `bin/create-tmp-myapp` to generate an app with `thredded_create_app` at
-`tmp/myapp`. This command will clean up the previously generated app before
-creating a new one.
+To generate an app with `thredded_create_app` at `tmp/myapp`, run:
+
+```sh
+bundle exec bin/create-tmp-myapp
+```
+
+This command will clean up the previously generated app before creating a new one.
 
 To install this gem onto your local machine, run `bundle exec rake install`.
 To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`,
