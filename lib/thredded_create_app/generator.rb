@@ -9,6 +9,8 @@ require 'thredded_create_app/tasks/add_thredded'
 require 'thredded_create_app/tasks/add_display_name_to_users'
 require 'thredded_create_app/tasks/setup_database'
 require 'thredded_create_app/tasks/setup_app_skeleton'
+require 'thredded_create_app/tasks/production_configs'
+require 'thredded_create_app/tasks/docker'
 module ThreddedCreateApp
   class Generator < Tasks::Base
     def initialize(**options)
@@ -62,8 +64,8 @@ module ThreddedCreateApp
         Tasks::AddThredded,
         Tasks::AddDisplayNameToUsers,
         Tasks::SetupAppSkeleton,
-        # Tasks::AddHeroku,
-        # Tasks::AddDocker,
+        Tasks::ProductionConfigs,
+        Tasks::Docker,
         Tasks::SetupDatabase
       ].compact.map { |task_class| task_class.new(@options) }
     end
