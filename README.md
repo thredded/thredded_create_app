@@ -9,6 +9,19 @@ This generator will create a new Rails app with the following configuration:
 * Database: PostgreSQL.
 * Auth: Devise.
 
+Example screenshots of the generated app:
+
+<table>
+  <tr>
+    <td><img alt="Home" src="https://cloud.githubusercontent.com/assets/216339/19858280/23072dd8-9f3e-11e6-8d71-e977a4a67f0f.png"></td>
+    <td><img alt="Sign Up" src="https://cloud.githubusercontent.com/assets/216339/19858282/231bb06e-9f3e-11e6-8e51-a293523b7034.png"></td>
+  </tr>
+  <tr>
+    <td><img alt="Messageboard" src="https://cloud.githubusercontent.com/assets/216339/19858469/c592413c-9f3e-11e6-827d-b530f3ee2850.png"></td>
+    <td><img alt="Topic" src="https://cloud.githubusercontent.com/assets/216339/19858284/232107e4-9f3e-11e6-8c5f-8a8f927f2922.png"></td>
+  </tr>
+</table>
+
 ## Pre-requisites
 
 1. Git.
