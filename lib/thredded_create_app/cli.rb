@@ -68,10 +68,14 @@ module ThreddedCreateApp
       command = "cd #{Shellwords.escape(app_path)} && " \
         'bundle exec rails s'
       log_command command
-      Bundler.with_clean_env { exec command }
+      if defined?(Bundler)
+        Bundler.with_clean_env { exec command }
+      else
+        exec command
+      end
     end
 
-    # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/BlockLength
+    # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     def optparse
       argv = @argv.dup
       argv << '--help' if argv.empty?
@@ -79,32 +83,23 @@ module ThreddedCreateApp
       positional_args = OptionParser.new(
         "Usage: #{program_name} #{Term::ANSIColor.bold 'APP_PATH'}"
       ) do |op|
-        default_text = -> (option) { " (default: #{DEFAULTS[option]})" }
+        flags = Flags.new(op, options)
 
-        op.on('-y', 'Auto-confirm all prompts') do
-          options[:auto_confirm] = true
-        end
-        op.on('-v', '--version', 'Print the version') do
+        flags.bool :auto_confirm, '-y', 'Auto-confirm all prompts'
+        op.on '-v', '--version', 'Print the version' do
           puts ThreddedCreateApp::VERSION
           exit
         end
-        op.on('--verbose', 'Verbose output') do
-          options[:verbose] = @verbose = true
+        flags.bool :verbose, '--verbose', 'Verbose output' do
+          @verbose = true
         end
-        op.on('--[no-]simple-form', 'Use simple_form' +
-            default_text[:simple_form]) do |v|
-          options[:simple_form] = v
-        end
-        op.on('--[no-]install-gem-bundler-rails',
-              'Run `gem update --system and `gem install bundler rails`' +
-                  default_text[:simple_form]) do |v|
-          options[:install_gem_bundler_rails] = v
-        end
-        op.on('--[no-]start-server', 'Start the app server' +
-            default_text[:start_server]) do |v|
-          options[:start_server] = v
-        end
-        op.on('-h', '--help', 'Show this message') do
+        flags.bool :simple_form, '--[no-]simple-form', 'Use simple_form'
+        flags.bool :install_gem_bundler_rails,
+                   '--[no-]install-gem-bundler-rails',
+                   'Run `gem update --system and `gem install bundler rails`'
+        flags.bool :start_server, '--[no-]start-server', 'Start the app server'
+
+        op.on '-h', '--help', 'Show this message' do
           STDERR.puts op
           exit
         end
@@ -123,6 +118,31 @@ TEXT
       options
     end
     # rubocop:enable Metrics/AbcSize,Metrics/MethodLength,Metrics/BlockLength
+
+    class Flags
+      def initialize(op, options)
+        @op      = op
+        @options = options
+      end
+
+      # rubocop:disable Style/OptionalArguments
+      def bool(as, short = nil, long, desc)
+        flag_args = [short, long].compact
+        if long.start_with?('--[no-]')
+          desc += " (default: #{DEFAULTS[as]})" if DEFAULTS[as]
+          @op.on(*flag_args, desc) do |v|
+            @options[as] = v
+            yield v if block_given?
+          end
+        else
+          @op.on(*flag_args, desc) do
+            @options[as] = !long.start_with?('--no-')
+            yield @options[as] if block_given?
+          end
+        end
+      end
+      # rubocop:enable Style/OptionalArguments
+    end
 
     def error(message, exit_code)
       log_error message
