@@ -25,6 +25,8 @@ module ThreddedCreateApp
         git_commit 'Configure Thredded (routes, assets, behaviour, tests)'
         add_admin_column_to_users
         git_commit 'Add the admin column to users'
+        run 'bundle exec rails thredded:install:emoji'
+        git_commit 'Copied emoji to public/emoji'
       end
 
       private
