@@ -9,14 +9,6 @@
   line-height: $base-line-height;
 }
 
-.app-header {
-  border-bottom: 1px solid #eee;
-  a {
-    display: inline-block;
-    padding: 1rem 0;
-  }
-}
-
 .app-container {
   margin: 0 auto;
   max-width: ($grid-container-max-width + 4rem);
@@ -27,6 +19,14 @@
   @media (min-width: $grid-container-max-width + 0.01rem) {
     padding-left: 3.5rem;
     padding-right: 3.5rem;
+  }
+}
+
+.app-header {
+  border-bottom: 1px solid #eee;
+  a {
+    display: inline-block;
+    padding: 1rem 0;
   }
 }
 
