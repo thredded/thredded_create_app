@@ -10,7 +10,6 @@ if ENV['CI']
   group :test do
     # CodeClimate coverage reporting.
     gem 'codeclimate-test-reporter', require: false
-    gem 'codeclimate_batch', require: false
   end
 end
 
