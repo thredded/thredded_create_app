@@ -58,7 +58,7 @@ module ThreddedCreateApp
                       'config/locales/en.yml'
       end
 
-      def add_app_layout
+      def add_app_layout # rubocop:disable Metrics/MethodLength
         copy 'setup_app_skeleton/_header.html.erb',
              'app/views/shared/_header.html.erb'
         copy 'setup_app_skeleton/_flash_messages.html.erb',
@@ -73,6 +73,15 @@ module ThreddedCreateApp
         replace 'app/views/layouts/application.html.erb',
                 %r{<title>.*?</title>},
                 '<title><%= page_title %></title>'
+        replace 'app/views/layouts/application.html.erb',
+                /<%= javascript_include_tag 'application', .*? %>/,
+                <<-'ERB'
+    <%= javascript_include_tag 'application',
+                                async: true,
+                                defer: !!Rails.application.config.assets.debug,
+                                'data-turbolinks-track': 'reload' %>
+        ERB
+
         replace 'app/views/layouts/application.html.erb',
                 %r{<body>.*?</body>}m,
                 File.read(
