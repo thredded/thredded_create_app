@@ -23,7 +23,7 @@ module ThreddedCreateApp
       end
 
       def after_bundle
-        add_jquery_turbolinks
+        add_javascripts
         add_styles
         add_user_page
         add_home_page
@@ -35,8 +35,11 @@ module ThreddedCreateApp
         git_commit 'Set up basic app navigation and styles'
       end
 
-      def add_jquery_turbolinks
-        # TODO: https://github.com/kossnocorp/jquery.turbolinks/pull/58
+      def add_javascripts
+        replace 'app/assets/javascripts/application.js',
+                         %r(^//= require jquery$),
+                         '//= require jquery3'
+        git_commit 'Use jQuery v3 instead of jQuery v1'
       end
 
       def add_styles
