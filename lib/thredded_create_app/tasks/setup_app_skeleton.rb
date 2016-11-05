@@ -74,7 +74,7 @@ module ThreddedCreateApp
                 %r{<title>.*?</title>},
                 '<title><%= page_title %></title>'
         replace 'app/views/layouts/application.html.erb',
-                /<%= javascript_include_tag 'application', .*? %>/,
+                /[ ]*<%= javascript_include_tag 'application', .*? %>/,
                 <<-'ERB'
     <%= javascript_include_tag 'application',
                                 async: true,
