@@ -22,5 +22,5 @@
     current_user: current_user) %>
 <% if posts_page.present? %>
     <h2><%= t 'thredded.users.recent_activity' %></h2>
-    <%= render 'thredded/users/posts', posts: posts %>
+    <%= render 'thredded/users/posts', posts: posts_page %>
 <% end %>
