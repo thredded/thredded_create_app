@@ -80,6 +80,7 @@ module ThreddedCreateApp
                 /[ ]*<%= javascript_include_tag 'application', .*? %>/,
                 <<-'ERB'
     <%= javascript_include_tag 'application',
+                                async: !Rails.application.config.assets.debug,
                                 defer: true,
                                 'data-turbolinks-track': 'reload' %>
         ERB
