@@ -2,11 +2,6 @@
 
 Generates a Rails app with the [Thredded](https://github.com/thredded/thredded) forums engine installed.
 
-This generator will create a new Rails app with the following configuration:
-
-* Database: PostgreSQL.
-* Auth: Devise.
-
 See below for more information on the generated app.
 
 Example screenshots of the generated app:
