@@ -1,7 +1,5 @@
 # ThreddedCreateApp [![Build Status](https://travis-ci.org/thredded/thredded_create_app.svg?branch=master)](https://travis-ci.org/thredded/thredded_create_app) [![Test Coverage](https://codeclimate.com/github/thredded/thredded_create_app/badges/coverage.svg)](https://codeclimate.com/github/thredded/thredded_create_app/coverage)
 
-**THIS IS A WORK-IN-PROGRESS REPO AND IS NOT YET USABLE**.
-
 Generates a Rails app with the [Thredded](https://github.com/thredded/thredded) forums engine installed.
 
 This generator will create a new Rails app with the following configuration:
