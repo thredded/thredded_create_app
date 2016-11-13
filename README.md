@@ -9,6 +9,8 @@ This generator will create a new Rails app with the following configuration:
 * Database: PostgreSQL.
 * Auth: Devise.
 
+See below for more information on the generated app.
+
 Example screenshots of the generated app:
 
 <table>
@@ -30,35 +32,38 @@ Example screenshots of the generated app:
 
 ## Usage
 
-First, install the gem:
+Install the gem and create your app:
 
 ```bash
 gem install thredded_create_app
+thredded_create_app myapp
 ```
 
-Then, run the command below depending on how you installed your ruby:
+### More detailed instructions
 
-* If using system ruby:
- 
-   ```bash
-   thredded_create_app myapp
-   ```
+Run `thredded_create_app --help` for more information about the available
+options.
 
-* If using [RVM](https://rvm.io/):
+#### RVM
 
-   ```bash
-   RUBY_VERSION=2.3.1 APP=myapp
-   rvm use --create "${RUBY_VERSION}@${APP}"
-   thredded_create_app $APP
-   ```
+If you're using [RVM](https://rvm.io/), you probably want to create a
+gemset before creating your app:
+
+ ```bash
+ RUBY_VERSION=2.3.1 APP=myapp
+ rvm use --create "${RUBY_VERSION}@${APP}"
+ gem install thredded_create_app
+ thredded_create_app "$APP"
+ ```
    
-   Then, generate .ruby-version and .ruby-gemset:
+Then, generate the `.ruby-version` and `.ruby-gemset` files so that the gemset
+is used automatically whenever you `cd` into the project directory:
  
-   ```bash
-   cd myapp
-   rvm use --ruby-version "${RUBY_VERSION}@${APP}"
-   printf '.ruby-version\n.ruby-gemset\n' >> .git/info/exclude
-   ```
+ ```bash
+ cd "$APP"
+ rvm use --ruby-version "${RUBY_VERSION}@${APP}"
+ printf '.ruby-version\n.ruby-gemset\n' >> .git/info/exclude
+ ```
 
 ## Development
 

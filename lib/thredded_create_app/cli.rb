@@ -78,7 +78,7 @@ module ThreddedCreateApp
       argv << '--help' if argv.empty?
       options = DEFAULTS.dup
       positional_args = OptionParser.new(
-        "Usage: #{program_name} #{Term::ANSIColor.bold 'APP_PATH'}"
+        "Usage: #{program_name} #{Term::ANSIColor.bold 'APP_PATH'}", 37
       ) do |op|
         flags = Flags.new(op, options)
 
