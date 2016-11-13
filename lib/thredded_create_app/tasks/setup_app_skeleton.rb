@@ -23,6 +23,7 @@ module ThreddedCreateApp
       end
 
       def after_bundle
+        add_favicon_and_touch_icons
         add_javascripts
         add_styles
         add_user_page
@@ -33,6 +34,25 @@ module ThreddedCreateApp
              'spec/features/homepage_spec.rb'
         add_seeds
         git_commit 'Set up basic app navigation and styles'
+      end
+
+      def add_favicon_and_touch_icons
+        FileUtils.mv 'public/favicon.ico',
+                     'app/assets/images/favicon.ico'
+        FileUtils.mv 'public/apple-touch-icon.png',
+                     'app/assets/images/apple-touch-icon.png'
+        # The `-precomposed.png` touch icon is only used by iOS < 7, remove it.
+        # Do not raise if the file does not exist, as Rails will stop generating
+        # it one of these days.
+        FileUtils.rm 'public/apple-touch-icon-precomposed.png', force: true
+
+        inject_into_file 'app/views/layouts/application.html.erb',
+                         before: '    <%= csrf_meta_tags %>',
+                         content: indent(4, <<~ERB)
+          <%= favicon_link_tag 'favicon.ico' %>
+          <%= favicon_link_tag 'apple-touch-icon.png',
+                               rel: 'apple-touch-icon', type: 'image/png' %>
+        ERB
       end
 
       def add_javascripts
