@@ -2,7 +2,7 @@
 require 'thredded_create_app/tasks/base'
 module ThreddedCreateApp
   module Tasks
-    class SetupAppSkeleton < Base
+    class SetupAppSkeleton < Base # rubocop:disable Metrics/ClassLength
       MATERIAL_700_COLORS = [
         '#7B1FA2', # purple
         '#512DA8', # deep purple
