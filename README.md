@@ -39,12 +39,10 @@ gem install thredded_create_app
 thredded_create_app myapp
 ```
 
-### More detailed instructions
-
 Run `thredded_create_app --help` for more information about the available
 options.
 
-#### RVM
+### RVM
 
 If you're using [RVM](https://rvm.io/), you probably want to create a
 gemset before creating your app:
