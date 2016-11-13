@@ -65,7 +65,100 @@ is used automatically whenever you `cd` into the project directory:
  printf '.ruby-version\n.ruby-gemset\n' >> .git/info/exclude
  ```
 
+### App generation
+
+The app generator will do the steps below for you.
+
+First, the rubygems package is updated and the latest versions of
+[Rails] and [Bundler] are installed.
+
+Then, a Rails app is generated for use with the PostgreSQL database.
+
+Then, a [git] repository is initialized in the app directory. From here onwards,
+the app generator will commit the changes at each step.
+
+[RSpec] is used as the testing framework, and some basic acceptance tests
+using [capybara] are added.
+
+[Devise] is used as the authentication framework. Its default views are
+customized to add a user name field (`display_name`) to the registration form.
+The [simple_form] gem is used for the customized Devise views by default.
+
+A basic responsive app layout with top bar navigation is added.
+A user profile page that displays some basic information about the user and
+their recent forum posts is also added.
+
+The app comes with basic styles (~10KiB gzipped, including Thredded styles)
+that are written using [Sass].
+
+The app's JavaScript code is loaded asynchronously in production mode via the
+[`async`] attribute on the script tag. In development, the individual script
+files are not concatenated. With `async` they would load out-of-order, so
+[`defer`] is used instead.
+
+**NB:** While loading scripts via `async` provides the best possible speed,
+a lot of JavaScript libraries do not support it.
+**If** you plan on adding JavaScript code, you might want to
+**remove the `async` attribute** from the `javascript_include_tag` in
+`app/views/layouts/application.html.erb`.
+
+A [Dockerfile] and [docker-compose.yml] is generated for development.
+This is so that other engineers can spin up a development environment with
+a single command.
+
+A production configuration file for the [puma] Ruby web server is created.
+A `Procfile` process description file that can be used by that can be used by
+the [Heroku] hosting platform or the [foreman] app runner is also be created.
+
+Lastly, the `$APP` database user is created and given rights to the app's
+development and test databases. Then, the database is created, the migrations
+are run, and the database is seeded with an admin user and a messageboard.
+
+Finally, the tests are run, and the development web server is started at
+<http://localhost:3000>.
+
+[`async`]: https://developer.mozilla.org/en/docs/Web/HTML/Element/script
+[`defer`]: https://developer.mozilla.org/en/docs/Web/HTML/Element/script
+[Bundler]: http://bundler.io/
+[capybara]: https://github.com/jnicklas/capybara
+[Devise]: https://github.com/plataformatec/devise
+[docker-compose.yml]: https://docs.docker.com/compose/
+[Dockerfile]: https://docs.docker.com/engine/reference/builder/
+[foreman]: https://ddollar.github.io/foreman/
+[git]: https://git-scm.com/
+[Heroku]: https://www.heroku.com/
+[puma]: https://github.com/puma/puma
+[Rails]: http://rubyonrails.org/
+[RSpec]: http://rspec.info/
+[Sass]: http://sass-lang.com/
+[simple_form]: https://github.com/plataformatec/simple_form
+
+### Next steps
+
+To learn about customizing the forums, see the [Thredded Readme].
+
+To learn about customizing the authentication system, e.g. to require email
+confirmation or to add an OAuth login, see the [Devise Readme].
+
+To change the homepage, edit the view file at `app/views/home/show.html.erb`.
+
+To change the app's styles, see the files in `app/assets/stylesheets`.
+The app is generated with a randomly selected primary theme color that you may
+want to change. You can find it in `app/assets/stylesheets/_variables.scss`.
+
+You can contact the Thredded team via the [Thredded chat room].
+Once you've deployed your app, please let us know that you are using Thredded
+by tweeting [@thredded]!
+
+[@thredded]: https://twitter.com/thredded
+[Devise Readme]: https://github.com/plataformatec/devise/blob/master/README.md
+[Thredded chat room]: https://gitter.im/thredded/thredded
+[Thredded Readme]: https://github.com/thredded/thredded/blob/master/README.md
+
 ## Development
+
+The instructions below are for developing and contributing to
+the Thredded app generator itself, not for using it.
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests.
 You can also run `bin/console` for an interactive prompt that will allow you to experiment.
