@@ -29,7 +29,7 @@ create_mysql_user() {
   if mysql -s -u"$USER" -p"$PASS" -e '' 2>/dev/null ; then return; fi
   log "Creating MySQL '$USER' user. MySQL root password required."
   local mysql_flags='-p'
-  if [ -z "$TRAVIS" ]; then
+  if [ -n "$TRAVIS" ]; then
     mysql_flags=''
   fi
   mysql --verbose -uroot $mysql_flags <<SQL
