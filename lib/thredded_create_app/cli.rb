@@ -83,9 +83,6 @@ module ThreddedCreateApp
       ) do |op|
         flags = Flags.new(op, options)
 
-        flags.bool :auto_confirm, '-y', 'Auto-confirm all prompts'
-        flags.bool :simple_form, '--[no-]simple-form', 'Use simple_form'
-
         db_adapters = %i(postgresql mysql2 sqlite3)
         op.on '--database DATABASE', db_adapters,
               "The database adapter, one of: #{db_adapters.join(', ')} " \
@@ -93,18 +90,20 @@ module ThreddedCreateApp
           options[:database] = v.to_sym
         end
 
-        flags.bool :start_server, '--[no-]start-server', 'Start the app server'
+        flags.bool :simple_form, '--[no-]simple-form', 'Use simple_form'
 
+        op.separator "\nOther options:"
+        flags.bool :start_server, '--[no-]start-server', 'Start the app server'
         flags.bool :install_gem_bundler_rails,
                    '--[no-]install-gem-bundler-rails',
                    'Run `gem update --system and `gem install bundler rails`'
-
+        flags.bool :auto_confirm, '-y', 'Auto-confirm all prompts'
+        flags.bool :verbose, '--verbose', 'Verbose output' do
+          @verbose = true
+        end
         op.on '-v', '--version', 'Print the version' do
           puts ThreddedCreateApp::VERSION
           exit
-        end
-        flags.bool :verbose, '--verbose', 'Verbose output' do
-          @verbose = true
         end
         op.on '-h', '--help', 'Show this message' do
           STDERR.puts op
