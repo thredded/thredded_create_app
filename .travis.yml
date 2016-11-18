@@ -4,8 +4,6 @@ language: ruby
 rvm:
 # The latest ruby that is pre-installed on Travis Trusty
 - 2.3.1
-services:
-  - postgresql
 env:
   global:
   - TRAVIS=1 CI=1 COVERAGE=1
