@@ -3,6 +3,12 @@ require 'thredded_create_app/tasks/base'
 module ThreddedCreateApp
   module Tasks
     class SetupDatabase < Base
+      # @param [:postgresql, :mysql2, :sqlite3] database the DB db_adapter name.
+      def initialize(database:, **_args)
+        super
+        @db_adapter = database
+      end
+
       def summary
         'Create the database user, configure database.yml, and run migrations'
       end
@@ -19,14 +25,20 @@ module ThreddedCreateApp
       private
 
       def create_db_user
+        return if @db_adapter == :sqlite3
         log_info "Creating #{dev_user} local database user"
         run 'bash',
             File.join(File.dirname(__FILE__), 'setup_database',
-                      'create_postgresql_user.sh'),
+                      'create_database_user.sh'),
+            @db_adapter.to_s,
+            app_name,
             dev_user,
             dev_user_password,
             log: false
       end
+
+      # @return [Symbol]
+      attr_reader :db_adapter
 
       def dev_user
         "#{app_name}_dev"

@@ -7,7 +7,8 @@ describe ThreddedCreateApp do
   end
 
   it 'generates the app without errors' do
-    expect(system({ 'THREDDED_CREATE_APP_BIN_SIMPLECOV_COVERAGE' => '1' },
+    expect(system({ 'THREDDED_CREATE_APP_BIN_SIMPLECOV_COVERAGE' => '1',
+                    'DB' => ENV['DB'] },
                   'bin/create-tmp-myapp --verbose --no-start-server'))
       .to(be true)
   end

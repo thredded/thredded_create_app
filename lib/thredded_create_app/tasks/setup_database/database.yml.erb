@@ -13,8 +13,14 @@ ERB
 defaults: &defaults
   host: <%%= db_host %>
   port: <%%= db_port %>
-  adapter: postgresql
+  adapter: <%= db_adapter %>
+<% if db_adapter == :mysql2 -%>
+  encoding: utf8mb4
+  charset: utf8mb4
+  collation: utf8mb4_unicode_ci
+<% else -%>
   encoding: utf8
+<% end -%>
   min_messages: WARNING
   pool: <%%= pool_size %>
   username: <%%= ENV.fetch('DB_USERNAME', '<%= dev_user %>').inspect %>
@@ -22,15 +28,16 @@ defaults: &defaults
 
 development:
   <<: *defaults
-  database: <%= "#{app_name}_dev" %>
+  database: <%= db_adapter == :sqlite3 ? 'db/development.sqlite3' : "#{app_name}_dev" %>
 
 test:
   <<: *defaults
-  database: <%= "#{app_name}_test" %>
+  database: <%= db_adapter == :sqlite3 ? 'db/test.sqlite3' : "#{app_name}_test" %>
+
 
 production:
   <<: *defaults
   encoding: utf8
   min_messages: WARNING
   url: <%%= ENV['DATABASE_URL'].inspect if ENV['DATABASE_URL'] %>
-  database: <%%= '<%= "#{app_name}_prod" %>' unless ENV['DATABASE_URL'] %>
+  database: <%%= '<%= (db_adapter == :sqlite3 ? 'db/production.sqlite3' : "#{app_name}_prod") %>' unless ENV['DATABASE_URL'] %>

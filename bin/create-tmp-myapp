@@ -3,20 +3,41 @@
 # Generates a new app with `thredded_create_app -y tmp/myapp "$@"`.
 # Cleans up the old app and database user + data first.
 
-echo 'Removing myapp_dev postgres data and the tmp/app codebase'
+DB=${DB:-postgresql}
+USER="myapp_dev"
+PASS="myapp"
 
-drop_postgres_user() {
+set -e
+
+drop_postgres_data() {
+  echo 'Removing myapp_dev PostgreSQL data'
   local psql_cmd='psql postgres'
   if ! $psql_cmd -c '' 2>/dev/null; then
     psql_cmd="sudo -u ${PG_DAEMON_USER:-postgres} psql postgres"
   fi
-  $psql_cmd --quiet <<SQL
+  $psql_cmd <<SQL
 DROP DATABASE IF EXISTS myapp_dev;
 DROP DATABASE IF EXISTS myapp_test;
-DROP ROLE IF EXISTS myapp_dev;
+DROP ROLE IF EXISTS $USER;
 SQL
 }
 
-drop_postgres_user
+drop_mysql_data() {
+  if ! mysql -s -u "$USER" -p"$PASS" myapp_dev -e '' 2>/dev/null; then return; fi
+  echo 'Removing myapp_dev MySQL data as MySQL "root" user'
+  mysql --verbose -uroot -p <<SQL
+DROP DATABASE IF EXISTS myapp_dev;
+DROP DATABASE IF EXISTS myapp_test;
+DROP USER IF EXISTS $USER;
+SQL
+}
+
+if [ "$DB" = 'mysql2' ]; then
+  drop_mysql_data
+elif [ "$DB" = 'postgresql' ]; then
+  drop_postgres_data
+fi
+
+set -x
 rm -rf tmp
-./exe/thredded_create_app -y tmp/myapp "$@"
+./exe/thredded_create_app -y tmp/myapp "$@" --database "$DB"

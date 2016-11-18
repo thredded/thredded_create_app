@@ -24,6 +24,7 @@
   <hr>
   <p>Your app uses:</p>
   <ul>
+    <li><%%= ActiveRecord::Base.connection.adapter_name %> database.</li>
     <li>
       <a href="http://rubyonrails.org/">Ruby on Rails</a>
       v<%%= Rails::VERSION::STRING %>.

@@ -49,7 +49,7 @@ module ThreddedCreateApp
 
       def copy_template(src_path, target_path, process_erb: true, mode: 'w')
         src = File.read(File.expand_path(src_path, File.dirname(__FILE__)))
-        src = ERB.new(src).result(binding) if process_erb
+        src = ERB.new(src, nil, '-').result(binding) if process_erb
         FileUtils.mkdir_p(File.dirname(target_path))
         File.write target_path, src, mode: mode
       end

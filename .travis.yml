@@ -10,8 +10,10 @@ env:
   global:
   - TRAVIS=1 CI=1 COVERAGE=1
   matrix:
-  # https://docs.travis-ci.com/user/database-setup/#PostgreSQL
-  - DB_USERNAME=postgres DB_PASSWORD=""
+  # Username and password from http://docs.travis-ci.com/user/database-setup/
+  - DB=sqlite3
+  - DB=mysql2     DB_USERNAME=root     DB_PASSWORD=""
+  - DB=postgresql DB_USERNAME=postgres DB_PASSWORD=""
 before_install:
 - "gem update --system --no-document --quiet"
 - "gem install bundler --no-document"

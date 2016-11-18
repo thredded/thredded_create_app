@@ -5,7 +5,7 @@ require 'thredded_create_app/logging'
 
 require 'highline'
 module ThreddedCreateApp
-  class CLI
+  class CLI # rubocop:disable Metrics/ClassLength
     include ThreddedCreateApp::Logging
 
     DEFAULTS = {
@@ -13,7 +13,8 @@ module ThreddedCreateApp
       verbose: false,
       install_gem_bundler_rails: true,
       start_server: true,
-      simple_form: true
+      simple_form: true,
+      database: :postgresql
     }.freeze
 
     def self.start(argv)
@@ -83,6 +84,21 @@ module ThreddedCreateApp
         flags = Flags.new(op, options)
 
         flags.bool :auto_confirm, '-y', 'Auto-confirm all prompts'
+        flags.bool :simple_form, '--[no-]simple-form', 'Use simple_form'
+
+        db_adapters = %i(postgresql mysql2 sqlite3)
+        op.on '--database DATABASE', db_adapters,
+              "The database adapter, one of: #{db_adapters.join(', ')} " \
+              "(default: #{DEFAULTS[:database]})" do |v|
+          options[:database] = v.to_sym
+        end
+
+        flags.bool :start_server, '--[no-]start-server', 'Start the app server'
+
+        flags.bool :install_gem_bundler_rails,
+                   '--[no-]install-gem-bundler-rails',
+                   'Run `gem update --system and `gem install bundler rails`'
+
         op.on '-v', '--version', 'Print the version' do
           puts ThreddedCreateApp::VERSION
           exit
@@ -90,12 +106,6 @@ module ThreddedCreateApp
         flags.bool :verbose, '--verbose', 'Verbose output' do
           @verbose = true
         end
-        flags.bool :simple_form, '--[no-]simple-form', 'Use simple_form'
-        flags.bool :install_gem_bundler_rails,
-                   '--[no-]install-gem-bundler-rails',
-                   'Run `gem update --system and `gem install bundler rails`'
-        flags.bool :start_server, '--[no-]start-server', 'Start the app server'
-
         op.on '-h', '--help', 'Show this message' do
           STDERR.puts op
           exit
