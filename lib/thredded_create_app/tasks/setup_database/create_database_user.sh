@@ -3,6 +3,7 @@ DB="$1"
 APP_NAME="$2"
 USER="$3"
 PASS="$4"
+TRAVIS="$5"
 
 BLUE='\033[1;34m'
 RESET_COLOR='\033[0m'
@@ -27,7 +28,11 @@ SQL
 create_mysql_user() {
   if mysql -s -u"$USER" -p"$PASS" -e '' 2>/dev/null ; then return; fi
   log "Creating MySQL '$USER' user. MySQL root password required."
-  mysql --verbose -uroot -p <<SQL
+  local mysql_flags='-p'
+  if [ -z "$TRAVIS" ]; then
+    mysql_flags=''
+  fi
+  mysql --verbose -uroot $mysql_flags <<SQL
 GRANT ALL PRIVILEGES ON \`${APP_NAME}_dev\`.* TO '$USER'@'localhost' IDENTIFIED BY '$PASS';
 GRANT ALL PRIVILEGES ON \`${APP_NAME}_test\`.* TO '$USER'@'localhost';
 SQL
