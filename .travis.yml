@@ -4,8 +4,6 @@ language: ruby
 rvm:
 # The latest ruby that is pre-installed on Travis Trusty
 - 2.3.1
-services:
-  - postgresql
 env:
   global:
   - TRAVIS=1 CI=1 COVERAGE=1
@@ -17,17 +15,9 @@ env:
 before_install:
 - "gem update --system --no-document --quiet"
 - "gem install bundler --no-document"
-- "psql -d template1 -c \"CREATE EXTENSION citext;\" -U postgres"
+- bash .travis.setup.sh
 cache: bundler
 bundler_args: --path ../../vendor/bundle --without debug
 
 # Avoid rake here, as the RSpec test task spawns a new process which does not run via bundler.
 script: "bundle exec rspec --format d && bundle exec rubocop && bundle exec codeclimate-test-reporter"
-
-# TODO: remove this once travis gets on with times and upgrades MySQL to 5.6.4+
-addons:
-  apt:
-    packages:
-    - mysql-server-5.7
-    - mysql-client-core-5.7
-    - mysql-client-5.7

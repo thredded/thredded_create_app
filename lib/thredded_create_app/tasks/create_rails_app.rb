@@ -10,7 +10,7 @@ module ThreddedCreateApp
       end
 
       def summary
-        "Create Rails app #{app_name.inspect} with postgresql and rspec"
+        "Create Rails app #{app_name.inspect} with #{rails_database} and rspec"
       end
 
       def before_bundle
@@ -18,10 +18,9 @@ module ThreddedCreateApp
           run 'gem update --system --no-document --quiet'
           run 'gem install bundler rails --no-document'
         end
-        rails_database_arg = { mysql2: :mysql }.fetch(@database, @database)
         # I have no idea why this bundle exec is necessary on Travis.
         run "#{'bundle exec ' if ENV['TRAVIS']}" \
-           "rails new . --skip-bundle --database=#{rails_database_arg} " \
+           "rails new . --skip-bundle --database=#{rails_database} " \
            "--skip-test#{verbose? ? ' --verbose' : ' --quiet'}"
         replace 'Gemfile', /gem 'sass-rails'.*$/, "gem 'sassc-rails'"
         add_gem 'rspec-rails', groups: %i(test)
@@ -32,6 +31,12 @@ module ThreddedCreateApp
       def after_bundle
         run_generator 'rspec:install'
         git_commit 'rails g rspec:install'
+      end
+
+      private
+
+      def rails_database
+        { mysql2: :mysql }.fetch(@database, @database)
       end
     end
   end
