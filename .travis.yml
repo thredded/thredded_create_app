@@ -28,6 +28,6 @@ script: "bundle exec rspec --format d && bundle exec rubocop && bundle exec code
 addons:
   apt:
     packages:
-    - mysql-server-5.6
-    - mysql-client-core-5.6
-    - mysql-client-5.6
+    - mysql-server-5.7
+    - mysql-client-core-5.7
+    - mysql-client-5.7
