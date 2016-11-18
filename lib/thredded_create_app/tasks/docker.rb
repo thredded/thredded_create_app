@@ -2,6 +2,7 @@
 require 'thredded_create_app/tasks/base'
 module ThreddedCreateApp
   module Tasks
+    # Currently only implemented for the postgresql database.
     class Docker < Base
       def summary
         'Add Docker configuration files for development'

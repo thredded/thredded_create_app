@@ -34,7 +34,7 @@ module ThreddedCreateApp
             app_name,
             dev_user,
             dev_user_password,
-            ENV['TRAVIS'],
+            ENV['TRAVIS'] || '',
             log: false
       end
 

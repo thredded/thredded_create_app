@@ -65,7 +65,7 @@ module ThreddedCreateApp
         Tasks::AddDisplayNameToUsers,
         Tasks::SetupAppSkeleton,
         Tasks::ProductionConfigs,
-        Tasks::Docker,
+        (Tasks::Docker if @options[:database] == :postgresql),
         Tasks::SetupDatabase
       ].compact.map { |task_class| task_class.new(@options) }
     end

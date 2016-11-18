@@ -1,6 +1,8 @@
 <%%
+<% if db_adapter != :sqlite3 -%>
 db_host    = ENV.fetch('DB_HOST', ENV.fetch('<%= app_name.upcase %>_DB_1_PORT_5432_TCP_ADDR', 'localhost'))
 db_port    = ENV['<%= app_name.upcase %>_DB_1_PORT_5432_TCP_PORT'] || ENV['DB_PORT'] || <%= {postgresql: 5432, mysql2: 3306}[db_adapter] %>
+<% end -%>
 require 'etc'
 pool_size =
   # Web: max workers * max threads
@@ -11,9 +13,17 @@ ERB
 %>
 
 defaults: &defaults
+  adapter: <%= db_adapter %>
+  min_messages: WARNING
+  pool: <%%= pool_size %>
+<% if db_adapter == :sqlite3 -%>
+  timeout: 5000
+<% else -%>
   host: <%%= db_host %>
   port: <%%= db_port %>
-  adapter: <%= db_adapter %>
+  username: <%%= ENV.fetch('DB_USERNAME', '<%= dev_user %>').inspect %>
+  password: <%%= ENV.fetch('DB_PASSWORD', <%= dev_user_password.inspect %>).inspect %>
+<% end -%>
 <% if db_adapter == :mysql2 -%>
   encoding: utf8mb4
   charset: utf8mb4
@@ -21,10 +31,6 @@ defaults: &defaults
 <% else -%>
   encoding: utf8
 <% end -%>
-  min_messages: WARNING
-  pool: <%%= pool_size %>
-  username: <%%= ENV.fetch('DB_USERNAME', '<%= dev_user %>').inspect %>
-  password: <%%= ENV.fetch('DB_PASSWORD', <%= dev_user_password.inspect %>).inspect %>
 
 development:
   <<: *defaults
