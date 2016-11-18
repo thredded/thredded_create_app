@@ -20,7 +20,7 @@ Example screenshots of the generated app:
 ## Pre-requisites
 
 1. Git.
-2. A supported database: PostgreSQL (recommended), MySQL v5.6.4+, or SQLite.
+2. A supported database: PostgreSQL (recommended), MySQL v5.7+, or SQLite.
 3. Ruby 2.3+.
 
 ## Usage
