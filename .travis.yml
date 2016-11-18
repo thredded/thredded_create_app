@@ -24,10 +24,11 @@ bundler_args: --path ../../vendor/bundle --without debug
 # Avoid rake here, as the RSpec test task spawns a new process which does not run via bundler.
 script: "bundle exec rspec --format d && bundle exec rubocop && bundle exec codeclimate-test-reporter"
 
-# TODO: remove this once travis gets on with times and upgrades MySQL to 5.6.4+
-addons:
-  apt:
-    packages:
-    - mysql-server-5.7
-    - mysql-client-core-5.7
-    - mysql-client-5.7
+# TODO: remove this once travis gets on with times and upgrades MySQL to 5.7+
+before_script: |
+  echo mysql-apt-config mysql-apt-config/select-server select mysql-5.7 | sudo debconf-set-selections
+  wget http://dev.mysql.com/get/mysql-apt-config_0.7.3-1_all.deb
+  sudo dpkg --install mysql-apt-config_0.7.3-1_all.deb
+  sudo apt-get update -q
+  sudo apt-get install -q -y -o Dpkg::Options::=--force-confnew mysql-server
+  sudo mysql_upgrade
