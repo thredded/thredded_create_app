@@ -20,7 +20,7 @@ Example screenshots of the generated app:
 ## Pre-requisites
 
 1. Git.
-2. PostgreSQL.
+2. A supported database: PostgreSQL (recommended), MySQL v5.6.4+, or SQLite.
 3. Ruby 2.3+.
 
 ## Usage
@@ -31,6 +31,10 @@ Install the gem and create your app:
 gem install thredded_create_app
 thredded_create_app myapp
 ```
+
+By default, PostgreSQL will be used as the database.
+Alternatively, you can pass `--database sqlite3` for SQLite,
+or `--datase mysql2` for MySQL.
 
 Run `thredded_create_app --help` for more information about the available
 options.
@@ -63,7 +67,7 @@ The app generator will do the steps below for you.
 First, the rubygems package is updated and the latest versions of
 [Rails] and [Bundler] are installed.
 
-Then, a Rails app is generated for use with the PostgreSQL database.
+Then, a Rails app is generated for use with the selected database.
 
 Then, a [git] repository is initialized in the app directory. From here onwards,
 the app generator will commit the changes at each step.
