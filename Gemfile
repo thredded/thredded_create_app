@@ -21,7 +21,7 @@ if ENV['TRAVIS']
   gem 'devise'
   gem 'devise-i18n'
   gem 'jbuilder'
-  gem 'listen'
+  gem 'listen', '~> 3.0.8'
   gem 'mysql2' if ENV['DB'] == 'mysql2'
   gem 'pg' if ENV['DB'] == 'postgresql'
   gem 'puma'
