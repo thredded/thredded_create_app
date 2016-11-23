@@ -105,6 +105,12 @@ module ThreddedCreateApp
                                 'data-turbolinks-track': 'reload' %>
         ERB
 
+        inject_into_file 'app/views/layouts/application.html.erb',
+                         before: '</head>',
+                         content: <<-'ERB'
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        ERB
+
         replace 'app/views/layouts/application.html.erb',
                 %r{<body>.*?</body>}m,
                 File.read(
@@ -124,7 +130,11 @@ module ThreddedCreateApp
   def show
     @user = User.find(params[:id])
         RUBY
-        add_route <<~'RUBY'
+        # The route must be defined after `devise_for`.
+        # The route is injected before Thredded in case Thredded is mount at /.
+        inject_into_file 'config/routes.rb',
+                         before: /^\s*mount Thredded::Engine/,
+                         content: indent(2, <<~'RUBY')
           resources :users, only: [:show]
         RUBY
       end
@@ -132,7 +142,7 @@ module ThreddedCreateApp
       def add_home_page
         run_generator 'controller home show' \
                       ' --no-assets --no-helper --skip-routes'
-        add_route <<~'RUBY', append: true
+        add_route <<~'RUBY', prepend: true
           root to: 'home#show'
         RUBY
         copy_template 'setup_app_skeleton/home_show.html.erb.erb',
