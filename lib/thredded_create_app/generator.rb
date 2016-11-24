@@ -78,10 +78,11 @@ module ThreddedCreateApp
     def bundle
       File.open('Gemfile', 'a') do |f|
         log_info 'Writing gems to Gemfile'
-        gems.each do |(name, version, groups)|
+        gems.each do |(name, version, groups, path)|
           f.puts ["gem '#{name}'",
                   (version if version),
-                  ("groups: %i(#{groups * ' '})" if groups)].compact.join(', ')
+                  ("groups: %i(#{groups * ' '})" if groups),
+                  ("path: '#{path}'" if path)].compact.join(', ')
         end
       end
       run "bundle install#{' --quiet' unless verbose?}"

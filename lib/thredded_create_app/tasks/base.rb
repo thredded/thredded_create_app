@@ -29,9 +29,9 @@ module ThreddedCreateApp
 
       protected
 
-      def add_gem(gem_name, version: nil, groups: nil)
+      def add_gem(gem_name, version: nil, groups: nil, path: nil)
         log_verbose "+ gem #{gem_name}"
-        @gems << [gem_name, version, groups]
+        @gems << [gem_name, version, groups, path]
       end
 
       def git_commit(message)
