@@ -102,8 +102,8 @@ This is so that other engineers can spin up a development environment with
 a single command.
 
 A production configuration file for the [puma] Ruby web server is created.
-A `Procfile` process description file that can be used by that can be used by
-the [Heroku] hosting platform or the [foreman] app runner is also be created.
+A `Procfile` process description file is also created. This file can be used by
+the [Heroku] hosting platform or the [foreman] app runner.
 
 Lastly, the `$APP` database user is created and given rights to the app's
 development and test databases. Then, the database is created, the migrations
