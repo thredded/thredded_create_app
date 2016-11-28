@@ -31,6 +31,7 @@ module ThreddedCreateApp
                          content: <<-'RUBY'
 
   before_action :store_current_location, unless: :devise_controller?
+  helper_method :back_url
 
   private
 
@@ -39,21 +40,26 @@ module ThreddedCreateApp
   end
 
   def after_sign_out_path_for(resource)
-    request.referrer || root_path
+    stored_location_for(:user) || root_path
+  end
+
+  def back_url
+    session[:user_return_to] || root_path
   end
         RUBY
       end
 
       def setup_views
         run_generator 'devise:i18n:views -v sessions registrations'
+        # Replace the back link with the correct URL
+        replace 'app/views/devise/registrations/edit.html.erb',
+                ', :back %>', ', back_url %>'
         # Make the views render-able outside Devise controllers
-        %w(app/views/devise/registrations/new.html.erb
-           app/views/devise/registrations/edit.html.erb
-           app/views/devise/sessions/new.html.erb
+        %w(app/views/devise/sessions/new.html.erb
            app/views/devise/shared/_links.html.erb).each do |path|
-          replace path, 'resource_name', ':user'
-          replace path, 'resource', ':user'
           replace path, 'resource_class', 'User', optional: true
+          replace path, /resource_name(?!:)/, ':user'
+          replace path, /resource(?!:)/, ':user', optional: true
           replace path, 'devise_mapping', 'Devise.mappings[:user]',
                   optional: true
         end

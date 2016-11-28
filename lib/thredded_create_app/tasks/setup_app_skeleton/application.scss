@@ -58,6 +58,19 @@
   margin: 1rem 0;
 }
 
+.form-inputs {
+  .hint {
+    color: $secondary-text-color;
+  }
+  .error {
+    @extend %thredded--alert;
+    @extend %thredded--alert--danger;
+    display: block;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+}
+
 a {
   @extend %thredded--link;
 }

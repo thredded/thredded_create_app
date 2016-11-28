@@ -6,6 +6,9 @@
   <%= image_tag Thredded.avatar_url.call(user), class: 'thredded--user--avatar' %><%= user.thredded_display_name %>
 </h1>
 <ul>
+  <% if user == current_user %>
+    <%= link_to t('nav.edit_my_account'), edit_user_registration_path %>
+  <% end %>
   <li><%= t 'thredded.users.user_since_html', time_ago: time_ago(user.created_at) %></li>
   <% if user_detail.last_seen_at %>
       <li><%= t 'thredded.users.last_active_html', time_ago: time_ago(user_detail.last_seen_at) %></li>
