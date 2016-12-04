@@ -21,11 +21,9 @@ module ThreddedCreateApp
         self.class.name
       end
 
-      def before_bundle
-      end
+      def before_bundle; end
 
-      def after_bundle
-      end
+      def after_bundle; end
 
       protected
 
