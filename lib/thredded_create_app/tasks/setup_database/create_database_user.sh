@@ -20,8 +20,8 @@ create_postgresql_user() {
     cmd="sudo -u ${PG_DAEMON_USER:-postgres} psql postgres"
   fi
   $cmd --quiet <<SQL
-CREATE ROLE $USER LOGIN PASSWORD '$PASS';
-ALTER ROLE $USER CREATEDB;
+CREATE ROLE "$USER" LOGIN PASSWORD '$PASS';
+ALTER ROLE "$USER" CREATEDB;
 SQL
 }
 
