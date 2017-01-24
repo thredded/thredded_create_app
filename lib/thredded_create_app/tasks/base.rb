@@ -10,6 +10,8 @@ module ThreddedCreateApp
     class Base
       include ThreddedCreateApp::Logging
 
+      attr_reader :app_name, :app_path, :gems
+
       def initialize(app_path:, verbose: false, **_args)
         @app_path = app_path
         @app_name = File.basename(File.expand_path(app_path))
@@ -38,8 +40,6 @@ module ThreddedCreateApp
         system(*['git', 'commit', '-m', "[thredded_create_app] #{message}",
                  ('--quiet' unless verbose?)].compact)
       end
-
-      attr_reader :app_name, :app_path, :gems
 
       def copy(src_path, target_path, mode: 'w')
         copy_template src_path, target_path, process_erb: false, mode: mode
