@@ -1,3 +1,9 @@
+# v0.1.5
+
+* Support Ruby 2.4.
+* Support postgresql usernames containing a `-`.
+  [#8](https://github.com/thredded/thredded_create_app/issues/8)
+
 # v0.1.4
 
 * Edit my account page.
