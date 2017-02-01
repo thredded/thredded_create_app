@@ -1,6 +1,6 @@
 def page_title
-  [content_for(:page_title) || content_for(:thredded_page_title),
-   t('brand.name')].compact.join(' - ')
+  safe_join [content_for(:page_title) || content_for(:thredded_page_title),
+             t('brand.name')].compact, ' - '
 end
 
 # @param datetime [DateTime]
