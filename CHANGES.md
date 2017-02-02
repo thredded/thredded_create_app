@@ -1,3 +1,8 @@
+# v0.1.6
+
+* Fix `<title>` escaping.
+* Remove browser margin on `body.app`.
+
 # v0.1.5
 
 * Support Ruby 2.4.
