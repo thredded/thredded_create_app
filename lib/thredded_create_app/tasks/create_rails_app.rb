@@ -15,8 +15,10 @@ module ThreddedCreateApp
 
       def before_bundle
         if @install_gem_bundler_rails
-          run 'gem update --system --no-document --quiet'
-          run 'gem install bundler rails --no-document'
+          user_install = !File.writable?(Gem.dir)
+          run 'gem update --system --no-document --quiet' unless user_install
+          run 'gem install bundler rails --no-document' \
+              "#{' --user' if user_install}"
         end
         # I have no idea why this bundle exec is necessary on Travis.
         run "#{'bundle exec ' if ENV['TRAVIS']}" \

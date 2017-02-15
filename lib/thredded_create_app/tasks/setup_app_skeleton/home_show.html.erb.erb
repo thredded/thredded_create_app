@@ -1,14 +1,13 @@
 <h1>Welcome to your new Rails app with Thredded! 🎉</h1>
 
+<p>Check out the
+  <b><%%= link_to t('nav.forums'), thredded.root_path %></b>.
+</p>
+
 <%% unless Rails.env.production? %>
   <p>You can now:</p>
 
   <ul>
-    <li>
-      <p>Check out the
-        <b><%%= link_to t('nav.forums'), thredded.root_path %></b>.
-      </p>
-    </li>
     <li>
       <p>
         <b><%%= link_to 'Log in', new_user_session_path %></b> as

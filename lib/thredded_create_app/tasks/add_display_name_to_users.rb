@@ -68,7 +68,7 @@ module ThreddedCreateApp
   before_validation :uniq_display_name!, on: :create
 
   def display_name=(value)
-    super(value&.strip)
+    super(value ? value.strip : nil)
   end
 
         RUBY

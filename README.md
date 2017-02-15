@@ -23,12 +23,41 @@ Example screenshots of the generated app:
 2. A supported database: PostgreSQL (recommended), MySQL v5.7+, or SQLite.
 3. Ruby 2.3+.
 
+You may also need some packages to compile Thredded dependencies.
+On Ubuntu, you can install all the required packages by running:
+
+```bash
+sudo apt-get install autoconf automake bison build-essential gawk git \
+  libffi-dev libgdbm-dev libgmp-dev libncurses5-dev libpq-dev libreadline6-dev \
+  libsqlite3-dev libtool libyaml-dev nodejs pkg-config ruby sqlite3
+```
+
 ## Usage
 
 Install the gem and create your app:
 
 ```bash
 gem install thredded_create_app
+```
+
+#### Installing the gem using system Ruby
+
+When using the *system* Ruby on Mac or Linux (as opposed to RVM or rbenv),
+the command above will fail because only root can install gems system-wide.
+
+Instead, install `thredded_create_app` with the `--user` flag:
+
+```bash
+gem install --user thredded_create_app
+```
+
+The above will install the gem to the `~/.gem/` directory.
+
+Then, [add the user gems `bin` directory to `PATH`](http://guides.rubygems.org/faqs/#user-install).
+
+### Create your app
+
+```
 thredded_create_app myapp
 ```
 
@@ -38,27 +67,6 @@ or `--datase mysql2` for MySQL.
 
 Run `thredded_create_app --help` for more information about the available
 options.
-
-### RVM
-
-If you're using [RVM](https://rvm.io/), you probably want to create a
-gemset before creating your app:
-
- ```bash
- RUBY_VERSION=2.3.1 APP=myapp
- rvm use --create "${RUBY_VERSION}@${APP}"
- gem install thredded_create_app
- thredded_create_app "$APP"
- ```
-   
-Then, generate the `.ruby-version` and `.ruby-gemset` files so that the gemset
-is used automatically whenever you `cd` into the project directory:
- 
- ```bash
- cd "$APP"
- rvm use --ruby-version "${RUBY_VERSION}@${APP}"
- printf '.ruby-version\n.ruby-gemset\n' >> .git/info/exclude
- ```
 
 ### App generation
 
@@ -149,6 +157,31 @@ by tweeting [@thredded]!
 [Devise Readme]: https://github.com/plataformatec/devise/blob/master/README.md
 [Thredded chat room]: https://gitter.im/thredded/thredded
 [Thredded Readme]: https://github.com/thredded/thredded/blob/master/README.md
+
+## Deploying to Heroku
+
+To deploy your app to Heroku, run:
+
+```bash
+gem install heroku # --user if using system ruby
+# Create a heroku app and set the necessary environment variables
+heroku create
+heroku config:set RACK_ENV=production RAILS_ENV=production \
+  SECRET_KEY_BASE="$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)"
+# Deploy to heroku
+git push heroku master
+# Set up the database and some seed data (an admin user and a messageboard)
+heroku run rake db:migrate db:seed
+# Open the website in your default browser
+heroku open
+```
+
+You can log in as the admin user with email `admin@<app name>.com`, password
+`123456`.
+
+The app is now deployed, but you'll also need to set up emailing, either by
+using one of the Heroku add-ons (there are some free ones), or by
+[configuring it yourself](http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration).
 
 ## Development
 

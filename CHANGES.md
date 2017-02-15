@@ -1,3 +1,12 @@
+# v0.1.7
+
+Simplify setup for non-rubyists:
+
+1. List the required packages for compiling the app's gem dependencies.
+2. Instructions and compatibility for running using the system ruby.
+3. Instructions for Heroku deployment and app compatibility with Ruby 2.2
+   (as that's what Heroku runs by default).
+
 # v0.1.6
 
 * Fix `<title>` escaping.

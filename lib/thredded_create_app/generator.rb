@@ -85,7 +85,9 @@ module ThreddedCreateApp
                   ("path: '#{path}'" if path)].compact.join(', ')
         end
       end
-      run "bundle install#{' --quiet' unless verbose?}"
+      log_info 'Installing gems'
+      run "bundle install#{' --quiet' unless verbose?}" \
+          "#{' --path .bundle' unless File.writable?(Gem.dir)}"
       git_commit "Add gems: #{gems.map { |(name, *)| name } * ', '}"
     end
   end

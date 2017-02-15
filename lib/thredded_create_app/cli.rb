@@ -2,6 +2,7 @@
 require 'thredded_create_app/command_error'
 require 'thredded_create_app/generator'
 require 'thredded_create_app/logging'
+require 'thredded_create_app/version'
 
 require 'highline'
 module ThreddedCreateApp
