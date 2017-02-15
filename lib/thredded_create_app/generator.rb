@@ -75,7 +75,7 @@ module ThreddedCreateApp
     end
 
     # @final
-    def bundle
+    def bundle # rubocop:disable Metrics/AbcSize
       File.open('Gemfile', 'a') do |f|
         log_info 'Writing gems to Gemfile'
         gems.each do |(name, version, groups, path)|
