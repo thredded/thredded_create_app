@@ -5,7 +5,18 @@ threads(threads_count, threads_count)
 
 preload_app!
 
-port ENV.fetch('PORT', 3000)
+if ENV['ANSIBLE_PROVISIONED']
+  shared_path = "#{ENV['APP_DIR']}/shared"
+  bind "unix://#{shared_path}/tmp/sockets/puma.sock"
+  state_path "#{shared_path}/tmp/pids/puma.state"
+  pidfile "#{shared_path}/tmp/pids/puma.pid"
+  stdout_redirect "#{shared_path}/log/puma.access.log",
+                  "#{shared_path}/log/puma.error.log",
+                  true
+else
+  port ENV.fetch('PORT', 3000)
+end
+
 environment ENV.fetch('RACK_ENV', 'development')
 
 before_fork do
