@@ -1,3 +1,8 @@
+# V0.1.8
+
+Add production Puma configuration for
+[Thredded Ansible playbooks](https://github.com/thredded/thredded-ansible).
+
 # v0.1.7
 
 Simplify setup for non-rubyists:
