@@ -183,6 +183,10 @@ The app is now deployed, but you'll also need to set up emailing, either by
 using one of the Heroku add-ons (there are some free ones), or by
 [configuring it yourself](http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration).
 
+## Deploying to a VPS or a bare-metal Ubuntu 16.04 server
+
+See: https://github.com/thredded/thredded-ansible.
+
 ## Development
 
 The instructions below are for developing and contributing to
