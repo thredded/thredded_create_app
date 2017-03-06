@@ -1,3 +1,8 @@
+# v0.1.9
+
+Add production Memcached configuration for Heroku and
+[Thredded Ansible playbooks](https://github.com/thredded/thredded-ansible).
+
 # V0.1.8
 
 Add production Puma configuration for
