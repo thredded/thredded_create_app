@@ -1,3 +1,7 @@
+# v0.1.10
+
+Fix user page recent posts display.
+
 # v0.1.9
 
 Add production Memcached configuration for Heroku and
