@@ -183,6 +183,30 @@ The app is now deployed, but you'll also need to set up emailing, either by
 using one of the Heroku add-ons (there are some free ones), or by
 [configuring it yourself](http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration).
 
+You may also want to set the Ruby GC variables for maximum performance.
+You can either do so by profiling the app with the
+[TuneMyGC Heroku add-on](https://elements.heroku.com/addons/tunemygc), or set
+these values obtained from profiling the Thredded Demo App:
+
+```bash
+# https://tunemygc.com/configs/e2cb38dac2fd4ff9fd9f32036e5e2688
+heroku config:set \
+  RUBY_GC_HEAP_INIT_SLOTS=308851 \
+  RUBY_GC_HEAP_FREE_SLOTS=1382037 \
+  RUBY_GC_HEAP_GROWTH_FACTOR=1.03 \
+  RUBY_GC_HEAP_GROWTH_MAX_SLOTS=44771 \
+  RUBY_GC_HEAP_OLDOBJECT_LIMIT_FACTOR=1.2 \
+  RUBY_GC_MALLOC_LIMIT=29939911 \
+  RUBY_GC_MALLOC_LIMIT_MAX=53891840 \
+  RUBY_GC_MALLOC_LIMIT_GROWTH_FACTOR=1.32 \
+  RUBY_GC_OLDMALLOC_LIMIT=24159191 \
+  RUBY_GC_OLDMALLOC_LIMIT_MAX=43486544 \
+  RUBY_GC_OLDMALLOC_LIMIT_GROWTH_FACTOR=1.2
+```
+
+In production, an app created with vanilla thredded_create_app will use around
+~220 MiB of RAM per puma worker under load.
+
 ## Deploying to a VPS or a bare-metal Ubuntu 16.04 server
 
 See: https://github.com/thredded/thredded-ansible.
