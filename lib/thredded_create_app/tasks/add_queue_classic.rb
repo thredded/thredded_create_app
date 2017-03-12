@@ -2,21 +2,23 @@
 require 'thredded_create_app/tasks/base'
 module ThreddedCreateApp
   module Tasks
-    class AddQue < Base
+    class AddQueueClassic < Base
       def summary
-        'Add Que for background jobs'
+        'Add QueueClassic for background jobs'
       end
 
       def before_bundle
         add_gem 'que'
+        add_gem 'queue_classic_admin',
+                "git: 'https://github.com/PSPDFKit-labs/queue_classic_admin'"
       end
 
       def after_bundle
-        run_generator 'que:install'
-        git_commit 'Install Que (rails g que:install)'
+        run_generator 'queue_classic:install'
+        git_commit 'Install QueueClassic (rails g que:install)'
         add_route <<~'RUBY'
           authenticate :user, lambda { |u| u.admin? } do
-            mount Que::Web, at: 'admin/que', as: :que
+            mount QueueClassicAdmin::Engine, at: 'admin/background-jobs', as: :admin_background_jobs
           end
         RUBY
         inject_into_file 'config/application.rb',
