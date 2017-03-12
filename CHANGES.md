@@ -1,3 +1,8 @@
+# v0.1.11
+
+Fix sign out when the app's root path is at Thredded
+(so `root_path` is not defined).
+
 # v0.1.10
 
 Fix user page recent posts display.
