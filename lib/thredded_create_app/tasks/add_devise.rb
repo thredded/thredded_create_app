@@ -40,11 +40,11 @@ module ThreddedCreateApp
   end
 
   def after_sign_out_path_for(resource)
-    stored_location_for(:user) || root_path
+    stored_location_for(:user) || (respond_to?(:root_path) ? root_path : thredded.root_path)
   end
 
   def back_url
-    session[:user_return_to] || root_path
+    session[:user_return_to] || (respond_to?(:root_path) ? root_path : thredded.root_path)
   end
         RUBY
       end
