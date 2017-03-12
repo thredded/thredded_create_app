@@ -21,7 +21,7 @@ environment ENV.fetch('RACK_ENV', 'development')
 
 before_fork do
   ::ActiveRecord::Base.connection_pool.disconnect!
-  ::I18n.backend.send(:init_translations)
+  ::I18n.backend.send(:init_translations) unless ::I18n.backend.initialized?
 end
 
 on_worker_boot do
