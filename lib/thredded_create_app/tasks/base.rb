@@ -61,10 +61,10 @@ module ThreddedCreateApp
         File.write path, src
       end
 
-      def add_route(route_str, prepend: false)
-        log_verbose "Add route: #{route_str}"
+      def add_route(src, prepend: false)
+        log_verbose "Add route: #{src}"
         inject_into_file 'config/routes.rb',
-                         content: "#{"\n" unless prepend}  #{route_str}",
+                         content: "#{"\n" unless prepend}#{indent 2, src}",
                          **(if prepend
                               { after: /\.routes\.draw do\s*\n/m }
                             else

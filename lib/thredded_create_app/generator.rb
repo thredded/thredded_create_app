@@ -12,6 +12,7 @@ require 'thredded_create_app/tasks/setup_app_skeleton'
 require 'thredded_create_app/tasks/production_configs'
 require 'thredded_create_app/tasks/add_memcached_support'
 require 'thredded_create_app/tasks/docker'
+require 'thredded_create_app/tasks/add_que'
 module ThreddedCreateApp
   class Generator < Tasks::Base
     def initialize(**options)
@@ -62,6 +63,7 @@ module ThreddedCreateApp
         Tasks::CreateRailsApp,
         (Tasks::AddSimpleForm if @options[:simple_form]),
         Tasks::AddDevise,
+        (Tasks::AddQue if @options[:database] == :postgresql),
         Tasks::AddThredded,
         Tasks::AddDisplayNameToUsers,
         Tasks::SetupAppSkeleton,
