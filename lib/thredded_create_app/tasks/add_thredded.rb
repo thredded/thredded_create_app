@@ -12,7 +12,7 @@ module ThreddedCreateApp
         add_gem 'thredded'
       end
 
-      def after_bundle
+      def after_bundle # rubocop:disable Metrics/AbcSize
         install_thredded
         git_commit 'Install thredded (rails g thredded:install)'
         add_thredded_routes
@@ -26,6 +26,8 @@ module ThreddedCreateApp
         git_commit 'Configure Thredded (routes, assets, behaviour, tests)'
         add_admin_column_to_users
         git_commit 'Add the admin column to users'
+        add_thredded_email_styles
+        git_commit 'Configure Thredded email styles with Roadie'
         run 'bundle exec rails thredded:install:emoji'
         git_commit 'Copied emoji to public/emoji'
       end
@@ -74,6 +76,23 @@ module ThreddedCreateApp
         run_generator 'migration add_admin_to_users'
         copy 'add_thredded/add_admin_to_users.rb',
              Dir['db/migrate/*_add_admin_to_users.rb'][0]
+      end
+
+      def add_thredded_email_styles
+        File.write 'app/assets/stylesheets/email.scss', <<~'SCSS', mode: 'a'
+          @import "variables";
+          @import "thredded/email";
+        SCSS
+
+        replace 'config/initializers/thredded.rb',
+                "# Thredded.parent_mailer = 'ActionMailer::Base'",
+                "Thredded.parent_mailer = 'ApplicationMailer'"
+
+        add_precompile_asset 'email.css'
+
+        File.write 'config/initializers/roadie.rb', <<~'RUBY', mode: 'a'
+          Rails.application.config.roadie.before_transformation = Thredded::EmailTransformer
+        RUBY
       end
     end
   end

@@ -62,6 +62,20 @@ module ThreddedCreateApp
         File.write path, src
       end
 
+      def add_precompile_asset(asset)
+        log_verbose "Add precompile asset: #{asset}"
+        assets_conf = File.read('config/initializers/assets.rb')
+        if assets_conf.include?('# Rails.application.config.assets.precompile')
+          replace 'config/initializers/assets.rb',
+                  /# Rails\.application\.config\.assets\.precompile.*/,
+                  "Rails.application.config.assets.precompile += %w(#{asset})"
+        else
+          replace 'config/initializers/assets.rb',
+                  /config\.assets\.precompile += %w\((.*?)\)/,
+                  "config.assets.precompile += %w(\\1 #{asset})"
+        end
+      end
+
       def add_route(route_str, prepend: false)
         log_verbose "Add route: #{route_str}"
         inject_into_file 'config/routes.rb',
