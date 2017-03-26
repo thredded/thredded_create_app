@@ -1,3 +1,9 @@
+# v0.1.13
+
+* Add day/night theme switcher.
+* Add a Turbolinks monkey-patch for https://github.com/turbolinks/turbolinks/issues/179.
+* Improve styles structure.
+
 # v0.1.12
 
 Add Roadie and RailsEmailPreview.
