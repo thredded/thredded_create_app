@@ -179,9 +179,39 @@ heroku open
 You can log in as the admin user with email `admin@<app name>.com`, password
 `123456`.
 
-The app is now deployed, but you'll also need to set up emailing, either by
-using one of the Heroku add-ons (there are some free ones), or by
-[configuring it yourself](http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration).
+### E-mails
+
+The app is now deployed, but you'll also need to set up emailing.
+
+The easiest way to do this is via the Mailgun Heroku add-on.
+
+1. Enable the Mailgun add-on:
+
+   ```bash
+   heroku addons:create mailgun:starter # Enable Mailgun with the free plan
+   ```
+
+2. Copy the following snippet into `config/environments/production.rb`:
+
+   ```ruby
+   config.action_mailer.perform_deliveries = true
+   config.action_mailer.raise_delivery_errors = true
+   config.action_mailer.delivery_method = :smtp
+   config.action_mailer.smtp_settings = {
+       domain: '[SET ME] myapp.herokuapp.com',
+       port: ENV['MAILGUN_SMTP_PORT'],
+       address: ENV['MAILGUN_SMTP_SERVER'],
+       user_name: ENV['MAILGUN_SMTP_LOGIN'],
+       password: ENV['MAILGUN_SMTP_PASSWORD'],
+       authentication: :plain,
+   }
+   ```
+
+   Set the `domain` in the snippet above to your domain.
+
+3. Commit and push to Heroku.
+
+### Performance
 
 You may also want to set the Ruby GC variables for maximum performance.
 You can either do so by profiling the app with the
