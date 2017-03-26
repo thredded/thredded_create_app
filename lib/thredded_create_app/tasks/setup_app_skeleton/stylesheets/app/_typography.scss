@@ -1,0 +1,38 @@
+h1, h2, h3 {
+  font-size: 1em;
+  line-height: 1.1;
+}
+
+h1 {
+  @include thredded-media-tablet-and-up {
+    font-size: 1.25em;
+  }
+  @include thredded-media-desktop-and-up {
+    font-size: 1.625em;
+  }
+}
+
+h2 {
+  @include thredded-media-tablet-and-up {
+    font-size: 1.125em;
+  }
+  @include thredded-media-desktop-and-up {
+    font-size: 1.55em;
+  }
+}
+
+a {
+  @extend %thredded--link;
+}
+
+blockquote {
+  @extend %thredded--blockquote;
+}
+
+table {
+  @extend %thredded--table;
+}
+
+hr {
+  @extend %thredded--hr;
+}

@@ -42,12 +42,23 @@ module ThreddedCreateApp
                  ('--quiet' unless verbose?)].compact)
       end
 
+      def expand_src_path(src_path)
+        File.expand_path src_path, File.dirname(__FILE__)
+      end
+
       def copy(src_path, target_path, mode: 'w')
         copy_template src_path, target_path, process_erb: false, mode: mode
       end
 
       def copy_template(src_path, target_path, process_erb: true, mode: 'w')
-        src = File.read(File.expand_path(src_path, File.dirname(__FILE__)))
+        expanded_src_path = expand_src_path(src_path)
+        if File.directory?(expanded_src_path)
+          fail "Only 'w' mode is supported for directories" if mode != 'w'
+          fail 'ERB processing not supported for directories' if process_erb
+          FileUtils.cp_r expanded_src_path, target_path
+          return
+        end
+        src = File.read(expanded_src_path)
         src = ERB.new(src, nil, '-').result(binding) if process_erb
         FileUtils.mkdir_p(File.dirname(target_path))
         File.write target_path, src, mode: mode

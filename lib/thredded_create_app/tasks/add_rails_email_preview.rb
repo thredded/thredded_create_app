@@ -21,13 +21,10 @@ module ThreddedCreateApp
       private
 
       def add_styles
-        if File.file? 'app/assets/stylesheets/application.css'
-          File.delete 'app/assets/stylesheets/application.css'
-        end
         copy 'add_rails_email_preview/_rails_email_preview-custom.scss',
              'app/assets/stylesheets/_rails_email_preview-custom.scss'
 
-        File.write 'app/assets/stylesheets/application.scss', <<~SCSS, mode: 'a'
+        File.write 'app/assets/stylesheets/_deps.scss', <<~SCSS, mode: 'a'
           @import "rails_email_preview-custom";
         SCSS
       end

@@ -63,12 +63,9 @@ module ThreddedCreateApp
              'app/assets/stylesheets/_thredded-variables.scss'
         copy 'add_thredded/_thredded-custom.scss',
              'app/assets/stylesheets/_thredded-custom.scss'
-        if File.file? 'app/assets/stylesheets/application.css'
-          File.delete 'app/assets/stylesheets/application.css'
-        end
-        File.write 'app/assets/stylesheets/application.scss',
-                   "@import \"thredded-custom\";\n",
-                   mode: 'a'
+        File.write 'app/assets/stylesheets/_deps.scss', <<~SCSS, mode: 'a'
+          @import "thredded-custom";
+        SCSS
       end
 
       def add_thredded_javascripts

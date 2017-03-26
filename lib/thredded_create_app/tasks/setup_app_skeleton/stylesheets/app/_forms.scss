@@ -1,0 +1,33 @@
+%form-hint {
+  color: $secondary-text-color;
+}
+
+.form-inputs {
+  .hint {
+    @extend %form-hint;
+  }
+  .error {
+    @extend %thredded--alert;
+    @extend %thredded--alert--danger;
+    display: block;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+}
+
+.form-hint {
+  @extend %form-hint;
+}
+
+.form-inputs .input,
+.form-actions {
+  margin: 1rem 0;
+}
+
+button, input[type="submit"] {
+  @extend %thredded--button;
+}
+
+form {
+  @extend %thredded--form;
+}

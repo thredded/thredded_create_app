@@ -69,17 +69,21 @@ module ThreddedCreateApp
       end
 
       def add_styles
-        copy_template 'setup_app_skeleton/_variables.scss.erb',
+        copy_template 'setup_app_skeleton/stylesheets/_variables.scss.erb',
                       'app/assets/stylesheets/_variables.scss'
-
+        copy 'setup_app_skeleton/stylesheets/_deps.scss',
+             'app/assets/stylesheets/_deps.scss',
+             mode: 'a'
+        copy 'setup_app_skeleton/stylesheets/_app.scss',
+             'app/assets/stylesheets/_app.scss'
+        copy 'setup_app_skeleton/stylesheets/app/',
+             'app/assets/stylesheets/app/'
         if File.file? 'app/assets/stylesheets/application.css'
           File.delete 'app/assets/stylesheets/application.css'
         end
-        copy_template 'setup_app_skeleton/application.scss',
+        copy_template 'setup_app_skeleton/stylesheets/application.scss',
                       'app/assets/stylesheets/application.scss',
                       mode: 'a'
-        copy 'setup_app_skeleton/_flash-messages.scss',
-             'app/assets/stylesheets/_flash-messages.scss'
       end
 
       def add_i18n
