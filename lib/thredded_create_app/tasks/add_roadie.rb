@@ -13,7 +13,7 @@ module ThreddedCreateApp
         add_gem 'plain-david' # for plain text email generation
       end
 
-      def after_bundle
+      def after_bundle # rubocop:disable Metrics/AbcSize
         inject_into_file 'app/mailers/application_mailer.rb',
                          after: "ActionMailer::Base\n",
                          content: "  include Roadie::Rails::Automatic\n"
