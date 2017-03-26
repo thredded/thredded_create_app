@@ -27,12 +27,20 @@ module ThreddedCreateApp
                          before: /\nend\n\z$/,
                          content: indent(2, "\n" + roadie_production_config)
         replace 'app/views/layouts/mailer.html.erb',
-                %r{<style>.*?</style>}m,
-                "<%= stylesheet_link_tag 'email' %>"
+                %r{ *<style>.*?</style>\n}m,
+                indent(4, mailer_template_head)
         git_commit 'Add Roadie configuration'
       end
 
       private
+
+      def mailer_template_head
+        <<~'ERB'
+          <%# Ensure the stylesheet is referenced without a host so that the local
+              version is read by Roadie even if asset_host is set. %>
+          <link rel="stylesheet" href="<%= stylesheet_path('email', host: '') %>" />
+        ERB
+      end
 
       def roadie_development_config
         <<~'RUBY'
@@ -46,9 +54,6 @@ module ThreddedCreateApp
 
       def roadie_production_config
         <<~'RUBY'
-          # Roadie requires that action_mailer.asset_host is nil, see:
-          # https://github.com/Mange/roadie-rails/blob/9e3cb2ed59f4ec9fda252ad016b23e106983a440/README.md#known-issues
-          config.action_mailer.asset_host = nil
           # Set the default URL options for both Roadie and ActionMailer:
           config.roadie.url_options = config.action_mailer.default_url_options = {
             host: ENV['APP_HOST'] || '[SET ME] myapp.herokuapp.com',
