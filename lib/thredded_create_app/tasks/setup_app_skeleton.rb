@@ -60,17 +60,22 @@ module ThreddedCreateApp
         replace 'app/assets/javascripts/application.js',
                 %r{^//= require jquery$},
                 '//= require jquery3'
+        git_commit 'Use jQuery v3 instead of jQuery v1'
 
         copy 'setup_app_skeleton/javascripts/app.js',
              'app/assets/javascripts/app.js'
-        copy 'setup_app_skeleton/javascripts/app/time_ago.js',
-             'app/assets/javascripts/app/time_ago.js'
-        git_commit 'Use jQuery v3 instead of jQuery v1'
+        copy 'setup_app_skeleton/javascripts/app/',
+             'app/assets/javascripts/app/'
+        git_commit 'Add app JavaScript'
       end
 
       def add_styles
+        copy 'setup_app_skeleton/images/brightness.svg',
+             'app/assets/images/brightness.svg'
         copy_template 'setup_app_skeleton/stylesheets/_variables.scss.erb',
                       'app/assets/stylesheets/_variables.scss'
+        copy 'setup_app_skeleton/stylesheets/_variables-night.scss',
+             'app/assets/stylesheets/_variables-night.scss'
         copy 'setup_app_skeleton/stylesheets/_deps.scss',
              'app/assets/stylesheets/_deps.scss',
              mode: 'a'
@@ -81,9 +86,12 @@ module ThreddedCreateApp
         if File.file? 'app/assets/stylesheets/application.css'
           File.delete 'app/assets/stylesheets/application.css'
         end
-        copy_template 'setup_app_skeleton/stylesheets/application.scss',
-                      'app/assets/stylesheets/application.scss',
-                      mode: 'a'
+        copy 'setup_app_skeleton/stylesheets/day.scss',
+             'app/assets/stylesheets/day.scss'
+        add_precompile_asset 'day.css'
+        copy 'setup_app_skeleton/stylesheets/night.scss',
+             'app/assets/stylesheets/night.scss'
+        add_precompile_asset 'night.css'
       end
 
       def add_i18n
@@ -96,21 +104,28 @@ module ThreddedCreateApp
                         RUBY
       end
 
-      def add_app_layout # rubocop:disable Metrics/MethodLength
+      # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      def add_app_layout
         copy 'setup_app_skeleton/_header.html.erb',
              'app/views/shared/_header.html.erb'
         copy 'setup_app_skeleton/_flash_messages.html.erb',
              'app/views/shared/_flash_messages.html.erb'
         app_helper_src = File.read(
-          File.join(File.dirname(__FILE__),
-                    'setup_app_skeleton/application_helper_methods.rb')
+          expand_src_path('setup_app_skeleton/application_helper_methods.rb')
         )
         inject_into_file 'app/helpers/application_helper.rb',
                          before:  /end\n\z/,
                          content: indent(2, app_helper_src)
+        copy 'setup_app_skeleton/themes_helper.rb',
+             'app/helpers/themes_helper.rb'
         replace 'app/views/layouts/application.html.erb',
                 %r{<title>.*?</title>},
                 '<title><%= page_title %></title>'
+        replace 'app/views/layouts/application.html.erb',
+                /[ ]*<%= stylesheet_link_tag.*?%>/,
+                indent(4, <<~ERB)
+                  <%= stylesheet_link_tag current_theme, media: 'all', 'data-turbolinks-track': 'reload' %>
+                ERB
         replace 'app/views/layouts/application.html.erb',
                 /[ ]*<%= javascript_include_tag 'application', .*? %>/,
                 <<-'ERB'
@@ -126,13 +141,14 @@ module ThreddedCreateApp
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         ERB
 
+        body = File.read(
+          expand_src_path('setup_app_skeleton/application.body.html.erb')
+        )
         replace 'app/views/layouts/application.html.erb',
                 %r{<body>.*?</body>}m,
-                File.read(
-                  File.join(File.dirname(__FILE__),
-                            'setup_app_skeleton/application.body.html.erb')
-                )
+                body
       end
+      # rubocop:enable Metrics/AbcSize,Metrics/MethodLength
 
       def add_user_page
         run_generator 'controller users show' \

@@ -87,7 +87,7 @@ module ThreddedCreateApp
                   "Rails.application.config.assets.precompile += %w(#{asset})"
         else
           replace 'config/initializers/assets.rb',
-                  /config\.assets\.precompile += %w\((.*?)\)/,
+                  /config\.assets\.precompile \+= %w\((.*?)\)/,
                   "config.assets.precompile += %w(\\1 #{asset})"
         end
       end

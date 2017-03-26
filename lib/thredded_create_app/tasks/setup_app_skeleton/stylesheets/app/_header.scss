@@ -1,5 +1,7 @@
+@import "./header/theme_selector";
+
 .app-header {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid $light-gray;
   a {
     display: inline-block;
     padding: 1rem 0;

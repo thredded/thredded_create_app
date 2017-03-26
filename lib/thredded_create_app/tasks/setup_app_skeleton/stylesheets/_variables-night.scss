@@ -1,0 +1,71 @@
+// See https://www.google.com/design/spec/style/color.html#color-color-palette
+// https://github.com/angular/material2/blob/master/src/lib/core/theming/_palette.scss
+@at-root {
+  $black-87-opacity: rgba(black, 0.87);
+  $white-87-opacity: rgba(white, 0.87);
+  $black-12-opacity: rgba(black, 0.12);
+  $white-12-opacity: rgba(white, 0.12);
+  $black-6-opacity: rgba(black, 0.06);
+  $white-6-opacity: rgba(white, 0.06);
+
+  $mat-deep-orange: (
+      50: #fbe9e7,
+      100: #ffccbc,
+      200: #ffab91,
+      300: #ff8a65,
+      400: #ff7043,
+      500: #ff5722,
+      600: #f4511e,
+      700: #e64a19,
+      800: #d84315,
+      900: #bf360c,
+      A100: #ff9e80,
+      A200: #ff6e40,
+      A400: #ff3d00,
+      A700: #dd2c00,
+      contrast: (
+          50: $black-87-opacity,
+          100: $black-87-opacity,
+          200: $black-87-opacity,
+          300: $black-87-opacity,
+          400: $black-87-opacity,
+          500: white,
+          600: white,
+          700: white,
+          800: white,
+          900: white,
+          A100: $black-87-opacity,
+          A200: $black-87-opacity,
+          A400: white,
+          A700: white,
+      )
+  );
+
+  $mat-palette: $mat-deep-orange !global;
+}
+
+$brand-primary: map-get($mat-palette, 500);
+$text-color: map-get($mat-palette, 50);
+$secondary-text-color: rgba(map-get($mat-palette, 50), 0.87);
+$body-background-color: #212121;
+$background-color: #272727;
+
+$action-hover-color: map-get($mat-palette, A200);
+$secondary-nav-color: $text-color;
+
+$button-color: $text-color;
+$button-background: map-get($mat-palette, 800);
+$button-hover-background: map-get($mat-palette, 700);
+
+$badge-active-background: $brand-primary;
+$light-gray: rgba(#424242, 0.8);
+
+$thredded-onebox-favicon-properties: (
+    'favicons/amazon.png': (filter: invert(100%) hue-rotate(175deg) brightness(150%)),
+    'favicons/github.png': (filter: invert(100%)),
+    'favicons/wikipedia.png': (filter: invert(100%)),
+);
+
+$thredded-code-selected-line-background: #541;
+
+@import "variables";
