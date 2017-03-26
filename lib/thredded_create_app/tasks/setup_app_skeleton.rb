@@ -85,6 +85,11 @@ module ThreddedCreateApp
       def add_i18n
         copy_template 'setup_app_skeleton/en.yml.erb',
                       'config/locales/en.yml'
+        inject_into_file'config/application.rb',
+                        before: / *end\nend\n\z/,
+                        content: indent(4, <<~'RUBY')
+                          config.i18n.available_locales = %w(en)
+                        RUBY
       end
 
       def add_app_layout # rubocop:disable Metrics/MethodLength

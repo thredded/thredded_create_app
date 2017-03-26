@@ -118,7 +118,7 @@ module ThreddedCreateApp
 TEXT
       end.parse!(argv)
       if positional_args.length != 1
-        raise ArgvError, 'Expected 1 positional argument, ' \
+        fail ArgvError, 'Expected 1 positional argument, ' \
                         "got #{positional_args.length}."
       end
       options.update(app_path: argv[0])
@@ -153,7 +153,7 @@ TEXT
 
     def error(message, exit_code)
       log_error message
-      raise ExecutionError.new(message, exit_code)
+      fail ExecutionError.new(message, exit_code)
     end
 
     def auto_output_coloring(coloring = STDOUT.isatty)

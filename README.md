@@ -118,7 +118,11 @@ development and test databases. Then, the database is created, the migrations
 are run, and the database is seeded with an admin user and a messageboard.
 
 Finally, the tests are run, and the development web server is started at
-<http://localhost:3000>.
+<http://localhost:3000>. To start the server yourself afterwards with:
+
+```bash
+bundle exec rails s
+```
 
 [`async`]: https://developer.mozilla.org/en/docs/Web/HTML/Element/script
 [`defer`]: https://developer.mozilla.org/en/docs/Web/HTML/Element/script

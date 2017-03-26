@@ -17,6 +17,12 @@ module ThreddedCreateApp
         inject_into_file 'app/mailers/application_mailer.rb',
                          after: "ActionMailer::Base\n",
                          content: "  include Roadie::Rails::Automatic\n"
+        inject_into_file 'config/environments/test.rb',
+                         before: /\nend\n\z$/,
+                         content: indent(2, "\n" + roadie_development_config)
+        inject_into_file 'config/environments/development.rb',
+                         before: /\nend\n\z$/,
+                         content: indent(2, "\n" + roadie_development_config)
         inject_into_file 'config/environments/production.rb',
                          before: /\nend\n\z$/,
                          content: indent(2, "\n" + roadie_production_config)
@@ -27,6 +33,16 @@ module ThreddedCreateApp
       end
 
       private
+
+      def roadie_development_config
+        <<~'RUBY'
+          # Set the default URL options for both Roadie and ActionMailer:
+          config.roadie.url_options = config.action_mailer.default_url_options = {
+            host: 'localhost',
+            port: 3000,
+          }
+        RUBY
+      end
 
       def roadie_production_config
         <<~'RUBY'

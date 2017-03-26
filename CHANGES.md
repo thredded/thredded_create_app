@@ -1,3 +1,7 @@
+# v0.1.12
+
+Add Roadie and RailsEmailPreview.
+
 # v0.1.11
 
 Fix sign out when the app's root path is at Thredded

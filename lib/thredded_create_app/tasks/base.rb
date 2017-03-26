@@ -53,11 +53,16 @@ module ThreddedCreateApp
         File.write target_path, src, mode: mode
       end
 
-      def replace(path, pattern, replacement = nil, optional: false, &block)
+      def replace(path, pattern, replacement = nil, optional: false)
         src = File.read(path)
-        unless src.gsub!(pattern, replacement, &block) || optional
-          raise ThreddedCreateApp::CommandError,
-                "No match found for #{pattern} in #{path}"
+        changed = if block_given?
+                    src.gsub!(pattern) { |_| yield Regexp.last_match }
+                  else
+                    src.gsub!(pattern, replacement)
+                  end
+        unless changed || optional
+          fail ThreddedCreateApp::CommandError,
+               "No match found for #{pattern} in #{path}"
         end
         File.write path, src
       end

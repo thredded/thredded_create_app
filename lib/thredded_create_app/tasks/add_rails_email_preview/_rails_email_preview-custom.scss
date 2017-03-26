@@ -1,0 +1,7 @@
+@import "variables";
+$rep-brand-color: $brand-primary;
+$rep-font-family: $base-font-family;
+$rep-text-color: $text-color;
+$rep-text-color-secondary: $secondary-text-color;
+$rep-gray-lighter: $light-gray;
+@import "rails_email_preview/application";

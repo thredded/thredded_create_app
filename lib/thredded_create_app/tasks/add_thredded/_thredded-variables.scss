@@ -1,5 +1,4 @@
 @import "variables";
-
 $thredded-brand: $brand-primary;
 $thredded-text-color: $text-color;
 $thredded-secondary-text-color: $secondary-text-color;
@@ -7,13 +6,3 @@ $thredded-base-font-family: $base-font-family;
 $thredded-base-font-size: $base-font-size;
 $thredded-base-line-height: $base-line-height;
 $thredded-grid-container-max-width: $grid-container-max-width;
-@import "thredded";
-
-.thredded--main-container {
-  // The padding and max-width are handled by the app's container.
-  max-width: none;
-  padding: 0;
-  @include thredded-media-tablet-and-up {
-    padding: 0;
-  }
-}

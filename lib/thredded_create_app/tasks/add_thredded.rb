@@ -28,6 +28,8 @@ module ThreddedCreateApp
         git_commit 'Add the admin column to users'
         add_thredded_email_styles
         git_commit 'Configure Thredded email styles with Roadie'
+        configure_rails_email_preview
+        git_commit 'Configure RailsEmailPreview with Thredded and Roadie'
         run 'bundle exec rails thredded:install:emoji'
         git_commit 'Copied emoji to public/emoji'
       end
@@ -57,13 +59,15 @@ module ThreddedCreateApp
       end
 
       def add_thredded_styles
-        copy 'add_thredded/_myapp-thredded.scss',
-             "app/assets/stylesheets/_#{app_name}-thredded.scss"
+        copy 'add_thredded/_thredded-variables.scss',
+             'app/assets/stylesheets/_thredded-variables.scss'
+        copy 'add_thredded/_thredded-custom.scss',
+             'app/assets/stylesheets/_thredded-custom.scss'
         if File.file? 'app/assets/stylesheets/application.css'
           File.delete 'app/assets/stylesheets/application.css'
         end
         File.write 'app/assets/stylesheets/application.scss',
-                   "@import \"#{app_name}-thredded\";\n",
+                   "@import \"thredded-custom\";\n",
                    mode: 'a'
       end
 
@@ -81,6 +85,7 @@ module ThreddedCreateApp
       def add_thredded_email_styles
         File.write 'app/assets/stylesheets/email.scss', <<~'SCSS', mode: 'a'
           @import "variables";
+          @import "thredded-variables";
           @import "thredded/email";
         SCSS
 
@@ -94,6 +99,46 @@ module ThreddedCreateApp
           Rails.application.config.roadie.before_transformation = Thredded::EmailTransformer
         RUBY
       end
+
+      # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+      def configure_rails_email_preview
+        replace 'config/routes.rb',
+                /\s*mount RailsEmailPreview::Engine.*/,
+                indent(2, "\n" + <<~'RUBY' + "\n")
+                  scope path: 'admin' do
+                    authenticate :user, lambda { |u| u.admin? } do
+                      mount RailsEmailPreview::Engine, at: 'emails'
+                    end
+                  end
+        RUBY
+        replace 'config/initializers/rails_email_preview.rb',
+                /#\s?(RailsEmailPreview\.setup.*?\n)(.*?)#\s?end/m do |m|
+                  content = m[2]
+                  content.gsub!(/^#( {2}#|$)/, '\1') || fail
+                  content.gsub!(/^#/, '  #')
+                  content.gsub!(/ *# *config.before_render.*?end\n/m,
+                                indent(2, <<~'RUBY')) || fail
+                                  config.before_render do |message, preview_class_name, mailer_action|
+                                    Roadie::Rails::MailInliner.new(message, message.roadie_options).execute
+                                  end
+                                RUBY
+                  content.gsub!(/ *# *config.enable_send_email =.*\n/,
+                                indent(2, <<~'RUBY')) || fail
+                                  config.enable_send_email = Rails.env.production?
+                                RUBY
+                  content.gsub!(/# do not show send email button/i,
+                                '# Only show Send Email button in production')
+                  "#{m[1]}#{content}end"
+                end
+        replace 'config/initializers/rails_email_preview.rb',
+                /#\s*RailsEmailPreview.layout =.*/,
+                "RailsEmailPreview.layout = 'application'"
+        replace 'config/initializers/rails_email_preview.rb',
+                /RailsEmailPreview.preview_classes = /,
+                'RailsEmailPreview.preview_classes = ' \
+                        'Thredded::BaseMailerPreview.preview_classes + '
+      end
+      # rubocop:enable Metrics/MethodLength,Metrics/AbcSize
     end
   end
 end

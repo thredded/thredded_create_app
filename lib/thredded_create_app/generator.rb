@@ -6,11 +6,12 @@ require 'thredded_create_app/tasks/base'
 require 'thredded_create_app/tasks/create_rails_app'
 require 'thredded_create_app/tasks/add_simple_form'
 require 'thredded_create_app/tasks/add_devise'
+require 'thredded_create_app/tasks/add_roadie'
+require 'thredded_create_app/tasks/add_rails_email_preview'
 require 'thredded_create_app/tasks/add_thredded'
 require 'thredded_create_app/tasks/add_display_name_to_users'
 require 'thredded_create_app/tasks/setup_database'
 require 'thredded_create_app/tasks/setup_app_skeleton'
-require 'thredded_create_app/tasks/add_roadie'
 require 'thredded_create_app/tasks/production_configs'
 require 'thredded_create_app/tasks/add_memcached_support'
 require 'thredded_create_app/tasks/docker'
@@ -64,10 +65,11 @@ module ThreddedCreateApp
         Tasks::CreateRailsApp,
         (Tasks::AddSimpleForm if @options[:simple_form]),
         Tasks::AddDevise,
+        Tasks::AddRailsEmailPreview,
+        Tasks::AddRoadie,
         Tasks::AddThredded,
         Tasks::AddDisplayNameToUsers,
         Tasks::SetupAppSkeleton,
-        Tasks::AddRoadie,
         Tasks::ProductionConfigs,
         Tasks::AddMemcachedSupport,
         (Tasks::Docker if @options[:database] == :postgresql),
