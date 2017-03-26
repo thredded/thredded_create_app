@@ -1,3 +1,8 @@
+# v0.1.14
+
+* A minor change to Roadie config as per
+  https://github.com/Mange/roadie-rails/issues/11#issuecomment-289299465.
+
 # v0.1.13
 
 * Add day/night theme switcher.
