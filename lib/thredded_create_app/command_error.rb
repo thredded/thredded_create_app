@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module ThreddedCreateApp
   # When this type of error is caught:
   # 1. show error message of the backtrace

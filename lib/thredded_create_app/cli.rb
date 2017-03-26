@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'thredded_create_app/command_error'
 require 'thredded_create_app/generator'
 require 'thredded_create_app/logging'
@@ -110,11 +111,10 @@ module ThreddedCreateApp
           STDERR.puts op
           exit
         end
-        op.separator Term::ANSIColor.bright_blue <<-TEXT
-
-For more information, see the readme at:
-    #{File.expand_path('../../README.md', File.dirname(__FILE__))}
-    https://github.com/thredded/thredded_create_app
+        op.separator Term::ANSIColor.bright_blue <<~TEXT
+                 For more information, see the readme at:
+          #{File.expand_path('../../README.md', File.dirname(__FILE__))}
+          https://github.com/thredded/thredded_create_app
 TEXT
       end.parse!(argv)
       if positional_args.length != 1

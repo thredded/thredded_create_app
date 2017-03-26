@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AddDisplayNameToUsers < ActiveRecord::Migration[5.0]
   def up
     case connection.adapter_name.to_s

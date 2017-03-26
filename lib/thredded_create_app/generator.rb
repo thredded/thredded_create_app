@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'fileutils'
 require 'shellwords'
 require 'thredded_create_app/tasks/base'

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'thredded_create_app/tasks/base'
 module ThreddedCreateApp
   module Tasks
@@ -49,9 +50,9 @@ module ThreddedCreateApp
         inject_into_file 'app/views/layouts/application.html.erb',
                          before: '    <%= csrf_meta_tags %>',
                          content: indent(4, <<~ERB)
-          <%= favicon_link_tag 'favicon.ico' %>
-          <%= favicon_link_tag 'apple-touch-icon.png',
-                               rel: 'apple-touch-icon', type: 'image/png' %>
+                           <%= favicon_link_tag 'favicon.ico' %>
+                           <%= favicon_link_tag 'apple-touch-icon.png',
+                                                rel: 'apple-touch-icon', type: 'image/png' %>
         ERB
       end
 
@@ -140,7 +141,7 @@ module ThreddedCreateApp
         inject_into_file 'config/routes.rb',
                          before: /^\s*mount Thredded::Engine/,
                          content: indent(2, <<~'RUBY')
-          resources :users, only: [:show]
+                           resources :users, only: [:show]
         RUBY
       end
 
