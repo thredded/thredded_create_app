@@ -1,3 +1,9 @@
+# v0.1.15
+
+* Add the `config` gem to have a single source of truth for configuration such
+  as the app's hostname (domain) and the default email sender.
+* Configure Devise mailers.
+
 # v0.1.14
 
 * A minor change to Roadie config as per
