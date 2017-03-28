@@ -26,8 +26,8 @@ module ThreddedCreateApp
         git_commit 'Configure Thredded (routes, assets, behaviour, tests)'
         add_admin_column_to_users
         git_commit 'Add the admin column to users'
-        add_thredded_email_styles
-        git_commit 'Configure Thredded email styles with Roadie'
+        setup_thredded_emails
+        git_commit 'Configure Thredded emails and email styles with Roadie'
         configure_rails_email_preview
         git_commit 'Configure RailsEmailPreview with Thredded and Roadie'
         run 'bundle exec rails thredded:install:emoji'
@@ -79,7 +79,7 @@ module ThreddedCreateApp
              Dir['db/migrate/*_add_admin_to_users.rb'][0]
       end
 
-      def add_thredded_email_styles
+      def setup_thredded_emails
         File.write 'app/assets/stylesheets/email.scss', <<~'SCSS', mode: 'a'
           @import "variables";
           @import "thredded-variables";
@@ -87,8 +87,13 @@ module ThreddedCreateApp
         SCSS
 
         replace 'config/initializers/thredded.rb',
-                "# Thredded.parent_mailer = 'ActionMailer::Base'",
+                /# Thredded\.parent_mailer = .*/,
                 "Thredded.parent_mailer = 'ApplicationMailer'"
+        replace 'config/initializers/thredded.rb',
+                /# Thredded\.email_from = .*/,
+                <<~'RUBY'.chomp
+                  Thredded.email_from = %("#{I18n.t('brand.name')}" <#{Settings.email_sender}>)
+                RUBY
 
         add_precompile_asset 'email.css'
 

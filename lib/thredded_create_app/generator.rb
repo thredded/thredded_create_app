@@ -4,6 +4,7 @@ require 'fileutils'
 require 'shellwords'
 require 'thredded_create_app/tasks/base'
 require 'thredded_create_app/tasks/create_rails_app'
+require 'thredded_create_app/tasks/add_rails_config'
 require 'thredded_create_app/tasks/add_simple_form'
 require 'thredded_create_app/tasks/add_devise'
 require 'thredded_create_app/tasks/add_roadie'
@@ -63,6 +64,7 @@ module ThreddedCreateApp
     def tasks
       @tasks ||= [
         Tasks::CreateRailsApp,
+        Tasks::AddRailsConfig,
         (Tasks::AddSimpleForm if @options[:simple_form]),
         Tasks::AddDevise,
         Tasks::AddRailsEmailPreview,

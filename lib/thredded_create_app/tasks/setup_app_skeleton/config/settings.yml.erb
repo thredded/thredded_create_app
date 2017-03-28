@@ -1,0 +1,3 @@
+<%% hostname = ENV['APP_HOST'] || '<%= app_hostname %>' %>
+hostname: <%%= hostname.inspect %>
+email_sender: <%%= (ENV['SMTP_USER'] || "no-reply@#{hostname}").inspect %>

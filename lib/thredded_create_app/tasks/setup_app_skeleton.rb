@@ -24,16 +24,17 @@ module ThreddedCreateApp
       end
 
       def after_bundle
+        add_config_vars
+        add_i18n
+        add_seeds
         add_favicon_and_touch_icons
         add_javascripts
         add_styles
         add_user_page
         add_home_page
-        add_i18n
         add_app_layout
         copy 'setup_app_skeleton/spec/features/homepage_spec.rb',
              'spec/features/homepage_spec.rb'
-        add_seeds
         git_commit 'Set up basic app navigation and styles'
       end
 
@@ -94,9 +95,19 @@ module ThreddedCreateApp
         add_precompile_asset 'night.css'
       end
 
+      def add_config_vars
+        copy_template 'setup_app_skeleton/config/settings.yml.erb',
+                      'config/settings.yml'
+        replace 'app/mailers/application_mailer.rb',
+                /default from: .*/,
+                'default from: Settings.email_sender'
+      end
+
       def add_i18n
-        copy_template 'setup_app_skeleton/en.yml.erb',
+        copy_template 'setup_app_skeleton/config/locales/en.yml.erb',
                       'config/locales/en.yml'
+        copy_template 'setup_app_skeleton/initializers/02_i18n.rb',
+                      'config/initializers/02_i18n.rb'
         inject_into_file'config/application.rb',
                         before: / *end\nend\n\z/,
                         content: indent(4, <<~'RUBY')
@@ -186,7 +197,7 @@ module ThreddedCreateApp
       end
 
       def admin_email
-        "admin@#{app_name.tr(' ', '_').downcase}.com"
+        "admin@#{app_hostname}"
       end
 
       def admin_password

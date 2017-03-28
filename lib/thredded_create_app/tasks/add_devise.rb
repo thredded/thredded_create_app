@@ -20,6 +20,7 @@ module ThreddedCreateApp
         run_generator 'devise:install'
         run_generator 'devise User'
         setup_views
+        setup_emails
         setup_after_sign_in_behaviour
         git_commit 'Setup Devise'
       end
@@ -64,6 +65,19 @@ module ThreddedCreateApp
           replace path, 'devise_mapping', 'Devise.mappings[:user]',
                   optional: true
         end
+      end
+
+      def setup_emails
+        replace 'config/initializers/devise.rb',
+                /# config\.parent_mailer = .*/,
+                <<~'RUBY'.chomp
+                  config.parent_mailer = 'ApplicationMailer'
+                RUBY
+        replace 'config/initializers/devise.rb',
+                /( *)config\.mailer_sender = .*/,
+                '\1' + <<~'RUBY'.chomp
+                  config.mailer_sender = %("#{I18n.t('brand.name')}" <#{Settings.email_sender}>)
+                RUBY
       end
     end
   end

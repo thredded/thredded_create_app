@@ -189,20 +189,27 @@ The app is now deployed, but you'll also need to set up emailing.
 
 The easiest way to do this is via the Mailgun Heroku add-on.
 
-1. Enable the Mailgun add-on:
+1. Set the `APP_HOST` environment variable on Heroku so that the app knows its
+   domain.
+
+   ```bash
+   heroku config:set APP_HOST='e.g. myapp.herokuapp.com'
+   ```
+
+2. Enable the Mailgun add-on:
 
    ```bash
    heroku addons:create mailgun:starter # Enable Mailgun with the free plan
    ```
 
-2. Copy the following snippet into `config/environments/production.rb`:
+3. Copy the following snippet into `config/environments/production.rb`:
 
    ```ruby
    config.action_mailer.perform_deliveries = true
    config.action_mailer.raise_delivery_errors = true
    config.action_mailer.delivery_method = :smtp
    config.action_mailer.smtp_settings = {
-       domain: '[SET ME] myapp.herokuapp.com',
+       domain: Settings.hostname,
        port: ENV['MAILGUN_SMTP_PORT'],
        address: ENV['MAILGUN_SMTP_SERVER'],
        user_name: ENV['MAILGUN_SMTP_LOGIN'],
@@ -213,7 +220,10 @@ The easiest way to do this is via the Mailgun Heroku add-on.
 
    Set the `domain` in the snippet above to your domain.
 
-3. Commit and push to Heroku.
+4. Commit and push to Heroku.
+
+By default, emails are send from `no-reply@`. You can configure this in
+`config/settings.yml`.
 
 ### Performance
 

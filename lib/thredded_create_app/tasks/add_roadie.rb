@@ -56,7 +56,7 @@ module ThreddedCreateApp
         <<~'RUBY'
           # Set the default URL options for both Roadie and ActionMailer:
           config.roadie.url_options = config.action_mailer.default_url_options = {
-            host: ENV['APP_HOST'] || '[SET ME] myapp.herokuapp.com',
+            host: Settings.hostname,
             protocol: 'https',
           }
         RUBY

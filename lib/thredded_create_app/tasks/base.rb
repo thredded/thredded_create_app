@@ -11,13 +11,14 @@ module ThreddedCreateApp
     class Base
       include ThreddedCreateApp::Logging
 
-      attr_reader :app_name, :app_path, :gems
+      attr_reader :app_name, :app_hostname, :app_path, :gems
 
       def initialize(app_path:, verbose: false, **_args)
         @app_path = app_path
         @app_name = File.basename(File.expand_path(app_path))
-        @verbose  = verbose
-        @gems     = []
+        @app_hostname = "#{@app_name.tr(' ', '_').downcase}.com"
+        @verbose = verbose
+        @gems = []
       end
 
       def summary
