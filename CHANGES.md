@@ -1,3 +1,7 @@
+# v0.1.16
+
+* Support Turbolinks v5.0.1.
+
 # v0.1.15
 
 * Add the `config` gem to have a single source of truth for configuration such
