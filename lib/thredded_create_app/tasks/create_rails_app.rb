@@ -1,33 +1,41 @@
 # frozen_string_literal: true
 
+require 'yaml'
 require 'thredded_create_app/tasks/base'
+
 module ThreddedCreateApp
   module Tasks
     class CreateRailsApp < Base
-      def initialize(install_gem_bundler_rails:, database:, **args)
+      def initialize(install_gem_bundler_rails:, rails_version:, database:,
+                     **args)
         super
         @install_gem_bundler_rails = install_gem_bundler_rails
         @database = database
+        @rails_version = rails_version
+        @user_install = !File.writable?(Gem.dir)
       end
 
       def summary
-        "Create Rails app #{app_name.inspect} with #{rails_database} and rspec"
+        "Create a Rails v#{@rails_version} app #{app_name.inspect} with"\
+          " #{rails_database} and rspec"
       end
 
       def before_bundle
         if @install_gem_bundler_rails
-          user_install = !File.writable?(Gem.dir)
-          run 'gem update --system --no-document --quiet' unless user_install
-          run 'gem install bundler rails --no-document' \
-              "#{' --user' if user_install}"
+          run 'gem update --system --no-document --quiet' unless @user_install
+          install_gem 'bundler'
+          install_gem 'rails', version: @rails_version
         end
+        @rails_version ||= latest_installed_rails_version
+
         # I have no idea why this bundle exec is necessary on Travis.
         run "#{'bundle exec ' if ENV['TRAVIS']}" \
-           "rails new . --skip-bundle --database=#{rails_database} " \
-           "--skip-test#{verbose? ? ' --verbose' : ' --quiet'}"
+           "rails _#{@rails_version}_ new . --skip-bundle" \
+           " --database=#{rails_database} " \
+           " --skip-test#{verbose? ? ' --verbose' : ' --quiet'}"
         replace 'Gemfile', /gem 'sass-rails'.*$/, "gem 'sassc-rails'"
-        add_gem 'rspec-rails', groups: %i(test)
-        add_gem 'capybara', groups: %i(test)
+        add_gem 'rspec-rails', groups: %i[test]
+        add_gem 'capybara', groups: %i[test]
         git_commit summary
       end
 
@@ -38,8 +46,20 @@ module ThreddedCreateApp
 
       private
 
+      def install_gem(gem_name, version: nil)
+        run ["gem install #{gem_name} --no-document",
+             ('--user' if @user_install),
+             ("-v #{version}" if version)].compact.join(' ')
+      end
+
       def rails_database
         { mysql2: :mysql }.fetch(@database, @database)
+      end
+
+      def latest_installed_rails_version
+        # rubocop:disable Security/YAMLLoad
+        YAML.load(`gem specification rails`).version.to_s
+        # rubocop:enable Security/YAMLLoad
       end
     end
   end

@@ -57,8 +57,8 @@ module ThreddedCreateApp
         replace 'app/views/devise/registrations/edit.html.erb',
                 ', :back %>', ', back_url %>'
         # Make the views render-able outside Devise controllers
-        %w(app/views/devise/sessions/new.html.erb
-           app/views/devise/shared/_links.html.erb).each do |path|
+        %w[app/views/devise/sessions/new.html.erb
+           app/views/devise/shared/_links.html.erb].each do |path|
           replace path, 'resource_class', 'User', optional: true
           replace path, /resource_name(?!:)/, ':user'
           replace path, /resource(?!:)/, ':user', optional: true

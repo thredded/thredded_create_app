@@ -16,7 +16,8 @@ module ThreddedCreateApp
       install_gem_bundler_rails: true,
       start_server: true,
       simple_form: true,
-      database: :postgresql
+      database: :postgresql,
+      rails_version: nil
     }.freeze
 
     def self.start(argv)
@@ -85,11 +86,16 @@ module ThreddedCreateApp
       ) do |op|
         flags = Flags.new(op, options)
 
-        db_adapters = %i(postgresql mysql2 sqlite3)
+        db_adapters = %i[postgresql mysql2 sqlite3]
         op.on '--database DATABASE', db_adapters,
               "The database adapter, one of: #{db_adapters.join(', ')} " \
               "(default: #{DEFAULTS[:database]})" do |v|
           options[:database] = v.to_sym
+        end
+
+        op.on '--rails-version VERSION',
+              'The exact version of Rails to use (default: latest)' do |value|
+          options[:rails_version] = value
         end
 
         flags.bool :simple_form, '--[no-]simple-form', 'Use simple_form'

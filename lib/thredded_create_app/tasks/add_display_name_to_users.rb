@@ -39,8 +39,8 @@ module ThreddedCreateApp
         inject_into_file 'app/controllers/application_controller.rb',
                          after:   /protect_from_forgery.*\n/,
                          content: devise_permitted_params_rb
-        %w(app/views/devise/registrations/new.html.erb
-           app/views/devise/registrations/edit.html.erb).each do |path|
+        %w[app/views/devise/registrations/new.html.erb
+           app/views/devise/registrations/edit.html.erb].each do |path|
           autofocus = File.read(path).include?(', autofocus: true')
           replace path, ', autofocus: true', '' if autofocus
           if @simple_form

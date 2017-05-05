@@ -1,3 +1,7 @@
+# v0.1.17
+
+* Allow passing in `--rails-version`.
+
 # v0.1.16
 
 * Support Turbolinks v5.0.1.

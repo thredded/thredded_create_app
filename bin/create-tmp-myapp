@@ -40,4 +40,4 @@ fi
 
 set -x
 rm -rf tmp
-./exe/thredded_create_app -y tmp/myapp "$@" --database "$DB"
+bundle exec ./exe/thredded_create_app -y tmp/myapp "$@" --database "$DB"

@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '~> 2.3'
 
-  s.files = Dir['{exe,lib}/**/*'] + %w(LICENSE.txt README.md)
+  s.files = Dir['{exe,lib}/**/*'] + %w[LICENSE.txt README.md]
 
   s.bindir        = 'exe'
   s.executables   = s.files.grep(%r{^exe/}) { |f| File.basename(f) }
