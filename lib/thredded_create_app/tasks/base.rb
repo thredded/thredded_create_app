@@ -77,6 +77,7 @@ module ThreddedCreateApp
                "No match found for #{pattern} in #{path}"
         end
         File.write path, src
+        changed
       end
 
       def add_precompile_asset(asset)

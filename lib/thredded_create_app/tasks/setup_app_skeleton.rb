@@ -58,11 +58,6 @@ module ThreddedCreateApp
       end
 
       def add_javascripts
-        replace 'app/assets/javascripts/application.js',
-                %r{^//= require jquery$},
-                '//= require jquery3'
-        git_commit 'Use jQuery v3 instead of jQuery v1'
-
         copy 'setup_app_skeleton/javascripts/app.js',
              'app/assets/javascripts/app.js'
         copy 'setup_app_skeleton/javascripts/app/',

@@ -9,6 +9,7 @@ require 'thredded_create_app/tasks/add_simple_form'
 require 'thredded_create_app/tasks/add_devise'
 require 'thredded_create_app/tasks/add_roadie'
 require 'thredded_create_app/tasks/add_rails_email_preview'
+require 'thredded_create_app/tasks/add_jquery'
 require 'thredded_create_app/tasks/add_thredded'
 require 'thredded_create_app/tasks/add_display_name_to_users'
 require 'thredded_create_app/tasks/setup_database'
@@ -69,6 +70,7 @@ module ThreddedCreateApp
         Tasks::AddDevise,
         Tasks::AddRailsEmailPreview,
         Tasks::AddRoadie,
+        Tasks::AddJquery,
         Tasks::AddThredded,
         Tasks::AddDisplayNameToUsers,
         Tasks::SetupAppSkeleton,
@@ -85,9 +87,13 @@ module ThreddedCreateApp
 
     # @final
     def bundle # rubocop:disable Metrics/AbcSize
+      gemfile_contents = File.read('Gemfile')
+      gems_to_add = gems.reject do |gem|
+        gemfile_contents =~ /^gem\s*['"]#{Regexp.escape(gem[0])}['"]/
+      end
       File.open('Gemfile', 'a') do |f|
         log_info 'Writing gems to Gemfile'
-        gems.each do |(name, version, groups, path)|
+        gems_to_add.each do |(name, version, groups, path)|
           f.puts ["gem '#{name}'",
                   (version if version),
                   ("groups: %i(#{groups * ' '})" if groups),
@@ -97,7 +103,7 @@ module ThreddedCreateApp
       log_info 'Installing gems'
       run "bundle install#{' --quiet' unless verbose?}" \
           "#{' --path .bundle' unless File.writable?(Gem.dir)}"
-      git_commit "Add gems: #{gems.map { |(name, *)| name } * ', '}"
+      git_commit "Add gems: #{gems_to_add.map { |(name, *)| name } * ', '}"
     end
   end
 end
