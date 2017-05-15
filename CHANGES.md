@@ -1,3 +1,7 @@
+# v0.1.18
+
+* Support Rails 5.1.
+
 # v0.1.17
 
 * Allow passing in `--rails-version`.

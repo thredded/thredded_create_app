@@ -13,11 +13,12 @@ module ThreddedCreateApp
 
       attr_reader :app_name, :app_hostname, :app_path, :gems
 
-      def initialize(app_path:, verbose: false, **_args)
+      def initialize(app_path:, verbose: false, database:, **_args)
         @app_path = app_path
         @app_name = File.basename(File.expand_path(app_path))
         @app_hostname = "#{@app_name.tr(' ', '_').downcase}.com"
         @verbose = verbose
+        @database_adapter_name = database.to_s
         @gems = []
       end
 
@@ -30,6 +31,8 @@ module ThreddedCreateApp
       def after_bundle; end
 
       protected
+
+      attr_reader :database_adapter_name
 
       def add_gem(gem_name, version: nil, groups: nil, path: nil)
         log_verbose "+ gem #{gem_name}"
@@ -60,9 +63,13 @@ module ThreddedCreateApp
           return
         end
         src = File.read(expanded_src_path)
-        src = ERB.new(src, nil, '-').result(binding) if process_erb
+        src = eval_template(src) if process_erb
         FileUtils.mkdir_p(File.dirname(target_path))
         File.write target_path, src, mode: mode
+      end
+
+      def eval_template(src)
+        ERB.new(src, nil, '-').result(binding)
       end
 
       def replace(path, pattern, replacement = nil, optional: false)
@@ -103,6 +110,14 @@ module ThreddedCreateApp
                             else
                               { before: /\nend\n\z/ }
                             end)
+      end
+
+      def add_migration(name, content: nil, template: nil)
+        run_generator "migration #{name}"
+        replace Dir["db/migrate/*_#{name}.rb"][0],
+                /^ *def change\n *end\n/,
+                indent(2, content ||
+                    eval_template(File.read(expand_src_path(template))))
       end
 
       def inject_into_file(path, content:, after: nil, before: nil)

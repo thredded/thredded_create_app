@@ -74,9 +74,11 @@ module ThreddedCreateApp
       end
 
       def add_admin_column_to_users
-        run_generator 'migration add_admin_to_users'
-        copy 'add_thredded/add_admin_to_users.rb',
-             Dir['db/migrate/*_add_admin_to_users.rb'][0]
+        add_migration 'add_admin_to_users', content: <<~RUBY
+          def change
+            add_column :users, :admin, :boolean, null: false, default: false
+          end
+        RUBY
       end
 
       def setup_thredded_emails

@@ -22,9 +22,9 @@ module ThreddedCreateApp
       private
 
       def add_display_name
-        run_generator 'migration add_display_name_to_users'
-        copy 'add_display_name_to_users/add_display_name_to_users.rb',
-             Dir['db/migrate/*_add_display_name_to_users.rb'][0]
+        add_migration 'add_display_name_to_users',
+                      template: 'add_display_name_to_users/' \
+                                  'add_display_name_to_users.rb.erb'
         model_path = 'app/models/user.rb'
         inject_into_file model_path,
                          after:   "ApplicationRecord\n",
@@ -84,7 +84,7 @@ module ThreddedCreateApp
   def uniq_display_name!
     if display_name.present?
       new_display_name = display_name
-      i  = 0
+      i = 0
       while User.exists?(display_name: new_display_name)
         new_display_name = "#{display_name} #{i += 1}"
       end
