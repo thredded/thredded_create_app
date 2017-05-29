@@ -75,9 +75,9 @@ module ThreddedCreateApp
       def replace(path, pattern, replacement = nil, optional: false)
         src = File.read(path)
         changed = if block_given?
-                    src.gsub!(pattern) { |_| yield Regexp.last_match }
+                    src.sub!(pattern) { |_| yield Regexp.last_match }
                   else
-                    src.gsub!(pattern, replacement)
+                    src.sub!(pattern, replacement)
                   end
         unless changed || optional
           fail ThreddedCreateApp::CommandError,
