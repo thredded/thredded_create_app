@@ -1,3 +1,8 @@
+# v0.1.19
+
+* Configures Thredded to use `rails-ujs` (default in Rails v5.1.1) instead of
+  `jquery_ujs`.
+
 # v0.1.18
 
 * Support Rails 5.1.
