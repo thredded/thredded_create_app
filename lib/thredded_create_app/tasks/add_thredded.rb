@@ -71,6 +71,8 @@ module ThreddedCreateApp
       def add_thredded_javascripts
         copy 'add_thredded/myapp_thredded.js',
              "app/assets/javascripts/#{app_name}_thredded.js"
+        copy 'add_thredded/javascripts/thredded/dependencies/ujs.js',
+             'app/assets/javascripts/thredded/dependencies/ujs.js'
       end
 
       def add_admin_column_to_users
