@@ -22,6 +22,8 @@ module ThreddedCreateApp
         setup_views
         setup_emails
         setup_after_sign_in_behaviour
+        copy 'add_devise/spec/features/devise_spec.rb',
+             'spec/features/devise_spec.rb'
         git_commit 'Setup Devise'
       end
 
