@@ -61,11 +61,11 @@ module ThreddedCreateApp
         # Make the views render-able outside Devise controllers
         %w[app/views/devise/sessions/new.html.erb
            app/views/devise/shared/_links.html.erb].each do |path|
-          replace path, 'resource_class', 'User', optional: true
-          replace path, /resource_name(?!:)/, ':user'
-          replace path, /resource(?!:)/, ':user', optional: true
+          replace path, 'resource_class', 'User', optional: true, global: true
+          replace path, /resource_name(?!:)/, ':user', global: true
+          replace path, /resource(?!:)/, ':user', optional: true, global: true
           replace path, 'devise_mapping', 'Devise.mappings[:user]',
-                  optional: true
+                  optional: true, global: true
         end
       end
 

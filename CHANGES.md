@@ -1,3 +1,7 @@
+# v0.1.20
+
+* Fix Devise setup.
+
 # v0.1.19
 
 * Configures Thredded to use `rails-ujs` (default in Rails v5.1.1) instead of

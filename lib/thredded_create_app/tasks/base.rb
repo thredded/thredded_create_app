@@ -72,12 +72,16 @@ module ThreddedCreateApp
         ERB.new(src, nil, '-').result(binding)
       end
 
-      def replace(path, pattern, replacement = nil, optional: false)
+      def replace(path, pattern, replacement = nil, optional: false,
+                  global: false)
         src = File.read(path)
+        replace_method = global ? :gsub! : :sub!
         changed = if block_given?
-                    src.sub!(pattern) { |_| yield Regexp.last_match }
+                    src.send(replace_method, pattern) do |_|
+                      yield Regexp.last_match
+                    end
                   else
-                    src.sub!(pattern, replacement)
+                    src.send(replace_method, pattern, replacement)
                   end
         unless changed || optional
           fail ThreddedCreateApp::CommandError,
