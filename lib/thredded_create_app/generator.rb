@@ -9,7 +9,6 @@ require 'thredded_create_app/tasks/add_simple_form'
 require 'thredded_create_app/tasks/add_devise'
 require 'thredded_create_app/tasks/add_roadie'
 require 'thredded_create_app/tasks/add_rails_email_preview'
-require 'thredded_create_app/tasks/add_jquery'
 require 'thredded_create_app/tasks/add_thredded'
 require 'thredded_create_app/tasks/add_display_name_to_users'
 require 'thredded_create_app/tasks/setup_database'
@@ -70,7 +69,6 @@ module ThreddedCreateApp
         Tasks::AddDevise,
         Tasks::AddRailsEmailPreview,
         Tasks::AddRoadie,
-        Tasks::AddJquery,
         Tasks::AddThredded,
         Tasks::AddDisplayNameToUsers,
         Tasks::SetupAppSkeleton,

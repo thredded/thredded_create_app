@@ -2,7 +2,8 @@
 <% is_thredded = content_for?(:thredded_page_id) %>
 <%= content_tag :div,
                 class: 'app-container',
-                id: ('app-page-container' unless is_thredded) do %>
+                id: ('app-page-container' unless is_thredded),
+                'data-locale' => I18n.locale do %>
   <%= render 'shared/header' %>
   <%= render 'shared/flash_messages' unless is_thredded %>
   <div class="app-content-container"><%= yield %></div>

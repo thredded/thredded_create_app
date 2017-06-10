@@ -1,3 +1,7 @@
+# v0.1.21
+
+* No longer adds jQuery. Compatible with thredded v0.13.0+.
+
 # v0.1.20
 
 * Fix Devise setup.
