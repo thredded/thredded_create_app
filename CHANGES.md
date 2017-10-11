@@ -1,3 +1,7 @@
+# v0.1.22
+
+* Fixed timeago.js with locales that contain a hyphen (e.g. `zh-CN`).
+
 # v0.1.21
 
 * No longer adds jQuery. Compatible with thredded v0.13.0+.
