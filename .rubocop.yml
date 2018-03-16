@@ -5,7 +5,7 @@ AllCops:
 
 Style/FrozenStringLiteralComment:
   Exclude:
-    - 'lib/thredded_create_app/tasks/*/*.rb'
+  - 'lib/thredded_create_app/tasks/*/*.rb'
 
 Metrics/ClassLength:
   Max: 125
@@ -16,8 +16,15 @@ Metrics/BlockLength:
 Metrics/MethodLength:
   Max: 25
 
+Naming/UncommunicativeMethodParamName:
+  Enabled: false
+
 Style/Documentation:
   Enabled: false
+
+Style/MixinUsage:
+  Exclude:
+  - 'lib/thredded_create_app/tasks/setup_app_skeleton/application_helper_methods.rb'
 
 Style/SignalException:
   EnforcedStyle: semantic

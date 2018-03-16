@@ -130,7 +130,7 @@ TEXT
       options.update(app_path: argv[0])
       options
     end
-    # rubocop:enable Metrics/AbcSize,Metrics/MethodLength,Metrics/BlockLength
+    # rubocop:enable Metrics/AbcSize,Metrics/MethodLength
 
     class Flags
       def initialize(op, options)
