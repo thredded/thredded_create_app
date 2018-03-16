@@ -1,29 +1,27 @@
 # frozen_string_literal: true
 
-require 'term/ansicolor'
+require 'rainbow'
 module ThreddedCreateApp
   module Logging
     def log_verbose(message = nil)
       return unless verbose?
-      log_stderr Term::ANSIColor.bright_magenta(message || yield)
+      log_stderr Rainbow(message || yield).magenta.bright
     end
 
     def log_command(message)
-      log_stderr Term::ANSIColor.bold message
+      log_stderr Rainbow(message).bright
     end
 
     def log_info(message)
-      log_stderr Term::ANSIColor.bright_blue message
+      log_stderr Rainbow(message).blue.bright
     end
 
     def log_warn(message)
-      log_stderr Term::ANSIColor.yellow("#{program_name}: [WARN] #{message}")
+      log_stderr Rainbow("#{program_name}: [WARN] #{message}").yellow
     end
 
     def log_error(message)
-      log_stderr Term::ANSIColor.red Term::ANSIColor.bold(
-        "#{program_name}: #{message}"
-      )
+      log_stderr Rainbow("#{program_name}: #{message}").red.bold
     end
 
     def log_stderr(*args)

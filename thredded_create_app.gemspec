@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.add_dependency 'highline', '>= 1.7.2'
-  s.add_dependency 'term-ansicolor', '>= 1.4.0'
+  s.add_dependency 'rainbow', '>= 3.0.0', '< 4'
   s.add_development_dependency 'bundler', '~> 1.13'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '~> 3.5'

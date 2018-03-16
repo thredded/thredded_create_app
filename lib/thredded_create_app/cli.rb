@@ -57,7 +57,7 @@ module ThreddedCreateApp
       log_info generator.summary
       exit unless options[:auto_confirm] || agree?
       generator.generate
-      log_stderr Term::ANSIColor.bold Term::ANSIColor.bright_green <<~TEXT
+      log_stderr Rainbow(<<~TEXT).green.bright
         All done! 🌟
       TEXT
       generator.run_tests!
@@ -82,7 +82,7 @@ module ThreddedCreateApp
       argv << '--help' if argv.empty?
       options = DEFAULTS.dup
       positional_args = OptionParser.new(
-        "Usage: #{program_name} #{Term::ANSIColor.bold 'APP_PATH'}", 37
+        "Usage: #{program_name} #{Rainbow('APP_PATH').bright}", 37
       ) do |op|
         flags = Flags.new(op, options)
 
@@ -117,7 +117,7 @@ module ThreddedCreateApp
           STDERR.puts op
           exit
         end
-        op.separator Term::ANSIColor.bright_blue <<~TEXT
+        op.separator Rainbow(<<~TEXT).blue.bright
                  For more information, see the readme at:
           #{File.expand_path('../../README.md', File.dirname(__FILE__))}
           https://github.com/thredded/thredded_create_app
@@ -163,20 +163,17 @@ TEXT
     end
 
     def auto_output_coloring(coloring = STDOUT.isatty)
-      coloring_was             = Term::ANSIColor.coloring?
-      Term::ANSIColor.coloring = coloring
-      HighLine.use_color       = coloring
+      coloring_was = Rainbow.enabled
+      Rainbow.enabled = coloring
+      HighLine.use_color = coloring
       yield
     ensure
-      HighLine.use_color       = coloring_was
-      Term::ANSIColor.coloring = coloring_was
+      HighLine.use_color = coloring_was
+      Rainbow.enabled = coloring_was
     end
 
     def agree?
-      ::HighLine.new.agree(
-        Term::ANSIColor.bold(Term::ANSIColor.bright_yellow('Proceed? [y/n]')),
-        true
-      )
+      ::HighLine.new.agree(Rainbow('Proceed? [y/n]').yellow.bright, true)
     end
 
     def verbose?
