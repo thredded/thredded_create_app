@@ -10,7 +10,7 @@ gem 'byebug', platform: :mri
 if ENV['CI']
   group :test do
     # CodeClimate coverage reporting.
-    gem 'codeclimate-test-reporter', require: false
+    gem 'codeclimate-test-reporter', '>= 1.0.8', require: false
   end
 end
 
