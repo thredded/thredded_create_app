@@ -37,7 +37,7 @@ module ThreddedCreateApp
 
       def configure_devise
         inject_into_file 'app/controllers/application_controller.rb',
-                         after:   /protect_from_forgery.*\n/,
+                         after:   /::Base\n(  protect_from_forgery.*\n)?/,
                          content: devise_permitted_params_rb
         %w[app/views/devise/registrations/new.html.erb
            app/views/devise/registrations/edit.html.erb].each do |path|

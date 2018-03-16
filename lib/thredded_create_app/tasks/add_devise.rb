@@ -31,7 +31,7 @@ module ThreddedCreateApp
 
       def setup_after_sign_in_behaviour
         inject_into_file 'app/controllers/application_controller.rb',
-                         after:   /protect_from_forgery.*\n/,
+                         after:   /::Base\n(  protect_from_forgery.*\n)?/,
                          content: <<-'RUBY'
 
   before_action :store_current_location, unless: :devise_controller?
