@@ -1,3 +1,8 @@
+# v0.1.23
+
+* Fixes installation on Rails 5.2.0.rc1.
+  [#12](https://github.com/thredded/thredded_create_app/issues/12)
+
 # v0.1.22
 
 * Fixed timeago.js with locales that contain a hyphen (e.g. `zh-CN`).
