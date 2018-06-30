@@ -20,6 +20,12 @@
       <li><%= t 'thredded.users.posts_count', count: user_detail.posts_count %></li>
   <% end %>
 </ul>
+<% if current_user && current_user != user %>
+  <a class="thredded--link"
+     href="<%= Thredded::UrlsHelper.send_private_message_path(current_user: current_user, to: user) %>">
+    <%= t 'thredded.users.send_private_message' %>
+  </a>
+<% end %>
 <% posts_page = Thredded.posts_page_view(
     scope: user.thredded_posts.order_newest_first.limit(5),
     current_user: current_user) %>
