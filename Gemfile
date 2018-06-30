@@ -39,3 +39,5 @@ if ENV['TRAVIS']
   gem 'uglifier'
   gem 'web-console'
 end
+
+gem 'thredded', path: '../thredded' if ENV['LOCAL_THREDDED'] # rubocop:disable Rubocop/DuplicatedGem
