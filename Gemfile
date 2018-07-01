@@ -40,9 +40,9 @@ if ENV['TRAVIS']
   gem 'web-console'
 end
 
-# rubocop:disable Rubocop/DuplicatedGem
+# rubocop:disable Bundler/DuplicatedGem
 if ENV['LOCAL_THREDDED']
   ENV['LOCAL_THREDDED'] = File.expand_path(ENV['LOCAL_THREDDED'])
   gem 'thredded', path: ENV['LOCAL_THREDDED']
 end
-# rubocop:enable Rubocop/DuplicatedGem
+# rubocop:enable Bundler/DuplicatedGem
