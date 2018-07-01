@@ -60,7 +60,7 @@ module ThreddedCreateApp
       log_stderr Rainbow(<<~TEXT).green.bright
         All done! 🌟
       TEXT
-      generator.run_tests!
+      generator.run_tests! unless ENV['SKIP_TESTS']
       start_app_server!(options[:app_path]) if options[:start_server]
     end
 

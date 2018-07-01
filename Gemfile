@@ -34,10 +34,15 @@ if ENV['TRAVIS']
   gem 'spring'
   gem 'spring-watcher-listen'
   gem 'sqlite3' if ENV['DB'] == 'sqlite3'
-  gem 'thredded'
+  gem 'thredded' unless ENV['LOCAL_THREDDED']
   gem 'turbolinks'
   gem 'uglifier'
   gem 'web-console'
 end
 
-gem 'thredded', path: '../thredded' if ENV['LOCAL_THREDDED'] # rubocop:disable Rubocop/DuplicatedGem
+# rubocop:disable Rubocop/DuplicatedGem
+if ENV['LOCAL_THREDDED']
+  ENV['LOCAL_THREDDED'] = File.expand_path(ENV['LOCAL_THREDDED'])
+  gem 'thredded', path: ENV['LOCAL_THREDDED']
+end
+# rubocop:enable Rubocop/DuplicatedGem

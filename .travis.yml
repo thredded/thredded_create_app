@@ -16,7 +16,10 @@ before_install:
 - "gem update --system --no-document --quiet"
 - "gem install bundler --no-document"
 - bash .travis.setup.sh
-cache: bundler
+cache:
+ bundler: true
+ directories:
+ - tmp/myapp-bundle-cache
 bundler_args: --path ../../vendor/bundle --without debug
 
 # Avoid rake here, as the RSpec test task spawns a new process which does not run via bundler.

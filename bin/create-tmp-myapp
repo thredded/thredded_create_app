@@ -39,5 +39,6 @@ elif [ "$DB" = 'postgresql' ]; then
 fi
 
 set -x
-rm -rf tmp
-bundle exec ./exe/thredded_create_app -y tmp/myapp "$@" --database "$DB"
+rm -rf tmp/myapp
+THREDDED_CREATE_APP_BUNDLE_CACHE="${PWD}/tmp/myapp-bundle-cache" \
+  bundle exec ./exe/thredded_create_app -y tmp/myapp "$@" --database "$DB"

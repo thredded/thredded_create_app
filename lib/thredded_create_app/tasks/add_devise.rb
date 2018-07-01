@@ -19,6 +19,7 @@ module ThreddedCreateApp
                 ':password, :password_confirmation'
         run_generator 'devise:install'
         run_generator 'devise User'
+        setup_controllers
         setup_views
         setup_emails
         setup_after_sign_in_behaviour
@@ -53,20 +54,35 @@ module ThreddedCreateApp
         RUBY
       end
 
+      def setup_controllers
+        copy 'add_devise/sessions_controller.rb',
+             'app/controllers/users/sessions_controller.rb'
+        replace 'config/routes.rb',
+                'devise_for :users',
+                <<~'RUBY'.chomp
+                  devise_for :users,
+                             skip: %i[sessions],
+                             controllers: {
+                               sessions: 'users/sessions',
+                             },
+                             path_names: { sign_up: 'register' }
+                  devise_scope :user do
+                    get 'sign-in', to: 'users/sessions#new', as: :new_user_session
+                    post 'sign-in', to: 'users/sessions#create', as: :user_session
+                    match 'sign-out', to: 'users/sessions#destroy', as: :destroy_user_session,
+                                      via: Devise.mappings[:user].sign_out_via
+                  end
+                RUBY
+      end
+
       def setup_views
-        run_generator 'devise:i18n:views -v sessions registrations'
+        # Generate all devise views that have forms, so that they use the
+        # app form template (e.g. simple_form).
+        run_generator 'devise:i18n:views -v confirmations passwords' \
+                      ' registrations sessions unlocks'
         # Replace the back link with the correct URL
         replace 'app/views/devise/registrations/edit.html.erb',
                 ', :back %>', ', back_url %>'
-        # Make the views render-able outside Devise controllers
-        %w[app/views/devise/sessions/new.html.erb
-           app/views/devise/shared/_links.html.erb].each do |path|
-          replace path, 'resource_class', 'User', optional: true, global: true
-          replace path, /resource_name(?!:)/, ':user', global: true
-          replace path, /resource(?!:)/, ':user', optional: true, global: true
-          replace path, 'devise_mapping', 'Devise.mappings[:user]',
-                  optional: true, global: true
-        end
       end
 
       def setup_emails

@@ -84,24 +84,39 @@ module ThreddedCreateApp
     end
 
     # @final
-    def bundle # rubocop:disable Metrics/AbcSize
+    def bundle
       gemfile_contents = File.read('Gemfile')
       gems_to_add = gems.reject do |gem|
         gemfile_contents =~ /^gem\s*['"]#{Regexp.escape(gem[0])}['"]/
       end
+      log_info 'Writing gems to Gemfile'
+      add_gems_to_gemfile gems_to_add
+      log_info 'Installing gems'
+      install_gems
+      git_commit "Add gems: #{gems_to_add.map { |(name, *)| name } * ', '}"
+    end
+
+    def add_gems_to_gemfile(gems)
       File.open('Gemfile', 'a') do |f|
-        log_info 'Writing gems to Gemfile'
-        gems_to_add.each do |(name, version, groups, path)|
+        gems.each do |(name, version, groups, path)|
           f.puts ["gem '#{name}'",
                   (version if version),
                   ("groups: %i(#{groups * ' '})" if groups),
                   ("path: '#{path}'" if path)].compact.join(', ')
         end
       end
-      log_info 'Installing gems'
-      run "bundle install#{' --quiet' unless verbose?}" \
-          "#{' --path .bundle' unless File.writable?(Gem.dir)}"
-      git_commit "Add gems: #{gems_to_add.map { |(name, *)| name } * ', '}"
+    end
+
+    def install_gems
+      cache_path = ENV['THREDDED_CREATE_APP_BUNDLE_CACHE']
+      if cache_path
+        FileUtils.mkdir_p cache_path
+        run 'ln', '-s', cache_path, 'vendor/cache'
+      end
+      run 'bundle', 'install',
+          *('--quiet' unless verbose?),
+          *(%w[--path .bundle] unless File.writable?(Gem.dir))
+      run 'bundle', 'package', *('--quiet' unless verbose?) if cache_path
     end
   end
 end

@@ -9,7 +9,8 @@ module ThreddedCreateApp
       end
 
       def before_bundle
-        add_gem 'thredded'
+        add_gem 'thredded',
+                **(ENV['LOCAL_THREDDED'] ? { path: ENV['LOCAL_THREDDED'] } : {})
       end
 
       def after_bundle # rubocop:disable Metrics/AbcSize
