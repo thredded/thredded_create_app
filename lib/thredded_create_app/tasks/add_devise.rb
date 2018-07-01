@@ -83,6 +83,11 @@ module ThreddedCreateApp
         # Replace the back link with the correct URL
         replace 'app/views/devise/registrations/edit.html.erb',
                 ', :back %>', ', back_url %>'
+        # Remove "Password confirmation" from sign up.
+        # See https://github.com/plataformatec/devise/wiki/Disable-password-confirmation-during-registration
+        replace 'app/views/devise/registrations/new.html.erb',
+                "    <%= f.input :password_confirmation, required: true %>\n",
+                ''
       end
 
       def setup_emails
