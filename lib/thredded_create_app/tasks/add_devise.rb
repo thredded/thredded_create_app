@@ -19,6 +19,7 @@ module ThreddedCreateApp
                 ':password, :password_confirmation'
         run_generator 'devise:install'
         run_generator 'devise User'
+        fix_migration_indices_limit_on_mysql
         setup_controllers
         setup_views
         setup_emails
@@ -52,6 +53,15 @@ module ThreddedCreateApp
     session[:user_return_to] || (respond_to?(:root_path) ? root_path : thredded.root_path)
   end
         RUBY
+      end
+
+      def fix_migration_indices_limit_on_mysql
+        return unless database_adapter_name =~ /mysql|maria/i
+        migration_file = Dir['db/migrate/*_devise_create_users.rb'][0]
+        replace migration_file,
+                /add_index :users, :(?:email|\w+_token), +unique: true/,
+                '\0, length: 191',
+                global: true
       end
 
       def setup_controllers
