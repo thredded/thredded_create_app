@@ -1,3 +1,11 @@
+# v0.1.24
+
+* Adds a "Send private message" link to user profile.
+* Removes password confirmation from sign up.
+* "Remember me" checked by default on sign in.
+* On `LoginRequired` error, now uses the sign in controller to render the login
+  form.
+
 # v0.1.23
 
 * Fixes installation on Rails 5.2.0.rc1.
