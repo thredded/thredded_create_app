@@ -11,6 +11,7 @@ require 'thredded_create_app/tasks/add_roadie'
 require 'thredded_create_app/tasks/add_rails_email_preview'
 require 'thredded_create_app/tasks/add_thredded'
 require 'thredded_create_app/tasks/add_display_name_to_users'
+require 'thredded_create_app/tasks/add_invisible_captcha'
 require 'thredded_create_app/tasks/setup_database'
 require 'thredded_create_app/tasks/setup_app_skeleton'
 require 'thredded_create_app/tasks/production_configs'
@@ -71,6 +72,7 @@ module ThreddedCreateApp
         Tasks::AddRoadie,
         Tasks::AddThredded,
         Tasks::AddDisplayNameToUsers,
+        Tasks::AddInvisibleCaptcha,
         Tasks::SetupAppSkeleton,
         Tasks::ProductionConfigs,
         Tasks::AddMemcachedSupport,

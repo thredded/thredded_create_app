@@ -4,6 +4,11 @@ require 'thredded_create_app/tasks/base'
 module ThreddedCreateApp
   module Tasks
     class AddDevise < Base
+      def initialize(simple_form: true, **args)
+        super
+        @simple_form = simple_form
+      end
+
       def summary
         'Add devise with I18n and configure a User model'
       end
@@ -65,6 +70,8 @@ module ThreddedCreateApp
       end
 
       def setup_controllers
+        copy 'add_devise/registrations_controller.rb',
+             'app/controllers/users/registrations_controller.rb'
         copy 'add_devise/sessions_controller.rb',
              'app/controllers/users/sessions_controller.rb'
         replace 'config/routes.rb',
@@ -73,6 +80,7 @@ module ThreddedCreateApp
                   devise_for :users,
                              skip: %i[sessions],
                              controllers: {
+                               registrations: 'users/registrations',
                                sessions: 'users/sessions',
                              },
                              path_names: { sign_up: 'register' }
@@ -95,9 +103,20 @@ module ThreddedCreateApp
                 ', :back %>', ', back_url %>'
         # Remove "Password confirmation" from sign up.
         # See https://github.com/plataformatec/devise/wiki/Disable-password-confirmation-during-registration
+        password_field =
+          if @simple_form
+            "    <%= f.input :password_confirmation, required: true %>\n"
+          else
+            <<-ERB
+  <div class="field">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "off" %>
+  </div>
+
+            ERB
+          end
         replace 'app/views/devise/registrations/new.html.erb',
-                "    <%= f.input :password_confirmation, required: true %>\n",
-                ''
+                password_field, ''
       end
 
       def setup_emails

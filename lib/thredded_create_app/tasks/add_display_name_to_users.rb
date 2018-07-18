@@ -109,7 +109,7 @@ module ThreddedCreateApp
 
       def simple_form_input_html(autofocus)
         <<-HTML
-  <%= f.input :display_name, required: true#{', autofocus: true' if autofocus} %>
+    <%= f.input :display_name, required: true#{', autofocus: true' if autofocus} %>
         HTML
       end
 
