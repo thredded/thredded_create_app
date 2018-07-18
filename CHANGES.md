@@ -1,3 +1,7 @@
+# v0.1.25
+
+* Adds `invisible_captcha` to the sign up form.
+
 # v0.1.24
 
 * Adds a "Send private message" link to user profile.
