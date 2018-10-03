@@ -31,8 +31,6 @@ module ThreddedCreateApp
         git_commit 'Configure Thredded emails and email styles with Roadie'
         configure_rails_email_preview
         git_commit 'Configure RailsEmailPreview with Thredded and Roadie'
-        run 'bundle exec rails thredded:install:emoji'
-        git_commit 'Copied emoji to public/emoji'
       end
 
       private
