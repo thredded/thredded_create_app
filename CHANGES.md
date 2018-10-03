@@ -1,3 +1,7 @@
+# v0.1.26
+
+* Emoji via `gemoji` v2 are no longer installed by default.
+
 # v0.1.25
 
 * Adds `invisible_captcha` to the sign up form.
