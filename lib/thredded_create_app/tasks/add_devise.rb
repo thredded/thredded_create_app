@@ -105,7 +105,11 @@ module ThreddedCreateApp
         # See https://github.com/plataformatec/devise/wiki/Disable-password-confirmation-during-registration
         password_field =
           if @simple_form
-            "    <%= f.input :password_confirmation, required: true %>\n"
+            <<-ERB
+    <%= f.input :password_confirmation,
+                required: true,
+                input_html: { autocomplete: "new-password" } %>
+            ERB
           else
             <<-ERB
   <div class="field">
