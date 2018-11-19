@@ -1,3 +1,8 @@
+# v0.1.27
+
+* Fixed generator to work with the latest version of Devise.
+  [#14](https://github.com/thredded/thredded_create_app/issues/14)
+
 # v0.1.26
 
 * Emoji via `gemoji` v2 are no longer installed by default.
