@@ -114,7 +114,7 @@ module ThreddedCreateApp
             <<-ERB
   <div class="field">
     <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "off" %>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
   </div>
 
             ERB
