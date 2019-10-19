@@ -1,3 +1,9 @@
+# v0.1.28
+
+* Fixed generator to work with the latest version of Devise (v4.7.1)
+
+  Devise commit: https://github.com/plataformatec/devise/commit/76b87dc0e83736cf16e3ffbc465fcd8ee3c06d46#diff-fc9dcab47d10e11cb5c43f4a83df6cf4L4
+
 # v0.1.27
 
 * Fixed generator to work with the latest version of Devise.

@@ -32,7 +32,7 @@ module ThreddedCreateApp
                            content: "    #{form_view_captcha}\n"
         else
           inject_into_file form_view_path,
-                           after: %(error_messages! %>\n\n),
+                           after: %r{render "devise/shared/error_messages", resource: resource %>\n\n},
                            content: "  #{form_view_captcha}\n\n"
         end
         inject_into_file form_view_path,

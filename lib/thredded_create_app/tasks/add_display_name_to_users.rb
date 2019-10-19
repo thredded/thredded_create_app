@@ -49,7 +49,7 @@ module ThreddedCreateApp
                              content: simple_form_input_html(autofocus)
           else
             inject_into_file path,
-                             after:   /error_messages! %>\n\n/,
+                             after:   %r{render "devise/shared/error_messages", resource: resource %>\n\n},
                              content: actionview_input_html(autofocus)
           end
         end
