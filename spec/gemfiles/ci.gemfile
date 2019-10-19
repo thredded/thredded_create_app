@@ -1,0 +1,10 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+gemspec path: '../../'
+
+if ENV['CI']
+  # CodeClimate coverage reporting.
+  gem 'codeclimate-test-reporter', '>= 1.0.8', require: false
+end

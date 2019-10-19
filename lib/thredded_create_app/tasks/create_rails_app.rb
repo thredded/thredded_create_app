@@ -28,9 +28,7 @@ module ThreddedCreateApp
         end
         @rails_version ||= latest_installed_rails_version
 
-        # I have no idea why this bundle exec is necessary on Travis.
-        run "#{'bundle exec ' if ENV['TRAVIS']}" \
-           "rails _#{@rails_version}_ new . --skip-bundle" \
+        run "rails _#{@rails_version}_ new . --skip-bundle" \
            " --database=#{rails_database} " \
            " --skip-test#{verbose? ? ' --verbose' : ' --quiet'}" \
            ' --skip-javascript'

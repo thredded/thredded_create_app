@@ -1,26 +1,45 @@
-dist: trusty
-sudo: required
+dist: xenial
 language: ruby
+sudo: false
 rvm:
-# The latest ruby that is pre-installed on Travis Trusty
-- 2.3.1
+- 2.5.3
+gemfile: spec/gemfiles/ci.gemfile
 env:
   global:
   - TRAVIS=1 CI=1 COVERAGE=1
-  matrix:
-  # Username and password from http://docs.travis-ci.com/user/database-setup/
-  - DB=sqlite3
-  - DB=mysql2     DB_USERNAME=root     DB_PASSWORD=""
-  - DB=postgresql DB_USERNAME=postgres DB_PASSWORD=""
+matrix:
+  include:
+    - name: Rubocop
+      gemfile: spec/gemfiles/rubocop.gemfile
+      rvm: 2.5.3
+      script: bundle exec rubocop
+      cache:
+        bundler: true
+        directories: []
+      before_install:
+      before_script:
+      after_script:
+      addons:
+        apt:
+          packages: []
+    - name: SQLite
+      env: DB=sqlite3
+    - name: MySQL
+      env: DB=mysql2 DB_USERNAME=root DB_PASSWORD=""
+      services: mysql
+    - name: PostreSQL
+      env: DB=postgresql DB_USERNAME=postgres DB_PASSWORD=""
+      services: postgresql
 before_install:
 - "gem update --system --no-document --quiet"
 - "gem install bundler --no-document"
 - bash .travis.setup.sh
 cache:
- bundler: true
- directories:
- - tmp/myapp-bundle-cache
+  bundler: true
+  directories:
+  - tmp/myapp-bundle-cache
+  - /home/travis/.rvm/ # for caching `gem install rails` results
 bundler_args: --path ../../vendor/bundle --without debug
 
 # Avoid rake here, as the RSpec test task spawns a new process which does not run via bundler.
-script: "bundle exec rspec --format d && bundle exec rubocop && bundle exec codeclimate-test-reporter"
+script: "bundle exec rspec --format d && bundle exec codeclimate-test-reporter"

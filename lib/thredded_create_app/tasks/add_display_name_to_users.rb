@@ -27,17 +27,17 @@ module ThreddedCreateApp
                                   'add_display_name_to_users.rb.erb'
         model_path = 'app/models/user.rb'
         inject_into_file model_path,
-                         after:   "ApplicationRecord\n",
+                         after: "ApplicationRecord\n",
                          content: display_name_model_rb
         inject_into_file model_path,
-                         before:  /end\n\z/,
+                         before: /end\n\z/,
                          content: uniq_display_name_method_rb
         git_commit 'Add a unique display_name User attribute'
       end
 
       def configure_devise
         inject_into_file 'app/controllers/application_controller.rb',
-                         after:   /::Base\n(  protect_from_forgery.*\n)?/,
+                         after: /::Base\n(  protect_from_forgery.*\n)?/,
                          content: devise_permitted_params_rb
         %w[app/views/devise/registrations/new.html.erb
            app/views/devise/registrations/edit.html.erb].each do |path|

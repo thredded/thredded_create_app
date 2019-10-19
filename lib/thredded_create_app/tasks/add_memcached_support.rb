@@ -15,7 +15,7 @@ module ThreddedCreateApp
 
       def after_bundle
         inject_into_file 'config/environments/production.rb',
-                         before:  /end\n\z/,
+                         before: /end\n\z/,
                          content: dalli_config
       end
 

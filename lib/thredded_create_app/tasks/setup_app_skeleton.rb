@@ -12,7 +12,7 @@ module ThreddedCreateApp
         '#0288D1', # light blue
         '#0097A7', # cyan
         '#00796B', # teal
-        '#F57C00', # orange
+        '#F57C00' # orange
       ].freeze
 
       def summary
@@ -58,7 +58,7 @@ module ThreddedCreateApp
                            <%= favicon_link_tag 'favicon.ico' %>
                            <%= favicon_link_tag 'apple-touch-icon.png',
                                                 rel: 'apple-touch-icon', type: 'image/png' %>
-        ERB
+                         ERB
       end
 
       def configure_assets
@@ -79,7 +79,7 @@ module ThreddedCreateApp
                          after: "  # config.assets.css_compressor = :sass\n",
                          content: <<-RUBY
   config.assets.js_compressor = Uglifier.new(harmony: true)
-RUBY
+                         RUBY
 
         copy 'setup_app_skeleton/javascripts/application.js',
              'app/assets/javascripts/application.js'
@@ -146,7 +146,7 @@ RUBY
           expand_src_path('setup_app_skeleton/application_helper_methods.rb')
         )
         inject_into_file 'app/helpers/application_helper.rb',
-                         before:  /end\n\z/,
+                         before: /end\n\z/,
                          content: indent(2, app_helper_src)
         copy 'setup_app_skeleton/themes_helper.rb',
              'app/helpers/themes_helper.rb'
@@ -165,13 +165,13 @@ RUBY
                                 async: !Rails.application.config.assets.debug,
                                 defer: true,
                                 'data-turbolinks-track': 'reload' %>
-        ERB
+                         ERB
 
         inject_into_file 'app/views/layouts/application.html.erb',
                          before: %r{\s*</head>},
                          content: <<-'ERB'
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-        ERB
+                         ERB
 
         body = File.read(
           expand_src_path('setup_app_skeleton/application.body.html.erb')
@@ -199,7 +199,7 @@ RUBY
                          before: /^\s*mount Thredded::Engine/,
                          content: indent(2, <<~'RUBY')
                            resources :users, only: [:show]
-        RUBY
+                         RUBY
       end
 
       def add_home_page

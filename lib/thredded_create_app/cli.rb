@@ -30,19 +30,17 @@ module ThreddedCreateApp
 
     def start
       auto_output_coloring do
+        run
+      rescue OptionParser::ParseError, ArgvError => e
+        error e.message, 64
+      rescue ThreddedCreateApp::CommandError => e
         begin
-          run
-        rescue OptionParser::ParseError, ArgvError => e
-          error e.message, 64
-        rescue ThreddedCreateApp::CommandError => e
-          begin
-            error e.message, 78
-          ensure
-            log_verbose e.backtrace * "\n"
-          end
-        rescue Errno::EPIPE
-          exit 1
+          error e.message, 78
+        ensure
+          log_verbose e.backtrace * "\n"
         end
+      rescue Errno::EPIPE
+        exit 1
       end
     rescue ExecutionError => e
       exit e.exit_code
@@ -121,7 +119,7 @@ module ThreddedCreateApp
                  For more information, see the readme at:
           #{File.expand_path('../../README.md', File.dirname(__FILE__))}
           https://github.com/thredded/thredded_create_app
-TEXT
+        TEXT
       end.parse!(argv)
       if positional_args.length != 1
         fail ArgvError, 'Expected 1 positional argument, ' \

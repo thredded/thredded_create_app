@@ -7,7 +7,7 @@ DB=${DB:-postgresql}
 USER="myapp_dev"
 PASS="myapp"
 
-set -e
+set -euo pipefail
 
 drop_postgres_data() {
   echo 'Removing myapp_dev PostgreSQL data'

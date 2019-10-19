@@ -22,7 +22,7 @@ module ThreddedCreateApp
                          after: "::Devise::RegistrationsController\n",
                          content: <<-RUBY
     invisible_captcha only: %i[create], honeypot: :name
-        RUBY
+                         RUBY
 
         form_view_path = 'app/views/devise/registrations/new.html.erb'
         form_view_captcha = '<%= invisible_captcha :name %>'

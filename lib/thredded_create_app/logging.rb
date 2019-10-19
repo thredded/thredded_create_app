@@ -5,6 +5,7 @@ module ThreddedCreateApp
   module Logging
     def log_verbose(message = nil)
       return unless verbose?
+
       log_stderr Rainbow(message || yield).magenta.bright
     end
 

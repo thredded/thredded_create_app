@@ -38,7 +38,7 @@ module ThreddedCreateApp
 
       def setup_after_sign_in_behaviour
         inject_into_file 'app/controllers/application_controller.rb',
-                         after:   /::Base\n(  protect_from_forgery.*\n)?/,
+                         after: /::Base\n(  protect_from_forgery.*\n)?/,
                          content: <<-'RUBY'
 
   before_action :store_current_location, unless: :devise_controller?
@@ -57,11 +57,12 @@ module ThreddedCreateApp
   def back_url
     session[:user_return_to] || (respond_to?(:root_path) ? root_path : thredded.root_path)
   end
-        RUBY
+                         RUBY
       end
 
       def fix_migration_indices_limit_on_mysql
         return unless database_adapter_name =~ /mysql|maria/i
+
         migration_file = Dir['db/migrate/*_devise_create_users.rb'][0]
         replace migration_file,
                 /add_index :users, :(?:email|\w+_token), +unique: true/,

@@ -104,7 +104,7 @@ module ThreddedCreateApp
           f.puts ["gem '#{name}'",
                   ("'#{version}'" if version),
                   ("require: '#{require}'" if require),
-                  ("groups: %i(#{groups * ' '})" if groups),
+                  ("groups: %i[#{groups * ' '}]" if groups),
                   ("path: '#{path}'" if path)].compact.join(', ')
         end
       end
@@ -116,7 +116,7 @@ module ThreddedCreateApp
         FileUtils.mkdir_p cache_path
         run 'ln', '-s', cache_path, 'vendor/cache'
       end
-      run 'bundle', 'install',
+      run 'bundle', 'install', '--with=test',
           *('--quiet' unless verbose?),
           *(%w[--path .bundle] unless File.writable?(Gem.dir))
       run 'bundle', 'package', *('--quiet' unless verbose?) if cache_path

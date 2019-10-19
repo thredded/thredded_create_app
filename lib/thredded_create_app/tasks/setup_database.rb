@@ -30,6 +30,7 @@ module ThreddedCreateApp
 
       def create_db_user
         return if @db_adapter == :sqlite3
+
         log_info "Creating #{dev_user} local database user"
         run 'bash',
             File.join(File.dirname(__FILE__), 'setup_database',

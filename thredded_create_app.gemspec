@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.homepage      = 'https://github.com/thredded/thredded_create_app'
   s.license       = 'MIT'
 
-  s.required_ruby_version = '~> 2.3'
+  s.required_ruby_version = '~> 2.5'
 
   s.files = Dir['{exe,lib}/**/*'] + %w[LICENSE.txt README.md]
 
@@ -25,9 +25,8 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'highline', '>= 1.7.2'
   s.add_dependency 'rainbow', '>= 3.0.0', '< 4'
-  s.add_development_dependency 'bundler', '~> 1.13'
+  s.add_development_dependency 'bundler', '~> 2.0'
   s.add_development_dependency 'rake'
-  s.add_development_dependency 'rspec', '~> 3.5'
-  s.add_development_dependency 'rubocop', '~> 0.53.0'
+  s.add_development_dependency 'rspec', '~> 3.9'
   s.add_development_dependency 'simplecov'
 end

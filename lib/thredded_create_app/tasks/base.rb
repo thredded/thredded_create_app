@@ -14,7 +14,7 @@ module ThreddedCreateApp
       attr_reader :app_name, :app_hostname, :app_path, :gems
 
       def initialize(
-          app_path:, verbose: false, database:, simple_form: true, **_args
+        app_path:, verbose: false, database:, simple_form: true, **_args
       )
         @app_path = app_path
         @app_name = File.basename(File.expand_path(app_path))
@@ -70,6 +70,7 @@ module ThreddedCreateApp
         if File.directory?(expanded_src_path)
           fail "Only 'w' mode is supported for directories" if mode != 'w'
           fail 'ERB processing not supported for directories' if process_erb
+
           FileUtils.cp_r expanded_src_path, target_path
           return
         end
@@ -146,7 +147,13 @@ module ThreddedCreateApp
         if log
           log_command args.length == 1 ? args[0] : Shellwords.shelljoin(args)
         end
-        exit 1 unless system(*args)
+        ok =
+          if Bundler.respond_to?(:with_unbundled_env)
+            Bundler.with_unbundled_env { system(*args) }
+          else
+            Bundler.with_clean_env { system(*args) }
+          end
+        exit 1 unless ok
       end
 
       def verbose?
