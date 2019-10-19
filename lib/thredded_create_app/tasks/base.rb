@@ -34,9 +34,9 @@ module ThreddedCreateApp
 
       attr_reader :database_adapter_name
 
-      def add_gem(gem_name, version: nil, groups: nil, path: nil)
+      def add_gem(gem_name, version: nil, require: nil, groups: nil, path: nil)
         log_verbose "+ gem #{gem_name}"
-        @gems << [gem_name, version, groups, path]
+        @gems << [gem_name, version, require, groups, path]
       end
 
       def git_commit(message)

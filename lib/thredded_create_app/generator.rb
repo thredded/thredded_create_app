@@ -100,9 +100,10 @@ module ThreddedCreateApp
 
     def add_gems_to_gemfile(gems)
       File.open('Gemfile', 'a') do |f|
-        gems.each do |(name, version, groups, path)|
+        gems.each do |(name, version, require, groups, path)|
           f.puts ["gem '#{name}'",
                   (version if version),
+                  ("require: '#{require}'" if require),
                   ("groups: %i(#{groups * ' '})" if groups),
                   ("path: '#{path}'" if path)].compact.join(', ')
         end
