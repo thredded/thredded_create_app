@@ -32,9 +32,10 @@ module ThreddedCreateApp
         run "#{'bundle exec ' if ENV['TRAVIS']}" \
            "rails _#{@rails_version}_ new . --skip-bundle" \
            " --database=#{rails_database} " \
-           " --skip-test#{verbose? ? ' --verbose' : ' --quiet'}"
+           " --skip-test#{verbose? ? ' --verbose' : ' --quiet'}" \
+           ' --skip-javascript'
         replace 'Gemfile', /gem 'sass-rails'.*$/, "gem 'sassc-rails'"
-        add_gem 'rspec-rails', groups: %i[test]
+        add_gem 'rspec-rails', version: '>= 4.0.0.beta3', groups: %i[test]
         add_gem 'capybara', groups: %i[test]
         git_commit summary
       end

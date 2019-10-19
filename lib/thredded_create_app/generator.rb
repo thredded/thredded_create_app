@@ -102,7 +102,7 @@ module ThreddedCreateApp
       File.open('Gemfile', 'a') do |f|
         gems.each do |(name, version, require, groups, path)|
           f.puts ["gem '#{name}'",
-                  (version if version),
+                  ("'#{version}'" if version),
                   ("require: '#{require}'" if require),
                   ("groups: %i(#{groups * ' '})" if groups),
                   ("path: '#{path}'" if path)].compact.join(', ')

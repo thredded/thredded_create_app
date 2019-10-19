@@ -20,6 +20,9 @@ module ThreddedCreateApp
       end
 
       def before_bundle
+        add_gem 'babel-transpiler'
+        add_gem 'uglifier'
+        add_gem 'turbolinks'
         add_gem 'rails-timeago'
       end
 
@@ -27,6 +30,7 @@ module ThreddedCreateApp
         add_config_vars
         add_i18n
         add_seeds
+        configure_assets
         add_favicon_and_touch_icons
         add_javascripts
         add_styles
@@ -57,11 +61,33 @@ module ThreddedCreateApp
         ERB
       end
 
+      def configure_assets
+        copy 'setup_app_skeleton/manifest.js',
+             'app/assets/config/manifest.js'
+
+        append_to_file 'config/initializers/assets.rb', <<~RUBY
+
+          # Work around https://github.com/rails/sprockets/issues/581
+          Rails.application.config.assets.configure do |env|
+            env.export_concurrent = false
+          end
+        RUBY
+      end
+
       def add_javascripts
+        inject_into_file 'config/environments/production.rb',
+                         after: "  # config.assets.css_compressor = :sass\n",
+                         content: <<-RUBY
+  config.assets.js_compressor = Uglifier.new(harmony: true)
+RUBY
+
+        copy 'setup_app_skeleton/javascripts/application.js',
+             'app/assets/javascripts/application.js'
         copy 'setup_app_skeleton/javascripts/app.js',
              'app/assets/javascripts/app.js'
         copy 'setup_app_skeleton/javascripts/app/',
              'app/assets/javascripts/app/'
+        add_precompile_asset 'application.js'
         git_commit 'Add app JavaScript'
       end
 
@@ -132,9 +158,9 @@ module ThreddedCreateApp
                 indent(4, <<~ERB)
                   <%= stylesheet_link_tag current_theme, media: 'all', 'data-turbolinks-track': 'reload' %>
                 ERB
-        replace 'app/views/layouts/application.html.erb',
-                /[ ]*<%= javascript_include_tag 'application', .*? %>/,
-                <<-'ERB'
+        inject_into_file 'app/views/layouts/application.html.erb',
+                         before: %r{\s*</head>},
+                         content: <<-'ERB'
     <%= javascript_include_tag 'application',
                                 async: !Rails.application.config.assets.debug,
                                 defer: true,
@@ -142,7 +168,7 @@ module ThreddedCreateApp
         ERB
 
         inject_into_file 'app/views/layouts/application.html.erb',
-                         before: '</head>',
+                         before: %r{\s*</head>},
                          content: <<-'ERB'
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         ERB

@@ -103,17 +103,8 @@ module ThreddedCreateApp
       end
 
       def add_precompile_asset(asset)
-        log_verbose "Add precompile asset: #{asset}"
-        assets_conf = File.read('config/initializers/assets.rb')
-        if assets_conf.include?('# Rails.application.config.assets.precompile')
-          replace 'config/initializers/assets.rb',
-                  /# Rails\.application\.config\.assets\.precompile.*/,
-                  "Rails.application.config.assets.precompile += %w(#{asset})"
-        else
-          replace 'config/initializers/assets.rb',
-                  /config\.assets\.precompile \+= %w\((.*?)\)/,
-                  "config.assets.precompile += %w(\\1 #{asset})"
-        end
+        log_verbose "Add asset to manifest: #{asset}"
+        append_to_file 'app/assets/config/manifest.js', "//= link #{asset}\n"
       end
 
       def add_route(route_str, prepend: false)
@@ -133,6 +124,10 @@ module ThreddedCreateApp
                 /^ *def change\n *end\n/,
                 indent(2, content ||
                     eval_template(File.read(expand_src_path(template))))
+      end
+
+      def append_to_file(path, content)
+        File.write(path, File.read(path) + content)
       end
 
       def inject_into_file(path, content:, after: nil, before: nil)
