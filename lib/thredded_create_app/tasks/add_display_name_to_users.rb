@@ -43,15 +43,13 @@ module ThreddedCreateApp
            app/views/devise/registrations/edit.html.erb].each do |path|
           autofocus = File.read(path).include?(', autofocus: true')
           replace path, ', autofocus: true', '' if autofocus
-          if @simple_form
-            inject_into_file path,
-                             after:   %(<div class="form-inputs">\n),
-                             content: simple_form_input_html(autofocus)
-          else
-            inject_into_file path,
-                             after:   %r{render "devise/shared/error_messages", resource: resource %>\n\n},
-                             content: actionview_input_html(autofocus)
-          end
+          inject_into_file path,
+                           after: devise_form_fields_begin_pattern,
+                           content: if @simple_form
+                                      simple_form_input_html(autofocus)
+                                    else
+                                      actionview_input_html(autofocus)
+                                    end
         end
         git_commit 'Configure Devise to support display_name in forms'
       end

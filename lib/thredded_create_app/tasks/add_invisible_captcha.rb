@@ -26,15 +26,13 @@ module ThreddedCreateApp
 
         form_view_path = 'app/views/devise/registrations/new.html.erb'
         form_view_captcha = '<%= invisible_captcha :name %>'
-        if @simple_form
-          inject_into_file form_view_path,
-                           after: %(<div class="form-inputs">\n),
-                           content: "    #{form_view_captcha}\n"
-        else
-          inject_into_file form_view_path,
-                           after: %r{render "devise/shared/error_messages", resource: resource %>\n\n},
-                           content: "  #{form_view_captcha}\n\n"
-        end
+        inject_into_file form_view_path,
+                         after: devise_form_fields_begin_pattern,
+                         content: if @simple_form
+                                    "    #{form_view_captcha}\n"
+                                  else
+                                    "  #{form_view_captcha}\n\n"
+                                  end
         inject_into_file form_view_path,
                          before: ') do |f|',
                          content: ", html: {autocomplete: 'off'}"

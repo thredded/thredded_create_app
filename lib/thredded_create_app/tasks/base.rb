@@ -13,13 +13,24 @@ module ThreddedCreateApp
 
       attr_reader :app_name, :app_hostname, :app_path, :gems
 
-      def initialize(app_path:, verbose: false, database:, **_args)
+      def initialize(
+          app_path:, verbose: false, database:, simple_form: true, **_args
+      )
         @app_path = app_path
         @app_name = File.basename(File.expand_path(app_path))
         @app_hostname = "#{@app_name.tr(' ', '_').downcase}.com"
         @verbose = verbose
         @database_adapter_name = database.to_s
         @gems = []
+        @simple_form = simple_form
+      end
+
+      def devise_form_fields_begin_pattern
+        if @simple_form
+          %(<div class="form-inputs">\n)
+        else
+          %r{render "devise/shared/error_messages", resource: resource %>\n\n}
+        end
       end
 
       def summary
