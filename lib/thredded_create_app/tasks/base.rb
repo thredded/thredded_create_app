@@ -8,13 +8,14 @@ require 'thredded_create_app/command_error'
 module ThreddedCreateApp
   module Tasks
     # @abstract
-    class Base
+    class Base # rubocop:disable Metrics/ClassLength
       include ThreddedCreateApp::Logging
 
       attr_reader :app_name, :app_hostname, :app_path, :gems
 
-      def initialize(
-        app_path:, verbose: false, database:, simple_form: true, **_args
+      def initialize( # rubocop:disable Metrics/ParameterLists
+        app_path:, verbose: false, database:, webpack_js: true,
+        simple_form: true, **_args
       )
         @app_path = app_path
         @app_name = File.basename(File.expand_path(app_path))
@@ -23,6 +24,11 @@ module ThreddedCreateApp
         @database_adapter_name = database.to_s
         @gems = []
         @simple_form = simple_form
+        @webpack_js = webpack_js
+      end
+
+      def webpack_js?
+        @webpack_js
       end
 
       def devise_form_fields_begin_pattern

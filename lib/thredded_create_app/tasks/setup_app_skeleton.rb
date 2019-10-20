@@ -20,9 +20,11 @@ module ThreddedCreateApp
       end
 
       def before_bundle
-        add_gem 'babel-transpiler'
-        add_gem 'uglifier'
-        add_gem 'turbolinks'
+        unless webpack_js?
+          add_gem 'babel-transpiler'
+          add_gem 'uglifier'
+          add_gem 'turbolinks'
+        end
         add_gem 'rails-timeago'
       end
 
@@ -30,9 +32,13 @@ module ThreddedCreateApp
         add_config_vars
         add_i18n
         add_seeds
-        configure_assets
+        configure_sprockets
         add_favicon_and_touch_icons
-        add_javascripts
+        if webpack_js?
+          add_javascripts_webpack
+        else
+          add_javascripts_sprockets
+        end
         add_styles
         add_user_page
         add_home_page
@@ -61,12 +67,25 @@ module ThreddedCreateApp
                          ERB
       end
 
-      def configure_assets
-        copy 'setup_app_skeleton/manifest.js',
-             'app/assets/config/manifest.js'
+      def add_javascripts_webpack
+        append_to_file 'app/javascript/packs/application.js', <<~JS
+          require('monkey-patch-turbolinks.js');
+          require('app');
+        JS
+        copy 'setup_app_skeleton/javascript_webpack/monkey-patch-turbolinks.js',
+             'app/javascript/monkey-patch-turbolinks.js'
+        %w[app index theme time_ago].each do |file|
+          copy "setup_app_skeleton/javascript_webpack/app/#{file}.js",
+               "app/javascript/app/#{file}.js"
+        end
+        git_commit 'Add app JavaScript'
+      end
 
+      def configure_sprockets
+        replace 'app/assets/config/manifest.js',
+                "//= link_directory ../stylesheets .css\n",
+                ''
         append_to_file 'config/initializers/assets.rb', <<~RUBY
-
           # Work around https://github.com/rails/sprockets/issues/581
           Rails.application.config.assets.configure do |env|
             env.export_concurrent = false
@@ -74,7 +93,7 @@ module ThreddedCreateApp
         RUBY
       end
 
-      def add_javascripts
+      def add_javascripts_sprockets
         inject_into_file 'config/environments/production.rb',
                          after: "  # config.assets.css_compressor = :sass\n",
                          content: <<-RUBY
@@ -158,18 +177,32 @@ module ThreddedCreateApp
                 indent(4, <<~ERB)
                   <%= stylesheet_link_tag current_theme, media: 'all', 'data-turbolinks-track': 'reload' %>
                 ERB
-        inject_into_file 'app/views/layouts/application.html.erb',
-                         before: %r{\s*</head>},
-                         content: <<-'ERB'
+        if webpack_js?
+          replace 'app/views/layouts/application.html.erb',
+                  <<-'ERB',
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+                  ERB
+                  <<-'ERB'
+    <%= javascript_pack_tag 'application',
+                            async: true,
+                            defer: true,
+                            'data-turbolinks-track': 'reload' %>
+                  ERB
+        else
+          inject_into_file 'app/views/layouts/application.html.erb',
+                           before: %r{\s*</head>},
+                           content: <<-'ERB'
     <%= javascript_include_tag 'application',
                                 async: !Rails.application.config.assets.debug,
                                 defer: true,
                                 'data-turbolinks-track': 'reload' %>
-                         ERB
+                           ERB
+        end
 
         inject_into_file 'app/views/layouts/application.html.erb',
                          before: %r{\s*</head>},
                          content: <<-'ERB'
+
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
                          ERB
 

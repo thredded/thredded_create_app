@@ -24,6 +24,8 @@ matrix:
           packages: []
     - name: SQLite
       env: DB=sqlite3
+    - name: --no-webpack-js
+      env: DB=sqlite3 THREDDED_CREATE_APP_BIN_ARGS=--no-webpack-js
     - name: MySQL
       env: DB=mysql2 DB_USERNAME=root DB_PASSWORD=""
       services: mysql

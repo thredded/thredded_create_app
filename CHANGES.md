@@ -1,3 +1,8 @@
+# v0.2.0
+
+* Now uses Webpack for JavaScript by default.
+  To use Sprockets instead pass `--no-webpack-js`.
+
 # v0.1.28
 
 * Rails 6 support, using Sprockets for now.
