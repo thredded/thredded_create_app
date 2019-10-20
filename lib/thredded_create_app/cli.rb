@@ -15,6 +15,7 @@ module ThreddedCreateApp
       verbose: false,
       install_gem_bundler_rails: true,
       start_server: true,
+      webpack_js: true,
       simple_form: true,
       database: :postgresql,
       rails_version: nil
@@ -74,7 +75,8 @@ module ThreddedCreateApp
       end
     end
 
-    # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    # rubocop:disable Metrics/AbcSize,Metrics/BlockLength,Metrics/MethodLength
+
     def optparse
       argv = @argv.dup
       argv << '--help' if argv.empty?
@@ -96,6 +98,9 @@ module ThreddedCreateApp
           options[:rails_version] = value
         end
 
+        flags.bool :webpack_js,
+                   '--[no-]webpack-js',
+                   'Use webpack for JavaScript'
         flags.bool :simple_form, '--[no-]simple-form', 'Use simple_form'
 
         op.separator "\nOther options:"
@@ -128,7 +133,7 @@ module ThreddedCreateApp
       options.update(app_path: argv[0])
       options
     end
-    # rubocop:enable Metrics/AbcSize,Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize,Metrics/BlockLength,Metrics/MethodLength
 
     class Flags
       def initialize(op, options)

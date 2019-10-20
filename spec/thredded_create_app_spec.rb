@@ -12,7 +12,8 @@ describe ThreddedCreateApp do
       expect(system({ 'THREDDED_CREATE_APP_BIN_SIMPLECOV_COVERAGE' => '1',
                       'DB' => ENV['DB'],
                       'TRAVIS' => ENV['TRAVIS'] },
-                    'bin/create-tmp-myapp --verbose --no-start-server'))
+                    'bin/create-tmp-myapp --verbose --no-start-server'\
+                     " #{ENV['THREDDED_CREATE_APP_BIN_ARGS']}"))
         .to(be true)
     end
   end

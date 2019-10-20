@@ -3,7 +3,7 @@
 require 'thredded_create_app/tasks/base'
 module ThreddedCreateApp
   module Tasks
-    class AddThredded < Base
+    class AddThredded < Base # rubocop:disable Metrics/ClassLength
       def summary
         'Add and setup Thredded with a User model'
       end
@@ -68,8 +68,17 @@ module ThreddedCreateApp
       end
 
       def add_thredded_javascripts
-        copy 'add_thredded/myapp_thredded.js',
-             "app/assets/javascripts/#{app_name}_thredded.js"
+        if webpack_js?
+          run 'bundle exec rails webpacker:install:erb'
+          copy 'add_thredded/thredded_imports.js.erb',
+               'app/javascript/thredded_imports.js.erb'
+          append_to_file 'app/javascript/packs/application.js', <<~JS
+            require('thredded_imports.js');
+          JS
+        else
+          copy 'add_thredded/myapp_thredded.js',
+               "app/assets/javascripts/#{app_name}_thredded.js"
+        end
       end
 
       def add_admin_column_to_users

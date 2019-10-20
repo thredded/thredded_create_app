@@ -20,7 +20,7 @@ module ThreddedCreateApp
           " #{rails_database} and rspec"
       end
 
-      def before_bundle
+      def before_bundle # rubocop:disable Metrics/AbcSize
         if @install_gem_bundler_rails
           run 'gem update --system --no-document --quiet' unless @user_install
           install_gem 'bundler'
@@ -31,7 +31,8 @@ module ThreddedCreateApp
         run "rails _#{@rails_version}_ new . --skip-bundle" \
            " --database=#{rails_database} " \
            " --skip-test#{verbose? ? ' --verbose' : ' --quiet'}" \
-           ' --skip-javascript'
+           "#{' --skip-javascript' unless webpack_js?}"
+        run 'rm', 'Gemfile.lock' if File.exist?('Gemfile.lock')
         replace 'Gemfile', /gem 'sass-rails'.*$/, "gem 'sassc-rails'"
         add_gem 'rspec-rails', version: '>= 4.0.0.beta3', groups: %i[test]
         add_gem 'capybara', groups: %i[test]
