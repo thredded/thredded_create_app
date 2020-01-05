@@ -1,3 +1,8 @@
+# v0.2.1
+
+* Fix bundler error. #18
+* Fix `inline_svg` deprecation warning.
+
 # v0.2.0
 
 * Now uses Webpack for JavaScript by default.
