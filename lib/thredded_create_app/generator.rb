@@ -1,23 +1,24 @@
 # frozen_string_literal: true
 
+require 'bundler'
 require 'fileutils'
 require 'shellwords'
-require 'thredded_create_app/tasks/base'
-require 'thredded_create_app/tasks/create_rails_app'
-require 'thredded_create_app/tasks/add_rails_config'
-require 'thredded_create_app/tasks/add_simple_form'
-require 'thredded_create_app/tasks/add_devise'
-require 'thredded_create_app/tasks/add_roadie'
-require 'thredded_create_app/tasks/add_rails_email_preview'
-require 'thredded_create_app/tasks/add_thredded'
-require 'thredded_create_app/tasks/add_display_name_to_users'
-require 'thredded_create_app/tasks/add_invisible_captcha'
-require 'thredded_create_app/tasks/setup_database'
-require 'thredded_create_app/tasks/setup_app_skeleton'
-require 'thredded_create_app/tasks/production_configs'
-require 'thredded_create_app/tasks/add_memcached_support'
-require 'thredded_create_app/tasks/docker'
-require 'bundler'
+require_relative './tasks/base'
+require_relative './tasks/create_rails_app'
+require_relative './tasks/add_rails_config'
+require_relative './tasks/add_simple_form'
+require_relative './tasks/add_devise'
+require_relative './tasks/add_roadie'
+require_relative './tasks/add_rails_email_preview'
+require_relative './tasks/add_thredded'
+require_relative './tasks/add_display_name_to_users'
+require_relative './tasks/add_invisible_captcha'
+require_relative './tasks/setup_database'
+require_relative './tasks/setup_app_skeleton'
+require_relative './tasks/production_configs'
+require_relative './tasks/add_memcached_support'
+require_relative './tasks/docker'
+
 module ThreddedCreateApp
   class Generator < Tasks::Base
     def initialize(**options)
@@ -50,17 +51,15 @@ module ThreddedCreateApp
     private
 
     def in_app_env
-      if defined?(Bundler)
-        Bundler.with_clean_env do
-          Dir.chdir app_path do
-            yield
-          end
-        end
-      else
-        Dir.chdir app_path do
+      bundle_gemfile_was = ENV['BUNDLE_GEMFILE']
+      Dir.chdir app_path do
+        Bundler.with_original_env do
+          ENV['BUNDLE_GEMFILE'] = 'Gemfile'
           yield
         end
       end
+    ensure
+      ENV['BUNDLE_GEMFILE'] = bundle_gemfile_was
     end
 
     def tasks

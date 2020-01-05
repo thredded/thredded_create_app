@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
+require 'bundler'
 require 'yaml'
-require 'thredded_create_app/tasks/base'
+require_relative './base'
 
 module ThreddedCreateApp
   module Tasks
@@ -26,12 +27,15 @@ module ThreddedCreateApp
           install_gem 'bundler'
           install_gem 'rails', version: @rails_version
         end
-        @rails_version ||= latest_installed_rails_version
+        @rails_version ||=
+          Bundler.with_original_env { latest_installed_rails_version }
 
         run "rails _#{@rails_version}_ new . --skip-bundle" \
-           " --database=#{rails_database} " \
-           " --skip-test#{verbose? ? ' --verbose' : ' --quiet'}" \
-           "#{' --skip-javascript' unless webpack_js?}"
+           " --database=#{rails_database}" \
+           ' --skip-webpack-install' \
+           "#{' --skip-javascript' unless webpack_js?}" \
+           ' --skip-test' \
+           "#{verbose? ? ' --verbose' : ' --quiet'}"
         run 'rm', 'Gemfile.lock' if File.exist?('Gemfile.lock')
         replace 'Gemfile', /gem 'sass-rails'.*$/, "gem 'sassc-rails'"
         add_gem 'rspec-rails', version: '>= 4.0.0.beta3', groups: %i[test]
@@ -42,9 +46,16 @@ module ThreddedCreateApp
       def after_bundle
         run_generator 'rspec:install'
         git_commit 'rails g rspec:install'
+
+        webpacker_install if webpack_js?
       end
 
       private
+
+      def webpacker_install
+        run 'bundle exec rails webpacker:install'
+        git_commit 'bundle exec rails webpacker:install'
+      end
 
       def install_gem(gem_name, version: nil)
         run ["gem install #{gem_name} --no-document",

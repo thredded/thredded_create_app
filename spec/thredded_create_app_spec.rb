@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'bundler'
 require 'spec_helper'
 
 describe ThreddedCreateApp do
@@ -8,13 +9,13 @@ describe ThreddedCreateApp do
   end
 
   it 'generates the app without errors' do # rubocop:disable RSpec/ExampleLength
-    Bundler.with_original_env do
-      expect(system({ 'THREDDED_CREATE_APP_BIN_SIMPLECOV_COVERAGE' => '1',
-                      'DB' => ENV['DB'],
-                      'TRAVIS' => ENV['TRAVIS'] },
-                    'bin/create-tmp-myapp --verbose --no-start-server'\
-                     " #{ENV['THREDDED_CREATE_APP_BIN_ARGS']}"))
-        .to(be true)
-    end
+    generate = lambda {
+      system({ 'THREDDED_CREATE_APP_BIN_SIMPLECOV_COVERAGE' => '1',
+               'DB' => ENV['DB'],
+               'TRAVIS' => ENV['TRAVIS'] },
+             'bin/create-tmp-myapp --verbose --no-start-server'\
+               " #{ENV['THREDDED_CREATE_APP_BIN_ARGS']}")
+    }
+    expect(Bundler.with_original_env(&generate)).to(be true)
   end
 end

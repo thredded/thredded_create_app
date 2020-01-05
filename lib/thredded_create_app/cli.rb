@@ -1,14 +1,16 @@
 # frozen_string_literal: true
 
-require 'thredded_create_app/command_error'
-require 'thredded_create_app/generator'
-require 'thredded_create_app/logging'
-require 'thredded_create_app/version'
-
 require 'highline'
+require_relative './command_error'
+require_relative './generator'
+require_relative './logging'
+require_relative './run_command'
+require_relative './version'
+
 module ThreddedCreateApp
   class CLI # rubocop:disable Metrics/ClassLength
     include ThreddedCreateApp::Logging
+    include ThreddedCreateApp::RunCommand
 
     DEFAULTS = {
       auto_confirm: false,
@@ -31,7 +33,7 @@ module ThreddedCreateApp
 
     def start
       auto_output_coloring do
-        run
+        run_cli
       rescue OptionParser::ParseError, ArgvError => e
         error e.message, 64
       rescue ThreddedCreateApp::CommandError => e
@@ -49,7 +51,7 @@ module ThreddedCreateApp
 
     private
 
-    def run # rubocop:disable Metrics/AbcSize
+    def run_cli # rubocop:disable Metrics/AbcSize
       options = optparse
       generator = ThreddedCreateApp::Generator.new(options)
       log_info 'Will do the following:'
@@ -65,14 +67,9 @@ module ThreddedCreateApp
 
     def start_app_server!(app_path)
       log_info 'Changing directory and starting the app server'
-      command = "cd #{Shellwords.escape(app_path)} && " \
-        'bundle exec rails s'
-      log_command command
-      if defined?(Bundler)
-        Bundler.with_clean_env { exec command }
-      else
-        exec command
-      end
+      ENV['BUNDLE_GEMFILE'] = 'Gemfile'
+      run "cd #{Shellwords.escape(app_path)} && bundle exec rails s",
+          run_method: :exec
     end
 
     # rubocop:disable Metrics/AbcSize,Metrics/BlockLength,Metrics/MethodLength

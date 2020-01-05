@@ -3,13 +3,16 @@
 require 'shellwords'
 require 'fileutils'
 require 'erb'
-require 'thredded_create_app/logging'
-require 'thredded_create_app/command_error'
+require_relative '../logging'
+require_relative '../command_error'
+require_relative '../run_command'
+
 module ThreddedCreateApp
   module Tasks
     # @abstract
-    class Base # rubocop:disable Metrics/ClassLength
+    class Base
       include ThreddedCreateApp::Logging
+      include ThreddedCreateApp::RunCommand
 
       attr_reader :app_name, :app_hostname, :app_path, :gems
 
@@ -147,19 +150,6 @@ module ThreddedCreateApp
 
       def run_generator(generate_args)
         run "bundle exec rails g #{generate_args}#{' --quiet' unless verbose?}"
-      end
-
-      def run(*args, log: true)
-        if log
-          log_command args.length == 1 ? args[0] : Shellwords.shelljoin(args)
-        end
-        ok =
-          if Bundler.respond_to?(:with_unbundled_env)
-            Bundler.with_unbundled_env { system(*args) }
-          else
-            Bundler.with_clean_env { system(*args) }
-          end
-        exit 1 unless ok
       end
 
       def verbose?
