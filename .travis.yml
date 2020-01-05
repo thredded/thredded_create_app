@@ -14,9 +14,10 @@ matrix:
       rvm: 2.5.3
       script: bundle exec rubocop
       cache:
-        bundler: true
-        directories: []
+        directories:
+        - $TRAVIS_BUILD_DIR/vendor/bundle
       before_install:
+      - bundle config set path $TRAVIS_BUILD_DIR/vendor/bundle
       before_script:
       after_script:
       addons:
@@ -33,15 +34,16 @@ matrix:
       env: DB=postgresql DB_USERNAME=postgres DB_PASSWORD=""
       services: postgresql
 before_install:
-- "gem update --system --no-document --quiet"
-- "gem install bundler --no-document"
+- gem update --system --no-document --quiet
+- gem install bundler --no-document
+- bundle config set path $TRAVIS_BUILD_DIR/vendor/bundle && bundle config set without debug
 - bash .travis.setup.sh
+- nvm use node
 cache:
-  bundler: true
   directories:
+  - $TRAVIS_BUILD_DIR/vendor/bundle
   - tmp/myapp-bundle-cache
   - /home/travis/.rvm/ # for caching `gem install rails` results
-bundler_args: --path ../../vendor/bundle --without debug
 
 # Avoid rake here, as the RSpec test task spawns a new process which does not run via bundler.
 script: "bundle exec rspec --format d && bundle exec codeclimate-test-reporter"
