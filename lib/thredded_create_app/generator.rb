@@ -17,6 +17,7 @@ require 'thredded_create_app/tasks/setup_app_skeleton'
 require 'thredded_create_app/tasks/production_configs'
 require 'thredded_create_app/tasks/add_memcached_support'
 require 'thredded_create_app/tasks/docker'
+require 'bundler'
 module ThreddedCreateApp
   class Generator < Tasks::Base
     def initialize(**options)
