@@ -1,3 +1,7 @@
+# v0.2.2
+
+* Docker fixes. #21
+
 # v0.2.1
 
 * Fix bundler error. #18
