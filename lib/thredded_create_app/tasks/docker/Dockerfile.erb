@@ -9,7 +9,7 @@ RUN apk add --no-cache \
     build-base ruby-dev libc-dev linux-headers gmp-dev openssl-dev libxml2-dev \
     libxslt-dev postgresql-dev
 
-RUN gem install foreman
+RUN gem install foreman bundler
 
 ENV BUNDLE_SILENCE_ROOT_WARNING=1
 ENV BUNDLE_PATH=/bundle
