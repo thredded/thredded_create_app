@@ -14,9 +14,13 @@ module ThreddedCreateApp
                       'Dockerfile'
         copy_template 'docker/docker-compose.yml.erb',
                       'docker-compose.yml'
+        copy 'docker/Procfile.docker.dev',
+             'Procfile.docker.dev'
+        copy 'docker/docker-dev-start-web.sh',
+             'script/docker-dev-start-web.sh'
         copy 'docker/wait-for-tcp',
              'script/wait-for-tcp'
-        run 'chmod +x script/wait-for-tcp'
+        run 'chmod +x script/wait-for-tcp script/docker-dev-start-web.sh'
         git_commit 'Add Docker compose for development'
       end
     end

@@ -107,7 +107,7 @@ a lot of JavaScript libraries do not support it.
 
 A [Dockerfile] and [docker-compose.yml] is generated for development.
 This is so that other engineers can spin up a development environment with
-a single command.
+a single command (`docker-compose up`).
 
 A production configuration file for the [puma] Ruby web server is created.
 A `Procfile` process description file is also created. This file can be used by
@@ -121,7 +121,7 @@ Finally, the tests are run, and the development web server is started at
 <http://localhost:3000>. To start the server yourself afterwards with:
 
 ```bash
-bundle exec rails s
+bin/rails s
 ```
 
 [`async`]: https://developer.mozilla.org/en/docs/Web/HTML/Element/script
