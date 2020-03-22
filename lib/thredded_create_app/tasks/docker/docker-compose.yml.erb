@@ -1,22 +1,49 @@
-db:
-  image: onjin/alpine-postgres:9.5
-  ports:
-    - "5433:5432"
-  environment:
-    POSTGRES_USER: root
-web:
-  build: .
-  volumes:
-    - .:/<%= app_name %>
-  working_dir: /<%= app_name %>
-  environment:
-    DB: postgresql
-    DB_USERNAME: root
-    DB_PASSWORD:
-  command: >
-    bash -c 'script/wait-for-tcp $<%= app_name.upcase %>_DB_1_PORT_5432_TCP_ADDR $<%= app_name.upcase %>_DB_1_PORT_5432_TCP_PORT &&
-             rails s'
-  ports:
-    - "9292:9292"
-  links:
-    - db
+version: "3.6"
+networks:
+  frontend:
+  backend:
+services:
+  db:
+    image: postgres:12-alpine
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: db-password
+    networks:
+      - backend
+  web:
+    build: .
+    # We want to avoid mapping Gemfile.lock, yarn.lock, etc but there is no way to exclude
+    # files using `volumes`.
+    volumes:
+    - ./.rspec:/<%= app_name %>/.rspec
+    - ./Procfile.docker.dev:/<%= app_name %>/Procfile.docker.dev
+    - ./Rakefile:/<%= app_name %>/Rakefile
+    - ./config.ru:/<%= app_name %>/config.ru
+    - ./app:/<%= app_name %>/app
+    - ./bin:/<%= app_name %>/bin
+    - ./config:/<%= app_name %>/config
+    - ./db:/<%= app_name %>/db
+    - ./lib:/<%= app_name %>/lib
+    - ./script:/<%= app_name %>/script
+    - ./vendor:/<%= app_name %>/vendor
+    - ./spec:/<%= app_name %>/spec
+    working_dir: /<%= app_name %>
+    environment:
+      DB: postgresql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: root
+      DB_PASSWORD: db-password
+      BUNDLE_GEMFILE: /<%= app_name %>/Gemfile
+      WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
+    command: script/docker-dev-start-web.sh
+    networks:
+      - backend
+      - frontend
+    ports:
+      - "9292:9292"
+      - "3035:3035"
+    depends_on:
+      - db

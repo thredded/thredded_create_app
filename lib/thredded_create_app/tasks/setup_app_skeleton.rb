@@ -78,6 +78,12 @@ module ThreddedCreateApp
           copy "setup_app_skeleton/javascript_webpack/app/#{file}.js",
                "app/javascript/app/#{file}.js"
         end
+        append_to_file 'config/initializers/content_security_policy.rb', <<~RUBY
+          Rails.application.config.content_security_policy do |policy|
+            # Allow connections to bin/webpack-dev-server in development
+            policy.connect_src :self, :https, 'http://localhost:3035', 'ws://localhost:3035' if Rails.env.development?
+          end
+        RUBY
         git_commit 'Add app JavaScript'
       end
 
@@ -217,7 +223,8 @@ module ThreddedCreateApp
 
       def add_user_page
         run_generator 'controller users show' \
-                      ' --no-assets --no-helper --skip-routes'
+                      ' --no-assets --no-helper --skip-routes' \
+                      ' --no-test-framework'
         copy 'setup_app_skeleton/spec/controllers/users_controller_spec.rb',
              'spec/controllers/users_controller_spec.rb'
         copy 'setup_app_skeleton/users_show.html.erb',
@@ -237,7 +244,8 @@ module ThreddedCreateApp
 
       def add_home_page
         run_generator 'controller home show' \
-                      ' --no-assets --no-helper --skip-routes'
+                      ' --no-assets --no-helper --skip-routes' \
+                      ' --no-test-framework'
         add_route <<~'RUBY', prepend: true
           root to: 'home#show'
         RUBY

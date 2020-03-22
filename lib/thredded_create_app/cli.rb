@@ -67,9 +67,12 @@ module ThreddedCreateApp
 
     def start_app_server!(app_path)
       log_info 'Changing directory and starting the app server'
-      ENV['BUNDLE_GEMFILE'] = 'Gemfile'
-      run "cd #{Shellwords.escape(app_path)} && bundle exec rails s",
-          run_method: :exec
+      Dir.chdir app_path do
+        Bundler.with_original_env do
+          ENV['BUNDLE_GEMFILE'] = 'Gemfile'
+          run 'bin/rails', 's', run_method: :exec
+        end
+      end
     end
 
     # rubocop:disable Metrics/AbcSize,Metrics/BlockLength,Metrics/MethodLength

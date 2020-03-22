@@ -70,6 +70,7 @@ module ThreddedCreateApp
       def add_thredded_javascripts
         if webpack_js?
           run 'bundle exec rails webpacker:install:erb'
+          FileUtils.rm 'app/javascript/packs/hello_erb.js.erb'
           copy 'add_thredded/thredded_imports.js.erb',
                'app/javascript/thredded_imports.js.erb'
           append_to_file 'app/javascript/packs/application.js', <<~JS
