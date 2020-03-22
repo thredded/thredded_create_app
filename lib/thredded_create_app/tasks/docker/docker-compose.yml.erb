@@ -1,9 +1,10 @@
 db:
-  image: onjin/alpine-postgres:9.5
-  expose:
-    - "5432"
+  image: postgres:12-alpine
+  ports:
+    - "5432:5432"
   environment:
     POSTGRES_USER: root
+    POSTGRES_PASSWORD: password
 web:
   build: .
   volumes:
@@ -11,12 +12,16 @@ web:
   working_dir: /<%= app_name %>
   environment:
     DB: postgresql
+    DB_HOST: db
+    DB_PORT: 5432
     DB_USERNAME: root
-    DB_PASSWORD:
+    DB_PASSWORD: password
+    WEBPACKER_CHECK_YARN_INTEGRITY: "false"
+    WEBPACKER_DEV_SERVER_HOST: webpacker
   command: >
-    bash -c 'script/wait-for-tcp $<%= app_name.upcase %>_DB_1_PORT_5432_TCP_ADDR $<%= app_name.upcase %>_DB_1_PORT_5432_TCP_PORT &&
-             rails s'
-  expose:
-    - "9292"
+    bash -c 'script/wait-for-tcp db 5432 &&
+            bin/rails server --port 9292 --binding 0.0.0.0'
+  ports:
+    - "9292:9292"
   links:
     - db

@@ -16,7 +16,7 @@ WORKDIR $APP_HOME
 RUN mkdir -p $APP_HOME
 
 # Copy Gemfile and run bundle install first to allow for caching
-ADD Gemfile Gemfile.lock $APP_HOME/
+COPY Gemfile Gemfile.lock $APP_HOME/
 RUN bundle install
 
-ADD Rakefile config.ru app/ bin/ config/ db/ lib/ script/ spec/ $APP_HOME/
+COPY Rakefile config.ru app/ bin/ config/ db/ lib/ script/ spec/ $APP_HOME/
