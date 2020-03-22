@@ -1,7 +1,7 @@
 db:
   image: onjin/alpine-postgres:9.5
-  ports:
-    - "5433:5432"
+  expose:
+    - "5432"
   environment:
     POSTGRES_USER: root
 web:
@@ -16,7 +16,7 @@ web:
   command: >
     bash -c 'script/wait-for-tcp $<%= app_name.upcase %>_DB_1_PORT_5432_TCP_ADDR $<%= app_name.upcase %>_DB_1_PORT_5432_TCP_PORT &&
              rails s'
-  ports:
-    - "9292:9292"
+  expose:
+    - "9292"
   links:
     - db

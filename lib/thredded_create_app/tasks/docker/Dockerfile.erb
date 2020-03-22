@@ -1,15 +1,15 @@
 # A Dockerfile for development.
 
-FROM alpine:3.4
+FROM ruby:2.6.3-alpine
 
-RUN apk add --no-cache \
+RUN apk update && \
+    apk add --no-cache \
     # Runtime deps
-    ruby ruby-bundler ruby-bigdecimal ruby-io-console tzdata nodejs bash \
+    ruby-bigdecimal ruby-io-console ruby-json tzdata nodejs yarn bash \
     # Bundle install deps
-    build-base ruby-dev libc-dev linux-headers gmp-dev openssl-dev libxml2-dev \
-    libxslt-dev postgresql-dev
-
-ENV BUNDLE_SILENCE_ROOT_WARNING=1
+    build-base ruby-dev libc-dev libffi-dev linux-headers gmp-dev libressl-dev libxml2-dev libxslt-dev \
+    mariadb-connector-c-dev postgresql-dev sqlite-dev git && \
+    gem install bundler:2.1.4
 
 ENV APP_HOME /<%= app_name %>
 WORKDIR $APP_HOME
