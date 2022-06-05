@@ -1,4 +1,4 @@
-# ThreddedCreateApp [![Build Status](https://travis-ci.org/thredded/thredded_create_app.svg?branch=master)](https://travis-ci.org/thredded/thredded_create_app) [![Test Coverage](https://codeclimate.com/github/thredded/thredded_create_app/badges/coverage.svg)](https://codeclimate.com/github/thredded/thredded_create_app/coverage)
+# ThreddedCreateApp [![Build Status](https://travis-ci.org/thredded/thredded_create_app.svg?branch=main)](https://travis-ci.org/thredded/thredded_create_app) [![Test Coverage](https://codeclimate.com/github/thredded/thredded_create_app/badges/coverage.svg)](https://codeclimate.com/github/thredded/thredded_create_app/coverage)
 
 Generates a Rails app with the [Thredded](https://github.com/thredded/thredded) forums engine installed.
 
@@ -158,9 +158,9 @@ Once you've deployed your app, please let us know that you are using Thredded
 by tweeting [@thredded]!
 
 [@thredded]: https://twitter.com/thredded
-[Devise Readme]: https://github.com/plataformatec/devise/blob/master/README.md
+[Devise Readme]: https://github.com/heartcombo/devise/blob/main/README.md
 [Thredded chat room]: https://gitter.im/thredded/thredded
-[Thredded Readme]: https://github.com/thredded/thredded/blob/master/README.md
+[Thredded Readme]: https://github.com/thredded/thredded/blob/main/README.md
 
 ## Deploying to Heroku
 
@@ -173,7 +173,7 @@ heroku create
 heroku config:set RACK_ENV=production RAILS_ENV=production \
   SECRET_KEY_BASE="$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)"
 # Deploy to heroku
-git push heroku master
+git push heroku main
 # Set up the database and some seed data (an admin user and a messageboard)
 heroku run rake db:migrate db:seed
 # Open the website in your default browser
