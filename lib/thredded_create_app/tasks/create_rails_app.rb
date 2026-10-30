@@ -10,9 +10,9 @@ module ThreddedCreateApp
       def initialize(install_gem_bundler_rails:, rails_version:, database:,
                      **args)
         super
-        @install_gem_bundler_rails = install_gem_bundler_rails
+        @install_gem_bundler_rails = false #install_gem_bundler_rails
         @database = database
-        @rails_version = rails_version
+        @rails_version = rails_version || '6.0.6.1'
         @user_install = !File.writable?(Gem.dir)
       end
 
@@ -27,10 +27,12 @@ module ThreddedCreateApp
           install_gem 'bundler'
           install_gem 'rails', version: @rails_version
         end
-        @rails_version ||=
-          Bundler.with_original_env { latest_installed_rails_version }
-
-        run "rails _#{@rails_version}_ new . --skip-bundle" \
+        @rails_version = @rails_version || '6.0.6.1'
+        if @install_gem_bundler_rails
+          install_gem 'rails', version: @rails_version
+        end
+        @rails_version ||= Bundler.with_original_env { latest_installed_rails_version }
+        run "rails _#{@rails_version}_ new . --skip-bundle --skip-spring" \
            " --database=#{rails_database}" \
            ' --skip-webpack-install' \
            "#{' --skip-javascript' unless webpack_js?}" \
@@ -40,6 +42,7 @@ module ThreddedCreateApp
         replace 'Gemfile', /gem 'sass-rails'.*$/, "gem 'sassc-rails'"
         add_gem 'rspec-rails', version: '>= 4.0.0.beta3', groups: %i[test]
         add_gem 'capybara', groups: %i[test]
+        add_gem 'webpacker', version: '~> 4.3.0'
         git_commit summary
       end
 
@@ -55,6 +58,8 @@ module ThreddedCreateApp
       def webpacker_install
         run 'bundle exec rails webpacker:install'
         git_commit 'bundle exec rails webpacker:install'
+        run 'yarn install --ignore-engines'
+	run 'RAILS_ENV=test bundle exec rails webpacker:compile'
       end
 
       def install_gem(gem_name, version: nil)
@@ -71,6 +76,8 @@ module ThreddedCreateApp
         # rubocop:disable Security/YAMLLoad
         YAML.load(`gem specification rails`).version.to_s
         # rubocop:enable Security/YAMLLoad
+        specs = `gem list --exact rails --all`.match(/rails \((.*?)\)/)[1].split(', ')
+        specs.find { |v| v.start_with?('6.0.6') } || specs.first
       end
     end
   end

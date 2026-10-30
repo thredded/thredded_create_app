@@ -21,7 +21,8 @@ Example screenshots of the generated app:
 
 1. Git.
 2. A supported database: PostgreSQL (recommended), MySQL v5.7+, or SQLite.
-3. Ruby 2.3+.
+3. Ruby 2.6.8
+4. Rails v6.0.6.1
 
 You may also need some packages to compile Thredded dependencies.
 On Ubuntu, you can install all the required packages by running:
